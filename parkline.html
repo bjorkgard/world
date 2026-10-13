@@ -1,0 +1,2118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Parkline | Theme park</title>
+<meta name="theme-color" content="#FBF4E8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23F43F5E%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--accent:#F43F5E;--acct:#881337;--accf:#BE123C;--cream:#FBF4E8;--ink:#3b2f2a;--ink2:#54453c;--glass:rgba(255,251,244,.76);--glass-b:rgba(255,255,255,.8);--line:rgba(60,40,30,.12);--chip:rgba(60,40,30,.06);--chip2:rgba(60,40,30,.11);--pop:rgba(255,251,244,.96);--shadow:0 10px 30px rgba(90,60,40,.14);--gut:16px}
+body.night{--acct:#FDA4AF;--ink:#f6ece0;--ink2:#f0e6da;--glass:rgba(36,33,50,.74);--glass-b:rgba(255,255,255,.15);--line:rgba(255,255,255,.14);--chip:rgba(255,255,255,.08);--chip2:rgba(255,255,255,.15);--pop:rgba(40,36,56,.96);--shadow:0 10px 30px rgba(0,0,0,.4)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;overflow:hidden;background:var(--cream);font:13px/1.35 'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+#ui{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#ui>*{pointer-events:auto}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--glass-b);border-radius:16px;box-shadow:var(--shadow);transition:background .6s,border-color .6s}
+button,select,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+h2,h3,.logo{font-family:'Fredoka','Manrope',system-ui,sans-serif}
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico{display:inline-flex}
+.grow{flex:1}
+.hid{display:none!important}
+/* top bar */
+#top{position:absolute;left:var(--gut);right:var(--gut);top:12px;height:56px;display:flex;align-items:center;gap:8px;padding:0 10px;z-index:30}
+#sec{display:contents}
+.logo{display:flex;align-items:center;gap:9px;font-weight:600;font-size:21px;letter-spacing:.2px;order:0;padding-right:6px}
+.logo i{width:32px;height:32px;border-radius:10px;background:var(--accent);display:grid;place-items:center;box-shadow:0 4px 10px rgba(244,63,94,.4)}
+.logo i svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#search{position:relative;order:1;flex:0 1 270px;min-width:120px}
+#search .ico{position:absolute;left:11px;top:9px;color:var(--ink2);pointer-events:none}
+#q{width:100%;height:36px;border-radius:12px;border:1px solid var(--line);background:var(--chip);padding:0 12px 0 34px;outline:none;transition:border-color .2s,box-shadow .2s}
+#q::placeholder{color:var(--ink2)}
+#q:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(244,63,94,.18)}
+.btn{height:36px;padding:0 11px;border-radius:12px;display:inline-flex;align-items:center;gap:7px;font-weight:700;background:var(--chip);white-space:nowrap;transition:background .15s}
+.btn:hover{background:var(--chip2)}
+.btn.icon{width:36px;padding:0;justify-content:center}
+.dd{position:relative}
+.dd.open>.btn{background:var(--chip2)}
+.dd>.btn .chev{width:14px;height:14px;opacity:.6;transition:transform .2s}
+.dd.open>.btn .chev{transform:rotate(180deg)}
+#dArea{order:2}#dWx{order:3}.fill{order:4;flex:1}#clockbox{order:5}#dAl{order:6}#bTod{order:7}#dUser{order:8}#bBurger{order:9;display:none}
+.pop{position:absolute;top:calc(100% + 8px);left:0;min-width:210px;padding:6px;border-radius:14px;background:var(--pop);border:1px solid var(--glass-b);box-shadow:var(--shadow);display:none;z-index:40}
+.pop.right{left:auto;right:0}
+.dd.open>.pop,#sres.on{display:block}
+.pop button,.pop .row{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:10px;text-align:left;font-weight:600}
+.pop button:hover,.pop .row.hl{background:var(--chip2)}
+.pop .cur{color:var(--acct)}
+.pop .tick{margin-left:auto;color:var(--acct);opacity:0}
+.pop .cur .tick{opacity:1}
+.pop .sub{font-weight:500;color:var(--ink2);font-size:12px}
+.pop hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
+#sres{top:calc(100% + 6px);left:0;right:0;min-width:240px}
+#sres .row small{margin-left:auto;color:var(--ink2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+#sres mark{background:none;color:var(--acct)}
+#sres .none{padding:10px;color:var(--ink2)}
+#clockbox{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;padding:0 6px}
+#clock{font:600 20px 'Fredoka',sans-serif}
+#open{font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--ink2)}
+#open.on{color:var(--acct)}
+#bAl{position:relative}
+#badge{position:absolute;right:-3px;top:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--accf);color:#fff;font:800 10.5px/17px 'Manrope';font-style:normal;text-align:center;box-shadow:0 0 0 2px var(--cream)}
+body.night #badge{box-shadow:0 0 0 2px #2a2738}
+#mAl{width:350px;padding:0}
+#mAl .h{display:flex;align-items:center;padding:12px 14px 8px;font:600 15px 'Fredoka'}
+#mAl .h small{margin-left:auto;font:600 11px 'Manrope';color:var(--ink2)}
+#alist{max-height:340px;overflow:auto;padding:0 6px 6px}
+#alist .al{display:flex;gap:10px;align-items:flex-start;padding:9px 8px;border-radius:10px;width:100%;text-align:left;font-weight:600}
+#alist .al:hover{background:var(--chip2)}
+#alist .al .ai{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--chip2);flex:none}
+#alist .al.live .ai{background:var(--accent);color:#fff}
+#alist .al span{display:block;font-weight:500;color:var(--ink2);font-size:11.5px}
+#alist .empty{padding:18px;text-align:center;color:var(--ink2)}
+.av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accf),#C23152);color:#fff;font:800 11px/26px 'Manrope';text-align:center;flex:none}
+.btn.user{padding-left:5px}
+/* KPI cards */
+#kpis{position:absolute;left:var(--gut);top:80px;display:flex;gap:10px;z-index:10}
+.kpi{width:208px;padding:11px 13px 8px;position:relative;overflow:hidden}
+.kpi .l{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--ink2)}
+.kpi .v{font:600 26px/1.15 'Fredoka',sans-serif;margin-top:2px}
+.kpi .v small{font:700 13px 'Manrope';color:var(--ink2);margin-left:3px}
+.kpi .d{font-size:11.5px;font-weight:700;color:var(--ink2);display:flex;align-items:center;gap:4px}
+.kpi .d b{color:var(--acct)}
+.kpi .sub{font-size:10.5px;font-weight:600;color:var(--ink2);margin-top:1px;white-space:nowrap}
+.kpi .sp{height:30px;margin:4px -4px 0}
+.sp svg,.chart svg{display:block;width:100%;height:100%;overflow:visible}
+.sp .ln,.chart .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.sp .ar,.chart .ar{fill:rgba(244,63,94,.13);stroke:none}
+/* panels */
+.panel{position:absolute}
+.pill{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:11px;font-size:11px;font-weight:800;letter-spacing:.3px;background:var(--chip2);color:var(--ink)}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.pill.closed{background:var(--ink);color:var(--cream)}
+body.night .pill.closed{background:#f6ece0;color:#2a2738}
+.pill.hold{background:transparent;box-shadow:inset 0 0 0 1.5px var(--accent);color:var(--acct)}
+.pill.hot{background:var(--accf);color:#fff}
+.pill.hot i{background:#fff}
+.pill .ic{width:12px;height:12px;stroke-width:2.4}
+#detail{right:var(--gut);top:80px;width:320px;max-height:calc(100% - 96px);overflow:auto;padding:16px;z-index:10}
+#detail .x{position:absolute;right:10px;top:10px;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--ink2)}
+#detail .x:hover{background:var(--chip2)}
+.kind{color:var(--acct);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+#detail h2{font-size:21px;font-weight:600;line-height:1.15;margin:2px 28px 8px 0}
+#dEmpty{text-align:center;padding:14px 8px 8px;color:var(--ink2)}
+#dEmpty svg{width:64px;height:64px;margin-bottom:6px}
+#dEmpty b{display:block;font:600 16px 'Fredoka';color:var(--ink);margin-bottom:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.stats div{background:var(--chip);border-radius:12px;padding:8px 10px}
+.stats dt{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink2)}
+.stats dd{font:600 18px/1.2 'Fredoka'}
+.stats dd small{font:600 11px 'Manrope';color:var(--ink2);margin-left:2px}
+.chart{margin-top:12px;background:var(--chip);border-radius:12px;padding:9px 10px 6px}
+.chart .h{display:flex;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2)}
+.chart .h b{margin-left:auto;color:var(--ink);font-size:12px}
+.chart .cv{height:78px;margin-top:4px}
+.chart .ax{display:flex;justify-content:space-between;font-size:10px;color:var(--ink2);margin-top:2px}
+.chart .gl{stroke:var(--line);stroke-width:1;vector-effect:non-scaling-stroke}
+.chart .mk{fill:var(--accent);stroke:none}
+/* ride cycle tracker */
+#tracker{left:var(--gut);bottom:var(--gut);width:392px;padding:12px 14px 12px;z-index:10}
+.ph{display:flex;align-items:center;gap:8px}
+.ph h3{font-size:16px;font-weight:600}
+#trSel{height:28px;border-radius:9px;border:1px solid var(--line);background:var(--chip);padding:0 6px;font-weight:700;max-width:160px;outline:none;cursor:pointer}
+#trSel option{color:#3b2f2a}
+#trSteps{list-style:none;display:flex;margin-top:12px}
+#trSteps li{flex:1;text-align:center;position:relative;color:var(--ink2);transition:color .2s,opacity .3s}
+#trSteps li::before{content:"";position:absolute;top:10px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0}
+#trSteps li:first-child::before{display:none}
+#trSteps li.done::before,#trSteps li.cur::before{background:var(--accent)}
+#trSteps b{position:relative;z-index:1;width:22px;height:22px;border-radius:50%;margin:0 auto;display:grid;place-items:center;font-size:11px;background:var(--pop);box-shadow:inset 0 0 0 2px var(--line)}
+#trSteps li.done b{box-shadow:inset 0 0 0 2px var(--accent);color:var(--acct)}
+#trSteps li.cur b{background:var(--accf);color:#fff;box-shadow:0 0 0 4px rgba(244,63,94,.22)}
+#trSteps span{display:block;margin-top:5px;font-size:11px;font-weight:700}
+#trSteps li.cur span{color:var(--ink);font-weight:800}
+#trSteps .bar{display:block;height:4px;border-radius:2px;background:var(--chip2);margin:5px 5px 0;overflow:hidden}
+#trSteps .bar u{display:block;height:100%;width:0;background:var(--accent);border-radius:2px;text-decoration:none}
+#trSteps.dim li:not(.cur){font-style:italic}
+#trInfo{display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--ink2);font-weight:600;align-items:center}
+#trInfo b{color:var(--ink);font-weight:800}
+#trNote{margin-top:8px;font-size:12px;font-weight:700;color:var(--acct);display:none;align-items:center;gap:6px}
+#trNote.on{display:flex}
+/* table */
+#table{left:calc(var(--gut) + 404px);right:calc(var(--gut) + 332px);bottom:var(--gut);padding:10px 12px 8px;z-index:10;min-width:300px}
+.tabs{display:flex;gap:4px;background:var(--chip);padding:3px;border-radius:11px}
+.tabs button{padding:5px 12px;border-radius:9px;font-weight:800;color:var(--ink2)}
+.tabs button.on{background:var(--pop);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+#tbCol{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--ink2)}
+#tbCol:hover{background:var(--chip2)}
+#tbCol .ic{transition:transform .2s}
+#table.col #tbCol .ic{transform:rotate(180deg)}
+.tbody{margin-top:8px;max-height:196px;overflow:auto}
+#table.col .tbody{display:none}
+table{width:100%;border-collapse:collapse;font-weight:600}
+th{position:sticky;top:0;background:var(--pop);text-align:right;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink2);padding:6px 8px;cursor:pointer;white-space:nowrap;user-select:none}
+th:first-child,td:first-child{text-align:left}
+th.s{color:var(--acct)}
+th .ar{display:inline-block;width:8px;font-size:9px}
+td{padding:6px 8px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--chip)}
+tbody tr.sel{background:rgba(244,63,94,.12)}
+tbody tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+td .st{display:inline-block;padding:1px 8px;border-radius:9px;font-size:10.5px;font-weight:800;background:var(--chip2)}
+td .st.Closed{background:var(--ink);color:var(--cream)}
+body.night td .st.Closed{background:#f6ece0;color:#2a2738}
+td .st.Hold{box-shadow:inset 0 0 0 1.5px var(--accent);color:var(--acct);background:none;padding:2px 8px}
+td.hi{color:var(--acct);font-weight:800}
+#label{position:absolute;left:0;top:0;transform:translate(-50%,-100%);padding:4px 10px;border-radius:999px;background:var(--accf);color:#fff;font-weight:700;font-size:12px;white-space:nowrap;pointer-events:none;display:none;box-shadow:0 4px 12px rgba(244,63,94,.4)}
+#dock{display:none}
+#toast{position:absolute;left:50%;top:76px;transform:translate(-50%,-8px);padding:8px 16px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:50}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:1180px){#table{right:calc(var(--gut) + 292px)}#detail{width:280px}.kpi{width:180px}}
+@media (max-width:1000px) and (min-width:769px){#table{left:var(--gut);bottom:172px}.tbody{max-height:150px}}
+/* mobile (<= 768 px wide or a short landscape phone) */
+.m #top{top:8px;height:48px;gap:6px;padding:0 6px}
+.m .logo span{display:none}.m .logo{padding:0}
+.m #search{flex:1 1 auto;order:1;min-width:0}
+.m #clockbox{order:3;padding:0 2px}.m #clock{font-size:17px}
+.m #dAl{order:4}.m #bBurger{display:inline-flex;order:5}.m #open{font-size:9px}
+.m .fill{display:none}
+.m #sec{display:none;position:absolute;left:0;right:0;top:calc(100% + 8px);flex-direction:column;align-items:stretch;gap:8px;padding:10px;border-radius:16px;background:var(--pop);border:1px solid var(--glass-b);box-shadow:var(--shadow);max-height:70vh;overflow:auto;z-index:45}
+.m #top.menu #sec{display:flex}
+.m #sec .dd,.m #sec>.btn{order:0;width:100%}
+.m #sec .btn{width:100%;justify-content:flex-start;height:42px}
+.m #sec .dd>.btn .chev{margin-left:auto}
+.m #sec .pop{position:static;box-shadow:none;border:0;background:var(--chip);margin-top:6px;min-width:0}
+.m #q{height:38px}.m #search .ico{top:10px}
+.m .btn.icon{width:38px;height:38px}
+.m #kpis{left:0;right:0;top:64px;padding:0 var(--gut) 4px;gap:8px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-padding:0 var(--gut);scrollbar-width:none}
+.m #kpis::-webkit-scrollbar{display:none}
+.m .kpi{flex:0 0 150px;width:150px;padding:8px 10px 6px;scroll-snap-align:start}
+.m .kpi .sub{display:none}
+.m .kpi .v{font-size:21px}.m .kpi .sp{height:22px}.m .kpi .l{font-size:10px}.m .kpi .d{font-size:10.5px}
+.m #detail,.m #tracker,.m #table{position:fixed;left:var(--gut);right:var(--gut);bottom:calc(60px + env(safe-area-inset-bottom));top:auto;width:auto;min-width:0;max-height:42vh;overflow:auto;display:none;z-index:20}
+.m #table{padding:10px 10px 6px}
+.m .tbody{max-height:calc(42vh - 70px)}
+.m .lo{display:none}
+.m[data-sheet=detail] #detail,.m[data-sheet=cycle] #tracker,.m[data-sheet=table] #table{display:block}
+.m #tracker,.m #table{overflow:hidden}
+.m #trSteps span{font-size:10px}
+.m #dock{position:fixed;left:var(--gut);right:var(--gut);bottom:calc(8px + env(safe-area-inset-bottom));height:46px;display:flex;gap:6px;padding:5px;z-index:25}
+.m #dock button{flex:1;border-radius:11px;font-weight:800;color:var(--ink2);display:flex;align-items:center;justify-content:center;gap:6px}
+.m #dock button.on{background:var(--accf);color:#fff}
+.m #toast{top:116px}
+.m.ml #top{top:6px;height:44px}
+.m.ml #kpis{top:56px}.m.ml .kpi{flex:0 0 132px;width:132px;padding:5px 9px 4px}.m.ml .kpi .sp,.m.ml .kpi .d span{display:none}.m.ml .kpi .v{font-size:18px}
+.m.ml #detail,.m.ml #tracker,.m.ml #table{left:auto;right:var(--gut);width:min(360px,46vw);top:104px;bottom:60px;max-height:none}
+.m.ml .tbody{max-height:calc(100% - 52px)}
+.m.ml #dock{left:var(--gut);right:auto;width:min(360px,46vw);bottom:8px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <header id="top" class="glass">
+    <div class="logo"><i><svg viewBox="0 0 24 24"><path d="M3 17c3-9 6-9 9 0s6 9 9 0"/><circle cx="12" cy="6.5" r="1.4" fill="#fff" stroke="none"/></svg></i><span>Parkline</span></div>
+    <div id="search"><span class="ico" data-ic="search"></span><input id="q" type="text" placeholder="Search rides, stalls, queues" autocomplete="off" spellcheck="false" aria-label="Search park" enterkeyhint="go"><div id="sres" class="pop" role="listbox"></div></div>
+    <div id="sec">
+      <div class="dd" id="dArea"><button class="btn" id="bArea" aria-haspopup="true"><span class="ico" data-ic="pin"></span><span id="areaName">Areas</span><span class="ico chev" data-ic="chev"></span></button><div class="pop" id="mArea"></div></div>
+      <div class="dd" id="dWx"><button class="btn" id="bWx" aria-haspopup="true"><span class="ico" id="wxIc"></span><span id="wxName">Sunny</span><span class="ico chev" data-ic="chev"></span></button><div class="pop" id="mWx"></div></div>
+      <button class="btn" id="bTod" title="Day / night: Auto, Day, Night"><span class="ico" id="todIc"></span><span id="todName">Auto</span></button>
+      <div class="dd" id="dUser"><button class="btn user" id="bUser" aria-haspopup="true"><b class="av">ML</b><span>Mia Larsen</span><span class="ico chev" data-ic="chev"></span></button>
+        <div class="pop right" id="mUser"><div class="row"><b class="av">ML</b><div>Mia Larsen<div class="sub">Park operations manager</div></div></div><hr><button data-u="profile">View profile</button><button data-u="shift">Shift notes</button><button data-u="settings">Settings</button><hr><button data-u="out">Sign out</button></div></div>
+    </div>
+    <div class="fill"></div>
+    <div id="clockbox"><b id="clock">11:00</b><small id="open">Open</small></div>
+    <div class="dd" id="dAl"><button class="btn icon" id="bAl" aria-haspopup="true" aria-label="Alerts"><span class="ico" data-ic="bell"></span><em id="badge">0</em></button>
+      <div class="pop right" id="mAl"><div class="h">Alerts<small id="alSub"></small></div><div id="alist"></div></div></div>
+    <button class="btn icon" id="bBurger" aria-label="Menu"><span class="ico" data-ic="menu"></span></button>
+  </header>
+  <section id="kpis"></section>
+  <aside id="detail" class="glass panel">
+    <button class="x" id="dx" aria-label="Close details"><span class="ico" data-ic="close"></span></button>
+    <div id="dEmpty"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="24" opacity=".35"/><circle cx="32" cy="32" r="14" opacity=".6"/><circle cx="32" cy="32" r="3.5" fill="#F43F5E" stroke="none"/><path d="M32 4v8M32 52v8M4 32h8M52 32h8" opacity=".5"/></svg><b>Nothing selected</b>Click a ride, stall, queue or the parade, or use the search bar.</div>
+    <div id="dBody" class="hid"><div class="kind" id="dKind"></div><h2 id="dTitle"></h2><span class="pill" id="dPill"></span><dl class="stats" id="dStats"></dl><div class="chart" id="dChart"></div></div>
+  </aside>
+  <section id="tracker" class="glass panel">
+    <div class="ph"><h3>Ride cycle</h3><select id="trSel" aria-label="Ride"></select><span class="grow"></span><span class="pill" id="trPill"></span></div>
+    <div id="trNote"></div>
+    <ol id="trSteps"></ol>
+    <div id="trInfo"></div>
+  </section>
+  <section id="table" class="glass panel">
+    <div class="ph"><div class="tabs" role="tablist"><button data-tab="rides" class="on" role="tab">Rides</button><button data-tab="queues" role="tab">Queues</button><button data-tab="stalls" role="tab">Stalls</button></div><span class="grow"></span><button id="tbCol" aria-label="Collapse table" title="Collapse"><span class="ico" data-ic="chev"></span></button></div>
+    <div class="tbody"><table><thead></thead><tbody></tbody></table></div>
+  </section>
+  <nav id="dock" class="glass"><button data-sheet="detail">Details</button><button data-sheet="cycle">Cycle</button><button data-sheet="table">Table</button></nav>
+  <div id="toast" class="glass"></div>
+  <div id="label"></div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* ============ 1. CORE: renderer, scene, lights, helpers ============ */
+const PAL = { cream:0xFBF4E8, sand:0xE8D9C0, clay:0xD9C2A3, stone:0xCFC4B4, sage:0xB7C9A8, leaf:0x9DB58C, water:0x9CC7CD,
+  butter:0xF2DDA4, lilac:0xC9B8D6, peach:0xF1C7A8, sky:0xAFCBD9, wood:0xB58B65, white:0xFFFAF2, dark:0x6B5A50, accent:0xF43F5E };
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = u => u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const srand = mulberry(7);
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(PAL.cream);
+scene.fog = new THREE.Fog(PAL.cream, 260, 560);
+const camera = new THREE.PerspectiveCamera(32, 1, 1, 1600);
+const env = { day: 1, over: 0, wind: 0, rain: 0, fest: 0, twi: 0 };         // smoothed environment factors 0..1 (section 6)
+const HOOKS = {};               // scene parts the environment layer (section 6) animates
+
+const hemi = new THREE.HemisphereLight(0xfff6e6, 0xf0e0c6, 1.5);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff0d8, 1.7);
+sun.position.set(70, 110, 50);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -125, right: 125, top: 125, bottom: -125, near: 10, far: 330 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.05;
+scene.add(sun);
+
+/* merged-geometry builder: many primitives -> one vertex-coloured mesh (1 draw call) */
+const VC = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0, flatShading: true });
+class Bag {
+  constructor() { this.g = []; }
+  add(geo, col, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0) {
+    const m = x && x.isMatrix4 ? x : new THREE.Matrix4().compose(new THREE.Vector3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz)), new THREE.Vector3(1, 1, 1));
+    const g = geo.applyMatrix4(m); const n = g.attributes.position.count, c = new THREE.Color(col), a = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { a[i * 3] = c.r; a[i * 3 + 1] = c.g; a[i * 3 + 2] = c.b; }
+    g.setAttribute('color', new THREE.BufferAttribute(a, 3)); this.g.push(g); return this;
+  }
+  box(w, h, d, col, x, y, z, rx, ry, rz) { return this.add(new THREE.BoxGeometry(w, h, d), col, x, y, z, rx, ry, rz); }
+  cyl(rt, rb, h, col, x, y, z, seg = 8, rx, ry, rz) { return this.add(new THREE.CylinderGeometry(rt, rb, h, seg), col, x, y, z, rx, ry, rz); }
+  sph(r, col, x, y, z, sw = 8, sh = 6) { return this.add(new THREE.SphereGeometry(r, sw, sh), col, x, y, z); }
+  build(cast = true, recv = true) {
+    const geos = this.g.map(g => g.index ? g : g); const m = new THREE.Mesh(mergeGeometries(geos, false), VC);
+    m.castShadow = cast; m.receiveShadow = recv; return m;
+  }
+}
+const mats = {};
+const stdMat = (c, o = {}) => mats[c + JSON.stringify(o)] ||= new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, flatShading: true, ...o });
+
+/* ground: cream island slab on a fog-matched plane */
+{
+  const slab = new THREE.Mesh(new THREE.BoxGeometry(236, 3, 236), stdMat(0xFFF8EB)); slab.position.y = -1.6; slab.receiveShadow = true; scene.add(slab);
+  const outer = new THREE.Mesh(new THREE.PlaneGeometry(2400, 2400), HOOKS.outerMat = new THREE.MeshBasicMaterial({ color: PAL.cream })); outer.rotation.x = -Math.PI / 2; outer.position.y = -3.2; scene.add(outer);
+}
+
+const pickables = [];            // root objects that carry userData.entityId
+const clock = new THREE.Clock();
+const V3 = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
+const world = new THREE.Group(); scene.add(world);
+
+/* ============ 2. PATH GRAPH & GUESTS ============ */
+/* path graph: nodes are junctions, edges are two directed lanes (right-hand traffic) */
+const G = { nodes: {}, edges: [], adj: {}, pairs: [] };
+function addNode(id, x, z) { G.nodes[id] = { id, x, z }; G.adj[id] = []; }
+function addEdge(a, b) {
+  const A = G.nodes[a], B = G.nodes[b], len = Math.hypot(B.x - A.x, B.z - A.z), dx = (B.x - A.x) / len, dz = (B.z - A.z) / len;
+  const e1 = { from: a, to: b, len, dx, dz, key: G.edges.length, pb: false }, e2 = { from: b, to: a, len, dx: -dx, dz: -dz, key: G.edges.length + 1, pb: false };
+  e1.rev = e2; e2.rev = e1; G.edges.push(e1, e2); G.adj[a].push(e1); G.adj[b].push(e2); G.pairs.push([e1, e2]);
+}
+[['gate', 0, 74], ['plaza', 0, 58], ['hub', 0, 30], ['n1', 0, 0], ['n2', 0, -26], ['e1', 26, 0], ['w1', -26, 0], ['k1', -14, -26], ['f1', 22, -26], ['lk1', -30, 58]]
+  .forEach(n => addNode(...n));
+[['gate', 'plaza'], ['plaza', 'hub'], ['hub', 'n1'], ['n1', 'n2'], ['n1', 'e1'], ['n1', 'w1'], ['n2', 'k1'], ['n2', 'f1'], ['plaza', 'lk1']].forEach(e => addEdge(...e));
+
+/* queue lines: polyline from the boarding front (d=0) to the back (d=L); guests hold slots every `gap` */
+const QP = { x: 0, z: 0 }, QP2 = { x: 0, z: 0 };
+class Queue {
+  constructor(id, pts, gap = 1.3) {
+    this.id = id; this.pts = pts; this.gap = gap; this.cum = [0];
+    for (let i = 1; i < pts.length; i++) this.cum.push(this.cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
+    this.L = this.cum[this.cum.length - 1]; this.cap = Math.max(2, Math.floor((this.L - 2.4) / gap) + 1);
+    this.list = []; this.owner = null; this.node = null; this.head = 0;
+  }
+  at(d, out) {
+    d = clamp(d, 0, this.L); let i = 1; while (i < this.cum.length - 1 && this.cum[i] < d) i++;
+    const t = (d - this.cum[i - 1]) / Math.max(1e-6, this.cum[i] - this.cum[i - 1]), a = this.pts[i - 1], b = this.pts[i];
+    out.x = lerp(a.x, b.x, t); out.z = lerp(a.z, b.z, t); return out;
+  }
+  update(dt) {
+    const n = this.list.length;
+    if (this.draining) {         // closed ride: the line walks out backwards, tail first, and leaves through the ride exit lane
+      for (let i = n - 1; i >= 0; i--) {
+        const g = this.list[i], lim = i === n - 1 ? this.L : this.list[i + 1].qd - 1.0, nq = Math.max(g.qd, Math.min(g.qd + 1.7 * dt, lim));
+        g.qd = nq > g.qd && nq > this.L - 3 && this.mouthBusy(nq) ? g.qd : nq;       // never walk back into a walker standing at the queue mouth: wait until it has turned away
+      }
+    } else for (let i = 0; i < n; i++) {
+      const g = this.list[i]; g.qd = Math.max(i * this.gap, g.qd - 2.2 * dt);
+      if (i > 0) g.qd = Math.max(g.qd, this.list[i - 1].qd + 1.0);
+    }
+    const dir = this.draining ? 0.4 : -0.4;
+    for (const g of this.list) {           // queue members sit exactly on the queue line; the line itself keeps them >= 1 m apart along its path
+      this.at(g.qd, QP); g.step += Math.hypot(QP.x - g.x, QP.z - g.z); g.x = QP.x; g.z = QP.z;
+      this.at(Math.max(0, g.qd + dir), QP2); if (Math.hypot(QP2.x - QP.x, QP2.z - QP.z) > 0.01) g.hd = Math.atan2(QP2.x - QP.x, QP2.z - QP.z);
+    }
+    if (this.draining && n && this.list[n - 1].qd >= this.L - 0.02) drainOut(this, this.list[n - 1]);
+  }
+  mouthBusy(d) {         // a walker at the mouth (or on its way to turn round there) has right of way: the line keeps 1 m back until it is gone; walkers already leaving on the exit lane do not hold the line
+    this.at(this.L, QP2); const px = QP2.x, pz = QP2.z; this.at(d, QP); const cx = Math.floor(px / 4), cz = Math.floor(pz / 4);
+    for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const l = grid.get(cellK(cx + i, cz + j)); if (l) for (const o of l) {
+      if (o.state === 'queue' && o.q === this) continue;
+      const leaving = o.lane && o.lane.e.from === this.node;
+      if (Math.hypot(o.x - QP.x, o.z - QP.z) < (leaving ? 0.62 : 0.85) || (!leaving && d > this.L - 1.0 && Math.hypot(o.x - px, o.z - pz) < 2.5)) return true;
+    } }
+    return false;
+  }
+  get full() { return this.list.length >= this.cap; }
+}
+function serp(front, dir, lat, len, rows, gap) {
+  const pts = [];
+  for (let r = 0; r < rows; r++) {
+    const s = { x: front.x + lat.x * gap * r + (r % 2 ? dir.x * len : 0), z: front.z + lat.z * gap * r + (r % 2 ? dir.z * len : 0) };
+    const e = { x: front.x + lat.x * gap * r + (r % 2 ? 0 : dir.x * len), z: front.z + lat.z * gap * r + (r % 2 ? 0 : dir.z * len) };
+    pts.push(s, e);
+  }
+  return pts.filter((p, i) => !i || Math.hypot(p.x - pts[i - 1].x, p.z - pts[i - 1].z) > 0.01);
+}
+/* a queue's back end becomes a graph node wired to a parent junction */
+function makeQueue(id, front, dir, lat, len, rows, gap, parent) {
+  const q = new Queue(id, serp(front, dir, lat, len, rows, gap)), b = q.pts[q.pts.length - 1];
+  addNode('q-' + id, b.x, b.z); addEdge('q-' + id, parent); q.node = 'q-' + id; return q;
+}
+
+/* walking agents (guests & service carts); lanes, junction moves and crossings are built in section 3 once all queues exist */
+const walkers = [];
+
+/* ============ 3. RIDES ============ */
+const ents = {};                 // entity id -> entity (rides, queues, stalls, parade)
+const anims = [];                // per-frame animators fn(dt, t)
+function tag(obj, id) { obj.userData.entityId = id; pickables.push(obj); return obj; }
+function placeM(pos, T, U) { const s = U.clone().cross(T).normalize(); return new THREE.Matrix4().makeBasis(s, U, T).setPosition(pos); }
+function proxyTube(curve, r, segs) { const m = new THREE.Mesh(new THREE.TubeGeometry(curve, segs, r, 5, true), new THREE.MeshBasicMaterial({ visible: false })); m.userData.proxy = true; return m; }
+const dist2seg = (px, pz, ax, az, bx, bz) => { const dx = bx - ax, dz = bz - az, t = clamp(((px - ax) * dx + (pz - az) * dz) / (dx * dx + dz * dz || 1), 0, 1); return Math.hypot(px - ax - dx * t, pz - az - dz * t); };
+
+function mkRide(o) {
+  const r = Object.assign({ kind: 'ride', status: 'Open', phase: 'Loading', phaseT: 0, util: 0.72, ridesToday: 0, cycles: 0, onboard: [], motion: 1, resumed: true, cycIdx: 0, ringR: 8, labelH: 6, dist: 80 }, o);
+  r.hourlyCap = Math.round(r.realSeats * 3600 / r.nomCycle); r.cyc = r.cycle ? r.cycle.reduce((a, c) => a + c[1], 0) : r.nomCycle / 4; r.lastDisp = -r.cyc / 2; r.nDisp = 0; r.rph = Math.round(r.hourlyCap * r.util);
+  ents[r.id] = r; return r;
+}
+/* timer-driven ride cycle: phases [name, seconds]; motion factor 0..1 shapes spin-up / spin-down */
+function runCycle(r, dt) {
+  if (r.wClosed && r.cycIdx === 0) { r.phaseT = 0; r.motion = 0; return; }       // weather-closed: finish the running cycle, then wait in the station
+  r.phaseT += dt; const ph = r.cycle[r.cycIdx];
+  if (r.phaseT >= ph[1]) {
+    r.phaseT = 0; r.cycIdx = (r.cycIdx + 1) % r.cycle.length; r.phase = r.cycle[r.cycIdx][0];
+    if (r.phase === 'Dispatch') r.onDispatch(); if (r.phase === 'Unload') r.releaseAll();
+  }
+  const u = r.phaseT / r.cycle[r.cycIdx][1];
+  r.motion = r.phase === 'Dispatch' ? u : r.phase === 'Ride' || r.phase === 'Lift' ? 1 : r.phase === 'Brake' ? 1 - u : 0;
+}
+
+/* ---------- entrance, plaza, fountain, depot ---------- */
+const FOUNTAIN = { x: -8, z: 65.8, R: 4.0 };   // inside the plaza paving, clear of every lane, cart, kiosk and the parade route
+{
+  const b = new Bag();
+  b.cyl(15, 15, 0.1, PAL.stone, 0, 0.05, 60, 40); b.cyl(7, 7, 0.1, PAL.stone, 0, 0.05, 30, 36);
+  // fountain
+  b.cyl(4.0, 4.0, 0.1, PAL.stone, FOUNTAIN.x, 0.05, FOUNTAIN.z, 28); b.cyl(3.6, 3.6, 0.9, PAL.white, FOUNTAIN.x, 0.5, FOUNTAIN.z, 20); b.cyl(3.2, 3.2, 0.2, PAL.water, FOUNTAIN.x, 0.92, FOUNTAIN.z, 20);
+  b.cyl(0.5, 0.8, 2.4, PAL.white, FOUNTAIN.x, 1.6, FOUNTAIN.z, 8); b.sph(0.9, PAL.water, FOUNTAIN.x, 3.0, FOUNTAIN.z);
+  // gate arch
+  for (const s of [-1, 1]) { b.box(2.2, 9, 2.2, PAL.white, s * 9, 4.5, 72); b.box(2.8, 0.7, 2.8, PAL.clay, s * 9, 0.35, 72); b.sph(1.2, PAL.accent, s * 9, 9.6, 72); b.box(5, 3.2, 4, PAL.butter, s * 14.5, 1.6, 70); b.box(5.6, 0.5, 4.6, PAL.accent, s * 14.5, 3.4, 70); }
+  b.box(22, 2.6, 1.8, PAL.accent, 0, 9.6, 72); b.box(18, 1.3, 1.9, PAL.white, 0, 9.6, 72.1);
+  for (const i of [-3, -2, -1, 1, 2, 3]) b.cyl(0.08, 0.08, 1.4, PAL.dark, Math.sign(i) * (3.9 + (Math.abs(i) - 1) * 1.8), 0.7, 70, 5);
+  // parade depot
+  b.box(8, 5, 7, PAL.lilac, 28, 2.5, 52); b.box(8.6, 0.6, 7.6, PAL.white, 28, 5.2, 52); b.box(5, 3.6, 0.3, PAL.accent, 28, 1.8, 48.4);
+  const m = b.build(true, true); world.add(m);
+}
+
+/* ---------- parking lot ---------- */
+{
+  const b = new Bag(); b.box(66, 0.1, 18, 0xD9CDBD, 0, 0.05, 86);
+  for (let r = 0; r < 3; r++) for (let i = -10; i <= 10; i++) b.box(0.15, 0.02, 5, PAL.white, i * 3, 0.12, 80 + r * 6 + (r ? 0 : 0));
+  world.add(b.build(false, true));
+  const cb = new Bag(); cb.box(2.2, 0.8, 4.2, 0xffffff, 0, 0.7, 0); cb.box(1.9, 0.7, 2.2, 0xdddddd, 0, 1.35, -0.2); cb.box(0.4, 0.3, 0.3, PAL.dark, -0.9, 0.3, 1.4); cb.box(0.4, 0.3, 0.3, PAL.dark, 0.9, 0.3, 1.4);
+  const geo = cb.build().geometry, cars = [];
+  for (const row of [0, 1, 2]) for (let i = -10; i < 10; i++) if (srand() < 0.62) cars.push([i * 3 + 1.5, 82.5 + row * 6 + (row === 0 ? -0.5 : 0)]);
+  const cols = [PAL.accent, PAL.butter, PAL.sky, PAL.peach, PAL.lilac, PAL.sage, PAL.white, PAL.stone];
+  const im = new THREE.InstancedMesh(geo, VC, cars.length); im.castShadow = true; im.receiveShadow = true;
+  const d = new THREE.Object3D();
+  cars.forEach((c, i) => { d.position.set(c[0], 0, c[1]); d.rotation.y = srand() < 0.5 ? 0 : Math.PI; d.updateMatrix(); im.setMatrixAt(i, d.matrix); im.setColorAt(i, new THREE.Color(cols[Math.floor(srand() * cols.length)])); });
+  world.add(im);
+}
+
+/* ---------- queue lines (visual + entity) ---------- */
+function buildQueueVisual(q, name, owner) {
+  const b = new Bag(), P = q.pts;
+  for (let i = 1; i < P.length; i++) {
+    const a = P[i - 1], c = P[i], len = Math.hypot(c.x - a.x, c.z - a.z), ang = Math.atan2(c.x - a.x, c.z - a.z), cut = i === 1 ? 1.15 : 0;      // the floor ends at the boarding front instead of running 1.15 m past it
+    b.box(2.3, 0.14, len + 2.3 - cut, 0xF6DAD3, (a.x + c.x) / 2 + Math.sin(ang) * cut / 2, 0.11, (a.z + c.z) / 2 + Math.cos(ang) * cut / 2, 0, ang, 0);
+  }
+  for (const p of queuePosts(q)) { b.cyl(0.07, 0.07, 1.0, PAL.white, p.x, 0.6, p.z, 5); b.sph(0.14, PAL.accent, p.x, 1.15, p.z, 5, 4); }
+  const mesh = b.build(false, true), g = new THREE.Group(); g.add(mesh); world.add(g); tag(g, 'q-' + q.id);
+  const tmp = { x: 0, z: 0 };
+  ents['q-' + q.id] = { id: 'q-' + q.id, kind: 'queue', name: name + ' queue', queue: q, owner, ringR: 6, labelH: 3.5, dist: 55,
+    pos: () => { q.at(q.L * 0.5, tmp); return V3(tmp.x, 0, tmp.z); } };
+}
+
+/* ---------- food stalls + seating ---------- */
+const stalls = [];
+function addStall(id, name, pos, face, wall, price, svc, parent) {
+  const front = { x: pos.x + face.x * 3.6, z: pos.z + face.z * 3.6 };
+  const q = makeQueue('stall-' + id, front, face, { x: -face.z, z: face.x }, 8, 1, 1, parent);
+  const g = new THREE.Group(), b = new Bag();
+  b.box(4.6, 2.6, 3.6, wall, 0, 1.3, 0); b.box(4.9, 0.25, 1.1, PAL.white, 0, 1.45, 2.3); b.box(4.9, 0.3, 4.2, PAL.dark, 0, 0.15, 0.3);
+  for (let i = 0; i < 6; i++) b.box(0.84, 0.18, 3.0, i % 2 ? PAL.white : PAL.accent, -2.1 + i * 0.84, 3.05 - 0.0, 1.5, 0.45, 0, 0);
+  b.box(4.8, 0.3, 2.4, PAL.cream, 0, 3.5, -0.3);
+  b.cyl(0.08, 0.08, 2.4, PAL.dark, -2.3, 1.2, 3.0, 5); b.cyl(0.08, 0.08, 2.4, PAL.dark, 2.3, 1.2, 3.0, 5);
+  b.sph(0.55, PAL.accent, 0, 4.2, 0); b.box(2.4, 0.9, 0.2, PAL.white, 0, 3.0, -1.85);
+  g.add(b.build()); g.position.set(pos.x, 0, pos.z); g.rotation.y = Math.atan2(face.x, face.z); world.add(g); tag(g, 'stall-' + id);
+  const s = { id: 'stall-' + id, kind: 'stall', name, queue: q, price, svc, ringR: 5.5, labelH: 6, dist: 50, served: 0, serveT: [], cur: null, curT: 0, revenue: 0, orders: 0,
+    pos: () => V3(pos.x, 0, pos.z) };
+  q.owner = s; ents[s.id] = s; stalls.push(s); buildQueueVisual(q, name, s); return s;
+}
+addStall('burger', 'Burger Barn', { x: -36, z: 30 }, { x: 1, z: 0 }, PAL.peach, 9.5, 7, 'hub');
+addStall('ice', 'Scoop Ice Cream', { x: 36, z: 30 }, { x: -1, z: 0 }, PAL.sky, 5.5, 5, 'hub');
+addStall('noodle', 'Noodle House', { x: 12, z: -34 }, { x: -1, z: 0 }, PAL.butter, 11, 8, 'n2');
+addStall('balloon', 'Balloon Cart', { x: 16, z: 62 }, { x: -1, z: 0 }, PAL.lilac, 4, 4, 'plaza');
+{
+  const b = new Bag(), spots = [[-14, 49], [-20, 49], [-26, 51], [14, 49], [19, 49], [16.5, 54], [18, -38], [18, -43]];
+  for (const [x, z] of spots) {
+    b.cyl(1.1, 1.1, 0.12, PAL.white, x, 1.0, z, 10); b.cyl(0.12, 0.12, 1.0, PAL.dark, x, 0.5, z, 5);
+    b.cyl(0.05, 0.05, 2.6, PAL.dark, x, 1.5, z, 4); b.add(new THREE.ConeGeometry(2.0, 0.7, 8), (x + z) % 2 ? PAL.accent : PAL.cream, x, 2.9, z);
+    for (const a of [0, 2.1, 4.2]) b.cyl(0.3, 0.3, 0.55, PAL.clay, x + Math.cos(a) * 1.6, 0.3, z + Math.sin(a) * 1.6, 6);
+  }
+  world.add(b.build());
+}
+
+/* ---------- lake, dock, paddle boats ---------- */
+const LAKE = { x: -64, z: 50, rx: 20, rz: 14 };
+const boats = (() => {
+  const shore = new THREE.Mesh(new THREE.CircleGeometry(1, 48), stdMat(PAL.sand)); shore.rotation.x = -Math.PI / 2; shore.scale.set(LAKE.rx + 2.5, LAKE.rz + 2.5, 1); shore.position.set(LAKE.x, 0.03, LAKE.z); shore.receiveShadow = true; world.add(shore);
+  const water = new THREE.Mesh(new THREE.CircleGeometry(1, 48), new THREE.MeshStandardMaterial({ color: PAL.water, roughness: 0.35, metalness: 0.05, flatShading: true }));
+  water.rotation.x = -Math.PI / 2; water.scale.set(LAKE.rx, LAKE.rz, 1); water.position.set(LAKE.x, 0.08, LAKE.z); water.receiveShadow = true;
+  const lg = new THREE.Group(); lg.add(water); world.add(lg); tag(lg, 'boats');
+  const dk = new Bag(); dk.box(5, 0.4, 3.4, PAL.wood, -43.5, 0.3, 50); for (const z of [48.5, 51.5]) dk.cyl(0.18, 0.18, 1.4, PAL.dark, -41.2, 0.7, z, 5);
+  world.add(dk.build());
+  const out = [], hullCols = [PAL.accent, PAL.butter, PAL.white, PAL.lilac, PAL.peach];
+  for (let i = 0; i < 5; i++) {
+    const b = new Bag(), c = hullCols[i];
+    b.box(1.7, 0.7, 3.0, c, 0, 0.5, 0); b.box(1.2, 0.5, 1.2, c, 0, 0.5, 1.9); b.box(0.9, 0.12, 1.6, PAL.white, 0, 0.9, -0.1);
+    b.cyl(0.2, 0.3, 1.1, PAL.white, 0, 1.2, 1.7, 6); b.sph(0.42, PAL.white, 0, 1.9, 1.8); b.box(0.2, 0.15, 0.5, PAL.accent, 0, 1.85, 2.3);
+    b.box(1.5, 0.12, 1.4, PAL.accent, 0, 2.0, -0.6); b.cyl(0.05, 0.05, 1.1, PAL.dark, -0.6, 1.45, -0.2, 4); b.cyl(0.05, 0.05, 1.1, PAL.dark, 0.6, 1.45, -0.2, 4);
+    const m = b.build(); m.position.y = 0.05; const g = new THREE.Group(); g.add(m); world.add(g);
+    out.push({ g, rx: 5 + i * 3, rz: 3.4 + i * 2.2, w: (i % 2 ? -1 : 1) * (0.17 - i * 0.012), ph: i * 1.26, ang: 0 });
+  }
+  return out;
+})();
+const boatsRide = mkRide({ id: 'boats', name: 'Paddle Boats', seats: 8, realSeats: 10, nomCycle: 600, duration: 20, queue: null, ringR: 22, labelH: 5, dist: 75,
+  cycle: [['Loading', 6], ['Dispatch', 2], ['Ride', 22], ['Brake', 3], ['Unload', 4]], pos: () => V3(LAKE.x, 0, LAKE.z) });
+let boatsMove = 1;
+anims.push((dt, t) => {
+  runCycle(boatsRide, dt);
+  boatsMove += ((boatsRide.wClosed && boatsRide.cycIdx === 0 ? 0 : 1) - boatsMove) * Math.min(1, dt * 1.5);
+  for (const b of boats) {
+    b.ph += b.w * dt * boatsMove; const x = LAKE.x + Math.cos(b.ph) * b.rx, z = LAKE.z + Math.sin(b.ph) * b.rz;
+    const tx = -Math.sin(b.ph) * b.rx * Math.sign(b.w), tz = Math.cos(b.ph) * b.rz * Math.sign(b.w);
+    b.g.position.set(x, Math.sin(t * 1.6 + b.rx) * 0.04, z); b.g.rotation.y = Math.atan2(tx, tz); b.g.rotation.z = Math.sin(t * 1.3 + b.rx) * 0.03;
+  }
+});
+
+/* ---------- carousel ---------- */
+const CAR = { x: -24, z: -50.8 };           // base edge (r 8.1) stays 0.7 m clear of the queue head at z -42
+const carouselRide = mkRide({ id: 'carousel', name: 'Grand Carousel', seats: 14, realSeats: 28, nomCycle: 240, duration: 24, ringR: 10, labelH: 12, dist: 60,
+  cycle: [['Loading', 7], ['Dispatch', 3], ['Ride', 22], ['Brake', 3], ['Unload', 5]], pos: () => V3(CAR.x, 0, CAR.z) });
+{
+  const g = new THREE.Group(); g.position.set(CAR.x, 0, CAR.z); world.add(g);
+  const base = new Bag(); base.cyl(7.8, 8.0, 0.6, PAL.white, 0, 0.3, 0, 32); base.cyl(8.1, 8.1, 0.2, PAL.accent, 0, 0.15, 0, 32);
+  g.add(base.build());
+  const rot = new THREE.Group(); g.add(rot); HOOKS.carouselRot = rot;
+  const top = new Bag(); top.cyl(7, 7, 0.3, PAL.butter, 0, 0.75, 0, 32); top.cyl(1.1, 1.1, 8, PAL.white, 0, 4.6, 0, 12);
+  top.cyl(8.3, 8.3, 0.7, PAL.cream, 0, 8.4, 0, 32); top.add(new THREE.ConeGeometry(8.6, 3.0, 20), PAL.accent, 0, 10.2, 0); top.sph(0.7, PAL.white, 0, 12.0, 0);
+  for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; top.cyl(0.08, 0.08, 7.6, PAL.stone, Math.sin(a) * 4.8, 4.5, Math.cos(a) * 4.8, 5); top.sph(0.25, i % 2 ? PAL.accent : PAL.white, Math.sin(a) * 7.6, 8.4, Math.cos(a) * 7.6, 6, 4); }
+  rot.add(top.build());
+  const horseGeo = c => { const h = new Bag(); h.box(0.6, 0.75, 1.6, c, 0, 0, 0); h.box(0.32, 0.9, 0.4, c, 0, 0.55, 0.75, -0.5, 0, 0); h.box(0.34, 0.4, 0.7, c, 0, 1.0, 1.15);
+    h.box(0.1, 0.7, 0.4, PAL.accent, 0, 0.7, 0.55, -0.5, 0, 0); h.box(0.14, 0.7, 0.14, PAL.dark, 0, -0.1, -0.9, 0.3, 0, 0);
+    for (const sx of [-0.2, 0.2]) for (const sz of [-0.55, 0.55]) h.box(0.16, 0.7, 0.16, c, sx, -0.6, sz); return h.build().geometry; };
+  const geos = [PAL.white, PAL.peach, PAL.lilac].map(horseGeo), horses = [];
+  for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, m = new THREE.Mesh(geos[i % 3], VC); m.castShadow = true; m.position.set(Math.sin(a) * 4.8, 2.5, Math.cos(a) * 4.8); m.rotation.y = Math.atan2(Math.cos(a), -Math.sin(a)); rot.add(m); horses.push(m); }
+  const proxy = new THREE.Mesh(new THREE.CylinderGeometry(8, 8, 12, 12), new THREE.MeshBasicMaterial({ visible: false })); proxy.userData.proxy = true; proxy.position.y = 6; g.add(proxy);
+  tag(g, 'carousel');
+  anims.push((dt, t) => {
+    runCycle(carouselRide, dt); rot.rotation.y += 0.6 * carouselRide.motion * dt;
+    horses.forEach((h, i) => h.position.y = 2.6 + Math.sin(rot.rotation.y * 4 + i * Math.PI) * 0.55);
+  });
+}
+
+/* ---------- ferris wheel ---------- */
+const FW = { x: 34, z: -52, R: 11, hub: 13.5 };
+const ferrisRide = mkRide({ id: 'ferris', name: 'Skyline Wheel', seats: 12, realSeats: 48, nomCycle: 420, duration: 46, ringR: 11, labelH: 27, dist: 80,
+  cycle: [['Loading', 8], ['Dispatch', 3], ['Ride', 40], ['Brake', 4], ['Unload', 8]], pos: () => V3(FW.x, 0, FW.z) });
+{
+  const g = new THREE.Group(); g.position.set(FW.x, 0, FW.z); world.add(g);
+  const fr = new Bag(), ang = Math.atan2(7, FW.hub), ld = Math.hypot(7, FW.hub);
+  fr.box(18, 0.6, 8, PAL.stone, 0, 0.3, 0);
+  for (const z of [-2.3, 2.3]) for (const s of [-1, 1]) fr.box(0.7, ld, 0.7, PAL.white, s * 3.5, FW.hub / 2, z, 0, 0, s * ang);
+  fr.cyl(0.7, 0.7, 6, PAL.accent, 0, FW.hub, 0, 12, Math.PI / 2, 0, 0);
+  g.add(fr.build());
+  const wheel = new THREE.Group(); wheel.position.y = FW.hub; g.add(wheel); HOOKS.ferrisWheel = wheel;
+  const wb = new Bag();
+  for (const z of [-1.5, 1.5]) {
+    wb.add(new THREE.TorusGeometry(FW.R, 0.22, 6, 40), PAL.white, 0, 0, z); wb.add(new THREE.TorusGeometry(5, 0.16, 6, 28), PAL.stone, 0, 0, z);
+    for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; wb.box(FW.R, 0.16, 0.16, PAL.stone, Math.cos(a) * FW.R / 2, Math.sin(a) * FW.R / 2, z, 0, 0, a); }
+  }
+  for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; wb.box(0.2, 0.2, 3.2, PAL.accent, Math.cos(a) * FW.R, Math.sin(a) * FW.R, 0); }
+  wb.sph(1.1, PAL.accent, 0, 0, 0); wheel.add(wb.build());
+  const gb = new Bag(); gb.box(1.7, 1.3, 2.0, 0xffffff, 0, 0, 0); gb.box(2.0, 0.2, 2.3, 0xffffff, 0, 0.75, 0); gb.cyl(0.05, 0.05, 1.3, 0xffffff, 0, 1.4, 0, 4);
+  const gond = new THREE.InstancedMesh(gb.build().geometry, VC, 12); gond.castShadow = true; gond.frustumCulled = false; g.add(gond);
+  const gc = [PAL.accent, PAL.butter, PAL.white, PAL.sky, PAL.lilac, PAL.peach]; for (let i = 0; i < 12; i++) gond.setColorAt(i, new THREE.Color(gc[i % 6]));
+  const disc = new THREE.Mesh(new THREE.CylinderGeometry(FW.R + 1, FW.R + 1, 4, 16), new THREE.MeshBasicMaterial({ visible: false })); disc.userData.proxy = true; disc.rotation.x = Math.PI / 2; disc.position.y = FW.hub; g.add(disc);
+  tag(g, 'ferris');
+  const m4 = new THREE.Matrix4();
+  anims.push((dt, t) => {
+    runCycle(ferrisRide, dt); wheel.rotation.z += 0.2 * ferrisRide.motion * dt;
+    for (let i = 0; i < 12; i++) { const a = wheel.rotation.z + i * Math.PI / 6; m4.makeTranslation(Math.cos(a) * FW.R, FW.hub + Math.sin(a) * FW.R - 1.3, 0); gond.setMatrixAt(i, m4); }
+    gond.instanceMatrix.needsUpdate = true;
+  });
+}
+
+/* ---------- roller coaster: closed spline, parallel-transport frames, energy-based speed ---------- */
+const coasterRide = mkRide({ id: 'coaster', name: 'Vortex Coaster', seats: 12, realSeats: 24, nomCycle: 150, ringR: 9, labelH: 8, dist: 70, follow: true, util: 0.8 });
+const coaster = (() => {
+  const g = new THREE.Group(); world.add(g);
+  const pts = [], P = (x, y, z) => pts.push(V3(x, y, z));
+  P(48, 2, -8); P(56, 2, -8); P(64, 2, -8); P(69, 3, -8); P(73, 8, -8.5); P(76, 16, -10); P(78, 24, -13); P(77, 25.5, -18); P(72, 24.5, -23);
+  P(66, 21, -25.5); P(63, 11, -27); P(61, 3.5, -28.2); P(58, 2.5, -28.5);
+  for (let k = 1; k <= 8; k++) { const th = k * Math.PI / 4; P(58 - (6 * Math.sin(th) + 12 * th / (2 * Math.PI)), 2.5 + 6 * (1 - Math.cos(th)), -28.5 - 4 * th / (2 * Math.PI)); }
+  P(41, 2.5, -34.5); P(37, 3.5, -32); P(34.5, 5.5, -27); P(34, 9, -21); P(35, 5, -15); P(38, 3, -10.5); P(43, 2.5, -8);
+  const curve = new THREE.CatmullRomCurve3(pts, true, 'centripetal'), L = curve.getLength(), N = Math.round(L / 0.7), ds = L / N;
+  const sp = curve.getSpacedPoints(N).slice(0, N), T = [], U = [];
+  for (let i = 0; i < N; i++) T.push(sp[(i + 1) % N].clone().sub(sp[(i + N - 1) % N]).normalize());
+  U.push(V3(0, 1, 0).addScaledVector(T[0], -T[0].y).normalize());
+  for (let i = 1; i < N; i++) U.push(U[i - 1].clone().addScaledVector(T[i], -U[i - 1].dot(T[i])).normalize());
+  { const e = U[N - 1].clone().addScaledVector(T[0], -U[N - 1].dot(T[0])).normalize(), a = Math.atan2(e.clone().cross(U[0]).dot(T[0]), e.dot(U[0]));
+    for (let i = 0; i < N; i++) U[i].applyAxisAngle(T[i], a * i / N); }
+  const fpos = V3(), fT = V3(), fU = V3();
+  function frame(p) {
+    const f = (((p % L) + L) % L) / ds, i = Math.floor(f) % N, j = (i + 1) % N, t = f - Math.floor(f);
+    fpos.lerpVectors(sp[i], sp[j], t); fT.lerpVectors(T[i], T[j], t).normalize(); fU.lerpVectors(U[i], U[j], t).normalize(); return fpos;
+  }
+  // geometry: rails, spine, ties, supports
+  const tb = new Bag(), rails = [[], []];
+  for (let i = 0; i < N; i++) { const S = U[i].clone().cross(T[i]); rails[0].push(sp[i].clone().addScaledVector(S, 0.62)); rails[1].push(sp[i].clone().addScaledVector(S, -0.62)); }
+  for (const r of rails) tb.add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(r, true), N, 0.13, 5, true), 0x8A786C);
+  tb.add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(sp.map((p, i) => p.clone().addScaledVector(U[i], -0.4)), true), N, 0.2, 5, true), PAL.accent);
+  const tieStep = Math.round(1.4 / ds), supStep = Math.round(5 / ds);
+  for (let i = 0; i < N; i += tieStep) tb.box(1.6, 0.1, 0.3, placeM(sp[i].clone().addScaledVector(U[i], -0.12), T[i], U[i]), PAL.wood);
+  for (let i = 0; i < N; i += supStep) if (Math.abs(T[i].y) < 0.88 && U[i].y > 0.5 && sp[i].y > 2.8) { const h = sp[i].y - 0.6; tb.box(0.45, h, 0.45, PAL.white, sp[i].x, h / 2, sp[i].z); tb.box(0.9, 0.2, 0.9, PAL.stone, sp[i].x, 0.1, sp[i].z); }
+  // station
+  tb.box(18, 0.5, 1.6, PAL.clay, 56, 0.25, -6.2); tb.box(18, 0.4, 6.4, PAL.cream, 56, 4.8, -7.2);
+  for (const x of [48, 64]) for (const z of [-5.4, -9.6]) tb.box(0.4, 4.6, 0.4, PAL.white, x, 2.5, z);
+  tb.box(18.4, 0.5, 0.5, PAL.accent, 56, 4.6, -4.4);
+  const track = tb.build(); g.add(track);
+  const proxy = new THREE.Mesh(new THREE.TubeGeometry(curve, 240, 1.8, 5, true), new THREE.MeshBasicMaterial({ visible: false })); proxy.userData.proxy = true; g.add(proxy);
+  tag(g, 'coaster');
+  // train
+  const NC = 6, SP = 2.9, cb = new Bag();
+  cb.box(1.6, 0.6, 2.4, PAL.accent, 0, 0.55, 0); cb.box(1.4, 0.55, 0.5, PAL.white, 0, 1.1, -0.5); cb.box(1.1, 0.12, 0.7, PAL.dark, 0, 1.1, 0.5); cb.box(1.5, 0.3, 0.5, PAL.accent, 0, 0.7, 1.35);
+  const carGeo = cb.build().geometry, cars = [];
+  for (let i = 0; i < NC; i++) { const m = new THREE.Mesh(carGeo, VC); m.castShadow = true; m.frustumCulled = false; g.add(m); cars.push(m); }
+  // loop / lift / stop markers (arc length)
+  let iPeak = 0; for (let i = 0; i < N; i++) if (sp[i].y > sp[iPeak].y) iPeak = i;
+  let iStop = 0; while (sp[iStop].x < 62) iStop++;
+  let iLift = 0; while (sp[iLift].x < 67) iLift++;
+  const S = { L, pStop: iStop * ds, pLift: iLift * ds, pPeak: iPeak * ds, yPeak: sp[iPeak].y };
+  S.pEnd = L + S.pStop; S.pBrake = S.pEnd - 30;
+  const st = { p: S.pStop, v: 0, t: 0, head: V3() };
+  coasterRide.phase = 'Loading';
+  const yAt = p => { frame(p); return fpos.y; };
+  anims.push(dt => {
+    const r = coasterRide; st.t += dt;
+    if (r.phase === 'Loading') { st.v = 0; if (r.wHold || r.wClosed) st.t = 0; else if (st.t > 7) { r.phase = 'Dispatch'; st.t = 0; r.onDispatch(); } }       // wind hold: the train waits in the station
+    else if (r.phase === 'Dispatch') { st.v = Math.min(4.2, st.v + 2 * dt); if (st.p >= S.pLift) { r.phase = 'Lift'; st.t = 0; } }
+    else if (r.phase === 'Lift') { st.v = 4.2; if (st.p >= S.pPeak) { r.phase = 'Ride'; st.t = 0; } }
+    else if (r.phase === 'Ride' || r.phase === 'Brake') {
+      const href = S.yPeak + 1 - 0.02 * Math.max(0, st.p - S.pPeak), ve = clamp(Math.sqrt(Math.max(0, 2 * 9 * (href - yAt(st.p)))), 3, 21);
+      if (r.phase === 'Ride') { st.v = ve; if (st.p >= S.pBrake) { r.phase = 'Brake'; st.t = 0; } }
+      else { st.v = Math.min(ve, 1.0 + (S.pEnd - st.p) * 0.35); if (st.p >= S.pEnd - 0.05) { st.p = S.pEnd; st.v = 0; r.phase = 'Unload'; st.t = 0; r.releaseAll(); } }
+    } else if (r.phase === 'Unload') { st.v = 0; if (st.t > 6) { r.phase = 'Loading'; st.t = 0; st.p = S.pStop; } }
+    st.p += st.v * dt;
+    for (let i = 0; i < NC; i++) { frame(st.p - (i + 0.5) * SP); cars[i].matrix.copy(placeM(fpos.clone().addScaledVector(fU, 0.75), fT, fU)); cars[i].matrixAutoUpdate = false; cars[i].matrixWorldNeedsUpdate = true; if (i === 0) st.head.copy(fpos); }
+    r.speed = st.v;
+  });
+  coasterRide.pos = () => st.head;
+  return { st, S, frame, yAt };
+})();
+
+/* ---------- log flume: channel on supports, 4 logs, splash drop with particles ---------- */
+const PH6 = ['Loading', 'Dispatch', 'Lift', 'Ride', 'Brake', 'Unload'];
+const flumeRide = mkRide({ id: 'flume', name: 'Rapids Log Flume', seats: 4, realSeats: 8, nomCycle: 64, duration: 40, ringR: 22, labelH: 15, dist: 75, util: 0.78 });
+const flume = (() => {
+  const g = new THREE.Group(); world.add(g);
+  const pts = [[-48, 1.2, -6], [-56, 1.2, -6], [-64, 2, -6], [-70, 8, -7], [-75, 13, -10], [-78, 13, -17], [-72, 13, -24], [-62, 13, -26], [-54, 12, -25], [-50, 7, -22.5], [-47, 1.8, -19.5], [-44, 1.2, -15], [-44, 1.2, -10]].map(a => V3(...a));
+  const curve = new THREE.CatmullRomCurve3(pts, true, 'centripetal'), L = curve.getLength(), N = Math.round(L / 0.6), ds = L / N;
+  const sp = curve.getSpacedPoints(N).slice(0, N), T = sp.map((_, i) => sp[(i + 1) % N].clone().sub(sp[(i + N - 1) % N]).normalize());
+  const Sd = T.map(t => V3(0, 1, 0).cross(t).normalize()), U = T.map((t, i) => t.clone().cross(Sd[i]).normalize());
+  const loc = (m, x, y, z) => m.clone().multiply(new THREE.Matrix4().makeTranslation(x, y, z));
+  const b = new Bag();
+  for (let i = 0; i < N; i += 2) {
+    const m = placeM(sp[i], T[i], U[i]);
+    b.box(3.2, 0.25, 1.4, PAL.white, loc(m, 0, -0.15, 0)); b.box(0.3, 1.0, 1.4, PAL.clay, loc(m, -1.45, 0.3, 0)); b.box(0.3, 1.0, 1.4, PAL.clay, loc(m, 1.45, 0.3, 0));
+    b.box(2.6, 0.12, 1.4, PAL.water, loc(m, 0, 0.0, 0));
+    if (i % 12 === 0 && sp[i].y > 2.4) { const h = sp[i].y - 0.4; b.box(0.5, h, 0.5, PAL.white, sp[i].x, h / 2, sp[i].z); b.box(1.0, 0.2, 1.0, PAL.stone, sp[i].x, 0.1, sp[i].z); }
+  }
+  b.box(8, 0.2, 9, PAL.water, -45.5, 0.95, -17.5); b.box(9, 0.6, 0.5, PAL.accent, -45.5, 0.9, -22.2); b.box(9, 0.6, 0.5, PAL.accent, -45.5, 0.9, -12.8);
+  b.box(10, 0.4, 3, PAL.accent, -52, 3.9, -6); for (const x of [-47, -57]) b.box(0.4, 3.5, 0.4, PAL.white, x, 2, -4.4);
+  g.add(b.build());
+  const proxy = new THREE.Mesh(new THREE.TubeGeometry(curve, 240, 2.2, 5, true), new THREE.MeshBasicMaterial({ visible: false })); proxy.userData.proxy = true; g.add(proxy);
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(32, 8, 20), new THREE.MeshBasicMaterial({ visible: false })); hit.position.set(-61, 4, -16); hit.userData.proxy = true; g.add(hit);      // fills the empty loop so a click on the visible flume selects it
+  tag(g, 'flume');
+  // speed profile along the channel
+  let iPeak = 0; for (let i = 0; i < N; i++) if (sp[i].y > sp[iPeak].y) iPeak = i;
+  let iLs = 0; while (sp[iLs].x > -63) iLs++;
+  let iSt = 0; while (sp[iSt].x > -55.5) iSt++;
+  let iSp = iPeak; while (sp[iSp].y > 2.4) iSp++;
+  const vp = new Array(N);
+  for (let i = 0; i < N; i++) {
+    let v = i < iSt ? 2.4 : i < iPeak ? 3.2 : clamp(Math.sqrt(Math.max(0, 2 * 8 * (sp[iPeak].y + 0.5 - sp[i].y))), 3, 13.5);
+    if (i >= iSp) v = Math.max(2.4, v * Math.exp(-(i - iSp) * ds / 4)); if (i > iSp && i * ds > L - 10) v = 2.4;
+    vp[i] = v;
+  }
+  for (let k = 0; k < 8; k++) for (let i = 0; i < N; i++) vp[i] = (vp[(i + N - 1) % N] + vp[i] * 2 + vp[(i + 1) % N]) / 4;
+  let lap = 0; for (let i = 0; i < N; i++) lap += ds / vp[i]; flumeRide.duration = lap;
+  const lb = new Bag(); lb.cyl(0.75, 0.75, 3.4, PAL.wood, 0, 0.5, 0, 10, Math.PI / 2, 0, 0); lb.cyl(0.8, 0.8, 0.5, PAL.accent, 0, 0.5, 0.3, 10, Math.PI / 2, 0, 0);
+  lb.box(1.2, 0.6, 1.0, PAL.cream, 0, 0.55, 0.0); lb.cyl(0.6, 0.6, 0.2, PAL.dark, 0, 0.5, 1.72, 8, Math.PI / 2, 0, 0);
+  const logGeo = lb.build().geometry, logs = [];
+  for (let k = 0; k < 4; k++) { const m = new THREE.Mesh(logGeo, VC); m.castShadow = true; m.matrixAutoUpdate = false; m.frustumCulled = false; g.add(m); logs.push({ m, p: k * L / 4 + 9, prev: 0 }); }
+  // splash particles
+  const NP = 160, pp = new Float32Array(NP * 3), pv = new Float32Array(NP * 3), pl = new Float32Array(NP);
+  const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+  const points = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xFFFFFF, size: 0.8, transparent: true, opacity: 0.92, depthWrite: false })); points.frustumCulled = false; g.add(points);
+  for (let i = 0; i < NP; i++) pp[i * 3 + 1] = -50;
+  let pc = 0;
+  const emit = (x, y, z) => { for (let n = 0; n < 28; n++) { const i = pc++ % NP; pp.set([x, y, z], i * 3); pv.set([rand(-3, 3), rand(5, 10), rand(-3, 3)], i * 3); pl[i] = rand(0.6, 1.1); } };
+  const at = V3(), fT = V3(), fU = V3();
+  const sample = p => { const f = (((p % L) + L) % L) / ds, i = Math.floor(f) % N, j = (i + 1) % N, t = f - Math.floor(f); at.lerpVectors(sp[i], sp[j], t); fT.lerpVectors(T[i], T[j], t).normalize(); fU.lerpVectors(U[i], U[j], t).normalize(); return i; };
+  const pSt = iSt * ds, pSplash = iSp * ds, pPk = iPeak * ds, pLs = iLs * ds;
+  const zone = p => p < pSt ? 'Loading' : p < pLs ? 'Dispatch' : p < pPk ? 'Lift' : p < pSplash ? 'Ride' : p < L - 18 ? 'Brake' : 'Unload';
+  flumeRide.pos = () => V3(-61, 0, -16);
+  flumeRide.dispInt = lap / logs.length;
+  flumeRide.dispAt = k => {         // seconds until the k-th next log reaches the station (logs never interact, so each repeats every lap)
+    const ts = logs.map(lg => { const p = ((lg.p % L) + L) % L, d = (pSt - p + L) % L; let i = Math.floor(p / ds) % N, left = d, t = 0, step = ds - (p - Math.floor(p / ds) * ds);
+      while (left > 1e-6) { const w = Math.min(step, left); t += w / vp[i]; left -= w; i = (i + 1) % N; step = ds; } return t; }).sort((a, c) => a - c);
+    return ts[(k - 1) % ts.length] + Math.floor((k - 1) / ts.length) * lap;
+  };
+  anims.push(dt => {
+    for (const lg of logs) {
+      const prev = lg.p; lg.p += vp[Math.floor((((lg.p % L) + L) % L) / ds) % N] * dt; if (lg.p >= L) lg.p -= L;
+      const cross = (a) => (prev < a && lg.p >= a);
+      if (cross(pSt)) flumeRide.onDispatch(); if (cross(pSplash)) { sample(lg.p); emit(at.x, at.y + 0.5, at.z); }
+      sample(lg.p); lg.m.matrix.copy(placeM(at.clone().addScaledVector(fU, 0.35), fT, fU));
+    }
+    const zs = logs.map(lg => zone(lg.p)), lead = logs.filter(lg => lg.p >= pSt && lg.p < L - 18).sort((a, c) => a.p - c.p)[0];
+    flumeRide.phase = zs.includes('Loading') ? 'Loading' : lead ? zone(lead.p) : 'Unload';
+    { const ph = flumeRide.phase, idx = PH6.indexOf(ph), lg = ph === 'Loading' ? logs.filter(l => l.p < pSt).sort((a, c) => c.p - a.p)[0] : ph === 'Unload' ? logs.filter(l => l.p >= L - 18).sort((a, c) => a.p - c.p)[0] : lead, b = [0, pSt, pLs, pPk, pSplash, L - 18, L];
+      flumeRide.phaseU = lg ? clamp((lg.p - b[idx]) / (b[idx + 1] - b[idx]), 0, 1) : 0; }
+    for (let i = 0; i < NP; i++) if (pl[i] > 0) { pl[i] -= dt; pv[i * 3 + 1] -= 18 * dt; pp[i * 3] += pv[i * 3] * dt; pp[i * 3 + 1] += pv[i * 3 + 1] * dt; pp[i * 3 + 2] += pv[i * 3 + 2] * dt; if (pl[i] <= 0) pp[i * 3 + 1] = -50; }
+    pg.attributes.position.needsUpdate = true;
+  });
+  return { curve, L };
+})();
+
+/* ---------- monorail: elevated beam loop with a station stop ---------- */
+const monorailRide = mkRide({ id: 'monorail', name: 'Skyline Monorail', seats: 40, realSeats: 120, nomCycle: 480, ringR: 9, labelH: 8, dist: 90, follow: true, queue: null, util: 0.55 });
+const monorail = (() => {
+  const g = new THREE.Group(); world.add(g); const RX = 98, RZ = 88, Y = 14;
+  const pts = []; for (let i = 0; i < 40; i++) { const a = i / 40 * Math.PI * 2; pts.push(V3(Math.cos(a) * RX, Y, Math.sin(a) * RZ)); }
+  const curve = new THREE.CatmullRomCurve3(pts, true), L = curve.getLength(), N = Math.round(L / 3);
+  const b = new Bag();
+  for (let i = 0; i < N; i++) { const p = curve.getPointAt(i / N), t = curve.getTangentAt(i / N); b.box(1.6, 0.9, 3.4, PAL.white, placeM(p, t, V3(0, 1, 0))); b.box(0.5, 0.15, 3.4, PAL.accent, placeM(p.clone().setY(Y + 0.5), t, V3(0, 1, 0))); }
+  for (let i = 0; i < 24; i++) { const p = curve.getPointAt((i + 0.5) / 24); if (Math.abs(p.x) < 38 && p.z > 74) continue; b.box(1.4, Y - 0.5, 1.4, PAL.cream, p.x, (Y - 0.5) / 2, p.z); b.box(2.6, 0.4, 2.6, PAL.stone, p.x, 0.2, p.z); }
+  b.box(6, 0.6, 22, PAL.clay, RX, Y - 0.1, 0); b.box(7, 0.5, 22, PAL.cream, RX, Y + 5, 0); for (const z of [-9, 9]) b.box(0.4, 5, 0.4, PAL.white, RX + 2.5, Y + 2.5, z);
+  g.add(b.build()); g.add(proxyTube(curve, 2.2, 160)); tag(g, 'monorail');
+  const cb = new Bag(); cb.box(2.2, 1.5, 4.6, PAL.white, 0, 1.1, 0); cb.box(2.3, 0.5, 4.7, PAL.accent, 0, 0.55, 0); cb.box(2.25, 0.5, 3.6, PAL.sky, 0, 1.4, 0); cb.box(2.0, 0.2, 4.2, PAL.cream, 0, 1.95, 0);
+  const geo = cb.build().geometry, cars = []; for (let i = 0; i < 4; i++) { const m = new THREE.Mesh(geo, VC); m.castShadow = true; m.matrixAutoUpdate = false; m.frustumCulled = false; g.add(m); cars.push(m); }
+  const st = { p: 0, v: 0, t: 0, head: V3(RX, Y, 0) }, pStop = 0, up = V3(0, 1, 0);
+  anims.push(dt => {
+    const r = monorailRide; st.t += dt;
+    if (r.phase === 'Loading') { st.v = 0; if (st.t > 9) { r.phase = 'Dispatch'; st.t = 0; r.cyclesBump(); } }
+    else if (r.phase === 'Dispatch') { st.v = Math.min(9, st.v + 2.2 * dt); if (st.p > 24) r.phase = 'Ride'; }
+    else if (r.phase === 'Ride') { st.v = 9; if (st.p > L - 46) r.phase = 'Brake'; }
+    else if (r.phase === 'Brake') { st.v = Math.min(9, 0.9 + (L - st.p) * 0.2); if (st.p >= L - 0.1) { st.p = L; st.v = 0; r.phase = 'Unload'; st.t = 0; } }
+    else if (r.phase === 'Unload') { if (st.t > 6) { r.phase = 'Loading'; st.t = 0; st.p = 0; } }
+    st.p = Math.min(L, st.p + st.v * dt);
+    for (let i = 0; i < 4; i++) {
+      const u = ((((st.p - 6 - i * 5.4) / L) % 1) + 1) % 1, p = curve.getPointAt(u), t = curve.getTangentAt(u);
+      cars[i].matrix.copy(placeM(p.clone().setY(Y + 0.45), t, up)); cars[i].matrixWorldNeedsUpdate = true; if (!i) st.head.copy(p);
+    }
+  });
+  monorailRide.phase = 'Loading'; monorailRide.pos = () => st.head;
+  return { st, L };
+})();
+
+/* ---------- ride queues ---------- */
+function rideQueue(ride, ...a) { const q = makeQueue(ride.id, ...a); ride.queue = q; q.owner = ride; buildQueueVisual(q, ride.name, ride); }
+rideQueue(coasterRide, { x: 57, z: -3.8 }, { x: -1, z: 0 }, { x: 0, z: 1 }, 11, 3, 3, 'e1');
+rideQueue(flumeRide, { x: -53, z: -3 }, { x: 1, z: 0 }, { x: 0, z: 1 }, 10, 3, 3, 'w1');
+rideQueue(ferrisRide, { x: 34, z: -44 }, { x: 1, z: 0 }, { x: 0, z: 1 }, 9, 2, 3, 'f1');
+rideQueue(carouselRide, { x: -24, z: -42 }, { x: -1, z: 0 }, { x: 0, z: 1 }, 8, 2, 3, 'k1');
+rideQueue(boatsRide, { x: -39.5, z: 50 }, { x: 1, z: 0 }, { x: 0, z: 1 }, 5, 3, 2.2, 'lk1');
+const rides = [coasterRide, ferrisRide, flumeRide, carouselRide, boatsRide, monorailRide];
+
+/* ---------- parade: float convoy on its own avenue ring (no guest or cart lane runs along it; two marked crossings) ---------- */
+const HALF_PI = Math.PI / 2;
+const mod = (a, m) => ((a % m) + m) % m;
+const pLine = (x0, z0, x1, z1) => { const l = Math.hypot(x1 - x0, z1 - z0), tx = (x1 - x0) / l, tz = (z1 - z0) / l; return { len: l, at: u => [x0 + tx * u, z0 + tz * u, tx, tz] }; };
+const pArc = (cx, cz, a0, a1, R) => { const sg = Math.sign(a1 - a0); return { len: Math.abs(a1 - a0) * R, at: u => { const a = a0 + sg * u / R; return [cx + Math.cos(a) * R, cz + Math.sin(a) * R, -Math.sin(a) * sg, Math.cos(a) * sg]; } }; };
+/* closed loop of segments, sampled every ~0.2 m: at(s,out) gives position + unit tangent */
+function makeLoop(segs) {
+  const L = segs.reduce((a, s) => a + s.len, 0), N = Math.ceil(L / 0.2), P = [];
+  for (let i = 0; i <= N; i++) { let u = Math.min(L, i * L / N), k = 0; while (k < segs.length - 1 && u > segs[k].len) { u -= segs[k].len; k++; } P.push(segs[k].at(Math.min(u, segs[k].len))); }
+  return { L, N, P, at(s, out) {
+    s = mod(s, L); const f = s / L * N, i = Math.min(N - 1, Math.floor(f)), t = f - i, a = P[i], b = P[i + 1];
+    out.x = a[0] + (b[0] - a[0]) * t; out.z = a[1] + (b[1] - a[1]) * t;
+    const tx = a[2] + (b[2] - a[2]) * t, tz = a[3] + (b[3] - a[3]) * t, l = Math.hypot(tx, tz) || 1; out.tx = tx / l; out.tz = tz / l; return out; } };
+}
+const RING = makeLoop([pLine(28, 42, -36, 42), pArc(-36, 32, HALF_PI, 2 * HALF_PI, 10), pLine(-46, 32, -46, 22), pArc(-36, 22, 2 * HALF_PI, 3 * HALF_PI, 10), pLine(-36, 12, 36, 12),
+  pArc(36, 22, 3 * HALF_PI, 4 * HALF_PI, 10), pLine(46, 22, 46, 32), pArc(36, 32, 0, HALF_PI, 10), pLine(36, 42, 28, 42)]);
+const parade = (() => {
+  const Lr = RING.L, SPACING = 11, NF = 6, group = new THREE.Group(); world.add(group); group.visible = false; tag(group, 'parade');
+  const decor = [
+    b => { for (const s of [-1, 1]) b.box(0.5, 5, 0.5, PAL.white, s * 2, 3.4, 0); b.box(4.6, 0.6, 0.7, PAL.accent, 0, 6, 0); b.sph(1.1, PAL.accent, -0.8, 7.2, 0); b.sph(1.1, PAL.accent, 0.8, 7.2, 0); b.box(1.9, 1.9, 0.7, PAL.accent, 0, 6.6, 0, 0, 0, Math.PI / 4); },
+    b => { const c = [PAL.accent, PAL.white, PAL.lilac, PAL.butter, PAL.accent, PAL.sky, PAL.white]; c.forEach((col, i) => { const a = i / 7 * 6.28, r = i ? 1.6 : 0, h = 4.5 + (i % 3) * 1.2; b.cyl(0.05, 0.05, h, PAL.dark, Math.cos(a) * r, 1 + h / 2, Math.sin(a) * r * 1.6, 4); b.sph(0.95, col, Math.cos(a) * r, 1 + h + 0.4, Math.sin(a) * r * 1.6); }); },
+    b => { b.cyl(2.2, 2.2, 1.2, PAL.cream, 0, 1.6, 0, 14); b.cyl(1.6, 1.6, 1.1, PAL.peach, 0, 2.75, 0, 14); b.cyl(1.0, 1.0, 1.0, PAL.white, 0, 3.8, 0, 14); b.sph(0.6, PAL.accent, 0, 4.6, 0); for (let i = 0; i < 6; i++) b.cyl(0.07, 0.07, 0.6, PAL.butter, Math.cos(i) * 1.5, 3.6, Math.sin(i) * 1.5, 4); },
+    b => { b.cyl(1.9, 1.9, 1.8, PAL.accent, 0, 2.0, 0, 16); b.cyl(1.95, 1.95, 0.25, PAL.white, 0, 2.95, 0, 16); b.cyl(1.95, 1.95, 0.25, PAL.white, 0, 1.1, 0, 16); b.box(0.12, 2.6, 0.12, PAL.dark, -1, 4.4, 0, 0, 0, 0.5); b.box(0.12, 2.6, 0.12, PAL.dark, 1, 4.4, 0, 0, 0, -0.5); b.sph(0.3, PAL.butter, -1.6, 5.6, 0); b.sph(0.3, PAL.butter, 1.6, 5.6, 0); },
+    b => { b.box(3.4, 3, 3.4, PAL.lilac, 0, 2.5, 0); for (const sx of [-1, 1]) for (const sz of [-1, 1]) { b.cyl(0.6, 0.6, 4.4, PAL.cream, sx * 1.8, 3.2, sz * 1.8, 8); b.add(new THREE.ConeGeometry(0.85, 1.4, 8), PAL.accent, sx * 1.8, 6.1, sz * 1.8); } b.add(new THREE.ConeGeometry(1.4, 2.2, 4), PAL.accent, 0, 5.1, 0, 0, Math.PI / 4, 0); b.box(1, 1.6, 0.2, PAL.dark, 0, 1.7, 1.75); },
+    b => { b.cyl(0.15, 0.15, 5, PAL.white, 0, 3.5, 0, 6); for (let i = 0; i < 5; i++) b.box(0.7, 3.6, 0.5, PAL.accent, 0, 6.5, 0, 0, 0, i * Math.PI * 2 / 5); b.sph(0.9, PAL.butter, 2.2, 7.5, 0); b.sph(0.7, PAL.cream, 2.0, 7.6, 0); },
+  ];
+  const floats = [];
+  for (let i = 0; i < NF; i++) {
+    const b = new Bag(); b.box(4.6, 0.7, 7.6, PAL.white, 0, 0.75, 0); b.box(4.9, 0.3, 7.9, PAL.accent, 0, 0.4, 0); b.box(4.4, 0.3, 7.4, i % 2 ? PAL.lilac : PAL.butter, 0, 1.2, 0);
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) b.cyl(0.5, 0.5, 0.4, PAL.dark, sx * 2.4, 0.5, sz * 2.8, 8, 0, 0, Math.PI / 2);
+    decor[i](b); const m = b.build(); const g = new THREE.Group(); g.add(m); g.visible = false; group.add(g); floats.push(g);
+  }
+  const R0 = { x: 0, z: 0, tx: 0, tz: 1 }, centre = V3(0, 0, 42);
+  const api = { Lr, floats, group, total: Lr + SPACING * NF, SPACING, NF, active: false,
+    set(prog) { if (prog === null) { this.active = false; group.visible = false; return; } this.setHead(prog * this.total); },
+    setHead(s0) {
+      this.active = true; group.visible = true; let n = 0; centre.set(0, 0, 0);
+      floats.forEach((f, i) => { const s = s0 - i * SPACING, on = s >= 0 && s <= Lr; f.visible = on; if (!on) return;
+        RING.at(s, R0); f.position.set(R0.x, 0.1, R0.z); f.rotation.y = Math.atan2(R0.tx, R0.tz); centre.x += R0.x; centre.z += R0.z; n++; });
+      if (n) centre.multiplyScalar(1 / n); else { RING.at(clamp(s0, 0, Lr), R0); centre.set(R0.x, 0, R0.z); }
+    },
+    /* first walker inside any float's footprint (extended `ahead` metres forward) when the convoy head sits at `head` metres: safety net only */
+    blocker(head, ahead) {
+      for (let i = 0; i < NF; i++) {
+        const s = head - i * SPACING; if (s < -ahead || s > Lr) continue;
+        RING.at(clamp(s, 0, Lr), R0); const y = Math.atan2(R0.tx, R0.tz), c = Math.cos(y), sn = Math.sin(y);
+        for (const a of walkers) {
+          if (a.state !== 'walk' && a.state !== 'queue') continue;
+          const r = a.cart ? 1.7 : 0.28, dx = a.x - R0.x, dz = a.z - R0.z, lx = dx * c - dz * sn, lz = dx * sn + dz * c;
+          if (Math.abs(lx) < 2.6 + r && lz > -3.95 - r && lz < 3.95 + r + ahead) return a;
+        }
+      }
+      return null;
+    },
+    pos: () => centre };
+  api.set(null); centre.set(0, 0, 42);
+  return api;
+})();
+
+/* ---------- service road (own loop for the carts), lanes, junction moves, crossings ---------- */
+/* service loop: a rounded rectangle in the quiet nook between the spine, the Thrill-zone path and the ferris path; it crosses no guest path, so carts and guests never share a lane or a junction */
+const SERVICE = makeLoop([pLine(12.5, -8, 24.5, -8), pArc(24.5, -12, HALF_PI, -HALF_PI, 4), pLine(24.5, -16, 12.5, -16), pArc(12.5, -12, -HALF_PI, -3 * HALF_PI, 4)]);
+const ZR = 3, TAPER = 3, GAP = 1.5, LANE_O = [0.7, 1.4], CT = 0.6, FIFO_T = 12;       // FIFO_T: a refused waiter only holds back later conflicting ones once it has waited this long (batches compatible streams, bounds every wait)
+const lanes = [], moves = [], PX = [], barriers = [];
+for (const id in G.nodes) { const n = G.nodes[id]; n.q = id.startsWith('q-'); n.leaf = G.adj[id].length === 1; n.zr = n.leaf ? 0 : ZR; n.moves = []; n.mvBy = {}; }
+for (const e of G.edges) {
+  const A = G.nodes[e.from], B = G.nodes[e.to]; e.z0 = A.zr; e.z1 = B.zr; e.lanes = [];
+  for (let i = 0; i < (A.q || B.q ? 1 : 2); i++) { const L = { id: lanes.length, e, idx: i, off: LANE_O[i], len: e.len - e.z0 - e.z1, list: [], dep: [], inflight: 0, xs: [], fe: B.q, fs: A.q }; lanes.push(L); e.lanes.push(L); }
+}
+/* point on a lane `s` metres into its body; a lane that ends at a queue node tapers to the queue centreline so arriving guests join the line without a sideways pop (the opposite lane keeps its offset, so the two never squeeze together) */
+function laneAt(L, s, o) {
+  const e = L.e, A = G.nodes[e.from]; let off = L.off;
+  if (L.fe) off *= clamp((L.len - s) / TAPER, 0, 1);
+  const d = e.z0 + s; o.x = A.x + e.dx * d - e.dz * off; o.z = A.z + e.dz * d + e.dx * off; return o;
+}
+/* a move carries one guest through a junction zone from the end of an incoming lane to the start of an outgoing lane */
+function mkMove(N, li, lo) {
+  const ei = li.e, eo = lo.e, Pa = laneAt(li, li.len, { x: 0, z: 0 }), Pb = laneAt(lo, 0, { x: 0, z: 0 });
+  const cr = ei.dx * eo.dz - ei.dz * eo.dx, dt = ei.dx * eo.dx + ei.dz * eo.dz, pts = [], ch = Math.hypot(Pb.x - Pa.x, Pb.z - Pa.z);
+  if (dt < -0.9 || Math.abs(cr) >= 0.04 || dt < 0) {           // U-turn or a real turn: cubic Bezier leaving along the incoming heading and arriving along the outgoing one
+    const k = dt < -0.9 ? ZR : clamp(ch * 0.45, 0.8, 4), C1 = { x: Pa.x + ei.dx * k, z: Pa.z + ei.dz * k }, C2 = { x: Pb.x - eo.dx * k, z: Pb.z - eo.dz * k };
+    for (let i = 0; i <= 14; i++) { const t = i / 14, u = 1 - t, a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t; pts.push({ x: a * Pa.x + b * C1.x + c * C2.x + d * Pb.x, z: a * Pa.z + b * C1.z + c * C2.z + d * Pb.z }); }
+  }
+  if (!pts.length) pts.push(Pa, Pb);
+  const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
+  const len = cum[cum.length - 1];
+  for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) if (cum[j] - cum[i] >= GAP && Math.hypot(pts[i].x - pts[j].x, pts[i].z - pts[j].z) < 0.9) console.warn('move folds', N.id, li.e.from, eo.to);
+  const dp = []; for (let k = 0; k <= Math.ceil(len / 0.1); k++) { const sd = Math.min(len, k * 0.1); let i = 1; while (i < cum.length - 1 && cum[i] < sd) i++; const t = clamp((sd - cum[i - 1]) / Math.max(1e-6, cum[i] - cum[i - 1]), 0, 1); dp.push([lerp(pts[i - 1].x, pts[i].x, t), lerp(pts[i - 1].z, pts[i].z, t)]); }
+  const m = { n: N, li, lo, eo, pts, cum, len, dp, rel: new Map(), list: [] }; moves.push(m); N.moves.push(m); (N.mvBy[li.id + '|' + eo.key] ||= []).push(m); return m;
+}
+for (const id in G.nodes) {
+  const N = G.nodes[id]; if (N.leaf) continue;
+  for (const ei of G.edges) if (ei.to === id) for (const li of ei.lanes) for (const eo of G.adj[id]) {
+    for (const lo of (ei.lanes.length === 1 && eo.lanes.length === 2 ? eo.lanes : [eo.lanes[Math.min(li.idx, eo.lanes.length - 1)]])) mkMove(N, li, lo);
+  }
+  /* rel(a,b): once a mover on a has passed this many metres, the rest of its path stays >= CT from every point of b's path (-1: never closer) */
+  for (const a of N.moves) for (const b of N.moves) {
+    if (a === b) continue;
+    const ea = a.dp.length - 8, eb = b.dp.length - 8, merge = a.lo === b.lo;          // paths that merge into one lane are kept apart by the landing rule over their last 0.8 m
+    let last = -1; for (let i = a.dp.length - 1; i >= 0 && last < 0; i--) for (let j = 0; j < b.dp.length; j++) if (!(merge && i >= ea && j >= eb) && Math.hypot(a.dp[i][0] - b.dp[j][0], a.dp[i][1] - b.dp[j][1]) < CT) { last = i; break; }
+    a.rel.set(b, last < 0 ? -1 : last * 0.1 + 0.15);
+  }
+}
+/* crossings: the two stretches of spine lane that the parade avenue also uses. mode 0 open, 1 closing (passable, but nobody may end up standing inside), 2 closed with the barrier down. */
+const XPAD = 0.95;          // the guarded stretch reaches this far past each barrier arm (arm at half + 0.35): waiting guests stand clear of the lowered arm, nobody counts as outside while an arm could hit them
+function addCrossing(kind, ids, zc, half, extra) {
+  const X = Object.assign({ kind, mode: 0, g: 0, zc, half }, extra), e0 = G.adj[ids[0]].find(e => e.to === ids[1]);
+  for (const e of [e0, e0.rev]) { const sc = (zc - G.nodes[e.from].z) / e.dz; for (const L of e.lanes) L.xs.push({ X, cs: sc - half - XPAD - e.z0, ce: sc + half + XPAD - e.z0 }); if (kind === 'parade') e.px = X; }
+  PX.push(X); return X;
+}
+addCrossing('parade', ['plaza', 'hub'], 42, 3.4, { sc: 28 });
+addCrossing('parade', ['hub', 'n1'], 12, 3.4, { sc: 64 + 2 * HALF_PI * 10 + 10 + 36 });
+for (const L of lanes) L.xs.sort((a, b) => a.cs - b.cs);
+
+{
+  const b = new Bag();
+  for (const [e] of G.pairs) {
+    const A = G.nodes[e.from], B = G.nodes[e.to];
+    b.box(7, 0.1, e.len, 0xEADFCB, (A.x + B.x) / 2, 0.05, (A.z + B.z) / 2, 0, Math.atan2(e.dx, e.dz), 0);
+  }
+  for (const id in G.nodes) { const n = G.nodes[id]; b.cyl(3.5, 3.5, 0.1, 0xEADFCB, n.x, 0.05, n.z, 14); }
+  world.add(b.build(false, true));
+  /* parade avenue: rose-tinted road with white centre dashes and edge lines */
+  const a = new Bag(), o = { x: 0, z: 0, tx: 0, tz: 1 };
+  for (let s = 0; s < RING.L; s += 1.6) { RING.at(s + 0.8, o); const ang = Math.atan2(o.tx, o.tz);
+    a.box(6.4, 0.05, 1.9, 0xEECFC8, o.x, 0.12, o.z, 0, ang, 0);
+    for (const sd of [-3.0, 3.0]) a.box(0.16, 0.04, 1.9, 0xF4A9B6, o.x - o.tz * sd, 0.15, o.z + o.tx * sd, 0, ang, 0); }
+  for (let s = 0; s < RING.L; s += 4) { RING.at(s + 1, o); a.box(0.25, 0.04, 1.6, PAL.white, o.x, 0.16, o.z, 0, Math.atan2(o.tx, o.tz), 0); }
+  world.add(a.build(false, true));
+  /* service road: darker taupe surface */
+  const r = new Bag();
+  for (let s = 0; s < SERVICE.L; s += 1.6) { SERVICE.at(s + 0.8, o); const ang = Math.atan2(o.tx, o.tz);
+    r.box(4.2, 0.05, 1.9, 0xA79B8D, o.x, 0.12, o.z, 0, ang, 0);
+    for (const sd of [-1.9, 1.9]) r.box(0.12, 0.04, 1.9, PAL.white, o.x - o.tz * sd, 0.15, o.z + o.tx * sd, 0, ang, 0); }
+  world.add(r.build(false, true));
+  /* barriers: striped arms across the path on both sides of each avenue crossing; down while the crossing is closed */
+  const posts = new Bag(), ab = new Bag(); for (let i = 0; i < 9; i++) ab.box(0.82, 0.2, 0.2, i % 2 ? PAL.white : PAL.accent, 0.41 + i * 0.82, 0, 0);
+  const armGeo = ab.build(true, false).geometry;
+  for (const X of PX) for (const side of [-1, 1]) {
+    const zb = X.zc + side * (X.half + 0.35);
+    for (const sx of [-3.9, 3.9]) { posts.cyl(0.14, 0.14, 1.5, PAL.white, sx, 0.75, zb, 6); posts.sph(0.22, PAL.accent, sx, 1.6, zb, 6, 4); }
+    const m = new THREE.Mesh(armGeo, VC); m.position.set(-3.7, 1.05, zb); m.castShadow = true; m.rotation.z = 1.35; world.add(m); barriers.push({ X, m, u: 0 });
+  }
+  world.add(posts.build());
+}
+anims.push(dt => { for (const b of barriers) { b.u += ((b.X.mode >= 2 ? 1 : 0) - b.u) * Math.min(1, dt * 3); b.m.rotation.z = (1 - b.u) * 1.35; } });
+
+/* ---------- trees (instanced) ---------- */
+{
+  const parPts = Array.from({ length: 120 }, (_, i) => RING.at(i / 120 * RING.L, { x: 0, z: 0 })).map(o => ({ x: o.x, z: o.z })), svcPts = Array.from({ length: 40 }, (_, i) => SERVICE.at(i / 40 * SERVICE.L, { x: 0, z: 0 })).map(o => ({ x: o.x, z: o.z }));
+  const qs = Object.values(ents).filter(e => e.queue).map(e => e.queue);
+  const circles = [[34, -52, 17], [-24, -50, 12], [0, 30, 10], [-8, 65.8, 6], [28, 52, 8], [-26, 51, 7], [17, 51, 7], [18, -40, 7], [16, 62, 7]];
+  const blocked = (x, z) => {
+    if (x > 30 && x < 86 && z > -42 && z < 8) return true;
+    if (x > -84 && x < -38 && z > -34 && z < 8) return true;
+    if (((x - LAKE.x) / (LAKE.rx + 4)) ** 2 + ((z - LAKE.z) / (LAKE.rz + 4)) ** 2 < 1) return true;
+    if (x > -62 && x < 62 && z > 66) return true;
+    if (Math.abs(x) > 104 || Math.abs(z) > 104) return true;
+    if (Math.abs(Math.hypot(x / 98, z / 88) - 1) < 0.07) return true;
+    if (circles.some(c => Math.hypot(x - c[0], z - c[1]) < c[2])) return true;
+    if (G.pairs.some(([e]) => dist2seg(x, z, G.nodes[e.from].x, G.nodes[e.from].z, G.nodes[e.to].x, G.nodes[e.to].z) < 6.6)) return true;      // crowns reach 2.8 m (scale 1.4) from the trunk, paving is 3.5 m from the centreline
+    if (qs.some(q => q.pts.some((p, i) => i && dist2seg(x, z, q.pts[i - 1].x, q.pts[i - 1].z, p.x, p.z) < 6.0))) return true;
+    if (svcPts.some(p => Math.hypot(p.x - x, p.z - z) < 6)) return true;
+    return parPts.some(p => Math.hypot(p.x - x, p.z - z) < 7.5);
+  };
+  const tp = [];
+  for (let k = 0; k < 900 && tp.length < 130; k++) { const x = rand(-102, 102), z = rand(-102, 102); if (!blocked(x, z) && tp.every(q => Math.hypot(q[0] - x, q[1] - z) > 5)) tp.push([x, z]); }
+  const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.4, 1.6, 6).translate(0, 0.8, 0), stdMat(PAL.wood), tp.length);
+  const fb = new Bag(); fb.add(new THREE.ConeGeometry(2.0, 3.0, 7), 0xffffff, 0, 3.0, 0); fb.add(new THREE.ConeGeometry(1.5, 2.4, 7), 0xffffff, 0, 4.4, 0);
+  const crown = new THREE.InstancedMesh(fb.build().geometry, VC, tp.length); trunk.castShadow = crown.castShadow = true; crown.receiveShadow = true;
+  const d = new THREE.Object3D(), gc = [PAL.sage, PAL.leaf, 0xA9BF94, 0xC2D1A6];
+  const tr = tp.map(([x, z], i) => { const s = rand(0.8, 1.4), sy = s * rand(0.9, 1.3), ry = rand(0, 6); d.position.set(x, 0, z); d.scale.set(s, sy, s); d.rotation.y = ry; d.updateMatrix(); trunk.setMatrixAt(i, d.matrix); crown.setMatrixAt(i, d.matrix); crown.setColorAt(i, new THREE.Color(gc[i % 4])); return { x, z, s, sy, ry }; });
+  world.add(trunk, crown); HOOKS.trees = { tr, trunk, crown };
+}
+
+
+/* ============ 4. PARK MODEL (simulation, API) ============ */
+
+const SHOWS = [12, 15, 18, 21], SHOW_MIN = 55, WARN_MIN = 30;
+/* dashboard scale: one sim agent = park.groupSize guests; KG = off-screen guests per on-screen guest (queues in covered switchbacks, indoor attractions, shops) when quoting park totals; QK = guests in a queue per guest visible in its outdoor line */
+const KG = 24, QK = 3, ORD = 120, TICKET = 59, MERCH = 3.7;      // ORD: orders per served stall agent (F&B comes to about $18-25 per guest and day); MERCH: $ per guest leaving a ride (gift shops at the exits, about $8-12 per guest and day)
+/* predicted time in line (park min) for a guest joining now: the wait for the next dispatch plus one measured dispatch interval per further batch of seats ahead */
+const waitRaw = r => {       // averaged over the dispatch phase: a guest joining at a random moment waits half an interval for the first batch
+  const batches = Math.ceil((r.queue.list.length + 1) / r.seats);
+  return (batches - 0.5) * (r.dispInt || r.cyc) * park.timeScale;
+};
+const waitOf = r => r.queue ? (r.wS ?? waitRaw(r)) : 0;       // r.wS: smoothed in updateRidesStalls so the displayed wait does not saw-tooth with every dispatch
+const waitTxt = r => r.status === 'Open' ? Math.ceil(waitOf(r)) + ' min' : r.status;
+const WX = { clear: { name: 'Sunny' }, rain: { name: 'Rain', close: ['flume', 'boats'] }, windy: { name: 'Windy', hold: ['coaster'] }, festive: { name: 'Festive night' } };
+const wxKey = n => { const k = String(n).toLowerCase().trim(); return k in WX ? k : Object.keys(WX).find(x => WX[x].name.toLowerCase() === k) || null; };
+const fmtT = h => { const m = Math.floor(h * 60 + 1e-6); return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+const fmtN = n => Math.round(n).toLocaleString('en-US');
+const park = {
+  time: 11.0, day: 1, merch: 0, timeScale: 1, openH: 9, closeH: 23, weather: 'clear', timeOfDay: null, todMode: 'auto', groupSize: 2, now: 0, entries: 0,
+  entities: ents, rides: {}, stalls: {}, parade: null, guestCount: 0, paradeState: 'Parked', paradeProgress: 0, showsToday: 0, handlers: {},
+  on(evt, fn) { (this.handlers[evt] ||= []).push(fn); return () => this.off(evt, fn); },
+  off(evt, fn) { this.handlers[evt] = (this.handlers[evt] || []).filter(f => f !== fn); },
+  emit(evt, ...a) { (this.handlers[evt] || []).forEach(f => f(...a)); },
+  get clock() { return fmtT(this.time); },
+  get open() { return this.time >= this.openH && this.time < this.closeH; },
+  get paradeBlock() { return this.paradeState !== 'Parked'; },
+  setClock(h) { this.time = h; if (showState(h) !== 'Parked') evacuateParade(); },
+  /* weather: 'clear' | 'rain' | 'windy' | 'festive' (or the display names Sunny, Rain, Windy, Festive night). Rain closes the water rides, wind holds the coaster in its station, festive forces night. */
+  setWeather(name) {
+    const k = wxKey(name); if (!k) return false;
+    const was = this.weather; this.weather = k;
+    for (const r of rides) {
+      const c = !!(WX[k].close && WX[k].close.includes(r.id)), h = !!(WX[k].hold && WX[k].hold.includes(r.id));
+      r.wClosed = c; r.wHold = h; if (r.queue) r.queue.draining = c;
+      if (c) for (const g of guests) if (g.state === 'walk' && g.goal && g.goal.ent === r) { g.route = []; dropGoal(g); }       // nobody keeps walking to a closed line
+    }
+    this.emit('weather', k, was); return true;
+  },
+  /* lighting: 'auto' follows the park clock, 'day' / 'night' force it, a number (hour) pins the lighting clock to that hour */
+  setTimeOfDay(v) {
+    if (typeof v === 'number') { this.timeOfDay = v; this.todMode = 'auto'; } else { this.timeOfDay = null; this.todMode = v === 'day' || v === 'night' ? v : 'auto'; }
+    this.emit('timeofday', typeof v === 'number' ? v : this.todMode);
+  },
+  nextShow() { const h = this.time; const n = SHOWS.find(s => s > h); return n === undefined ? 'Tomorrow ' + fmtT(SHOWS[0]) : fmtT(n); },
+};
+window.park = park;
+for (const r of rides) park.rides[r.id] = r;
+for (const s of stalls) park.stalls[s.id] = s;
+
+/* ---- ride + stall simulation ---- */
+const rideMethods = {
+  onDispatch() {
+    if (this.wClosed || this.wHold) { this.lastBoard = 0; return; }
+    let n;
+    if (this.queue) {
+      n = Math.min(this.seats, this.queue.list.length);
+      for (let i = 0; i < n; i++) { const g = this.queue.list.shift(); g.state = 'ride'; g.ride = this; g.until = this.timed ? park.now + this.duration : Infinity; this.onboard.push(g); }
+    } else n = Math.round(this.seats * 0.55 * (0.8 + 0.4 * Math.random()));
+    this.util = this.util * 0.8 + (n / this.seats) * 0.2; this.cycles++; this.lastBoard = n;
+    const dd = park.now - this.lastDisp; if (this.resumed) this.resumed = false; else if (dd > 1 && dd < this.cyc * 3 + 20) this.cyc += (dd - this.cyc) * (this.nDisp++ ? 0.25 : 1); this.lastDisp = park.now;
+  },
+  releaseAll() { for (const g of this.onboard) exitGuest(g, this.queue.node); this.onboard.length = 0; },
+  cyclesBump() { this.onDispatch(); },
+};
+for (const r of rides) Object.assign(r, rideMethods);
+flumeRide.timed = true;
+function exitGuest(g, node) { if (g.ride && g.ride.queue) park.merch += MERCH * park.groupSize * KG; g.state = 'exit'; g.exitNode = node; g.ride = null; }
+function showState(h) { for (const s of SHOWS) if (h >= s - WARN_MIN / 60 && h < s + SHOW_MIN / 60) return h < s ? 'Assembling' : 'On route'; return 'Parked'; }
+/* after a clock jump the lead time never happened: clear everyone out of the parade crossings (the barriers close on the next step) */
+function evacuateParade() {
+  for (const g of guests) if (g.state === 'walk' && g.lane) for (const x of g.lane.xs) if (x.X.kind === 'parade' && g.s >= x.cs - 0.01 && g.s <= x.ce + 0.5) { release(g); g.state = 'off'; park.debug.evacuated = (park.debug.evacuated || 0) + 1; break; }
+}
+
+/* ---- guests & carts ----
+   Movement is structural, not corrected afterwards:
+   - guests walk on 2 lanes per directed path edge (follow-the-leader, gap GAP); a junction zone is crossed only on a reserved "move" (FIFO, conflicting moves exclusive, outgoing lane must have room, nobody stops inside a zone)
+   - carts drive their own service-road loop, which crosses no guest path
+   - the parade avenue is used by nobody else; its two crossings close (barrier down) before a show until the last float has passed
+   - a final distance veto (VETO) refuses any step that would bring two agents closer: the invariant holds even if the logic above is wrong */
+const UT_T = 20, MAXG = 340, NCART = 3, VETO2 = 0.52 * 0.52, CGAP = 5.6, GM = 0.31;
+const SHIRT = [PAL.accent, PAL.butter, PAL.sky, PAL.lilac, PAL.peach, PAL.sage, PAL.white, PAL.clay, PAL.accent], SKIN = [0xF3D3B8, 0xE0AC85, 0xC68863, 0x8D5B3E, 0xF6DCC8];
+const guests = [], carts = [];
+let uidN = 0, admN = 0;
+const mkWalker = cart => ({ uid: uidN++, pri: 0, cart, state: 'off', lane: null, edge: G.edges[0], s: 0, mv: null, ms: 0, from: null, xin: null, route: [], goal: null, hold: 0, arr: false, speed: 1.5, wt: 0, x: 0, z: 0, yaw: 0, hd: 0, step: 0, ph: Math.random() * 6, balloon: false, visits: 0, maxVisits: 4, qd: 0, q: null, ride: null, until: 0, last: null, ps: 0, still: 0 });
+for (let i = 0; i < MAXG; i++) { const g = mkWalker(false); guests.push(g); walkers.push(g); }
+for (let i = 0; i < NCART; i++) { const c = mkWalker(true); c.state = 'walk'; c.speed = 2.0; c.ps = 8 + i * SERVICE.L / NCART; carts.push(c); walkers.push(c); }
+const STROLL = ['hub', 'plaza', 'n1', 'n2'], POP = { coaster: 4, ferris: 2, flume: 2.6, carousel: 1.6, boats: 1.2 };
+const pickW = (list, wf) => { const w = list.map(wf), tot = w.reduce((a, b) => a + b, 0); if (tot <= 0) return null; let r = Math.random() * tot; for (let i = 0; i < list.length; i++) if ((r -= w[i]) <= 0) return list[i]; return list[0]; };
+const PP = { x: 0, z: 0 }, CPOSE = { x: 0, z: 0, tx: 0, tz: 1, yaw: 0 };
+
+/* ---- spatial hash of walking + queuing guests (cell 4 m) ---- */
+const grid = new Map(), cellK = (cx, cz) => (cx + 64) * 1024 + cz + 64;
+function gridAdd(g) { const k = cellK(Math.floor(g.x / 4), Math.floor(g.z / 4)); (grid.get(k) || grid.set(k, []).get(k)).push(g); }
+function gridBuild() { grid.clear(); for (const g of guests) if (g.state === 'walk' || g.state === 'queue') gridAdd(g); }
+function inCartBox(x, z, c, m) {
+  const cs = Math.cos(c.yaw), sn = Math.sin(c.yaw), dx = x - c.x, dz = z - c.z, lx = dx * cs - dz * sn, lz = dx * sn + dz * cs;
+  return Math.abs(lx) < 0.93 + m && lz > -1.3 - m && lz < 1.45 + m;
+}
+/* would moving guest `w` to (nx,nz) bring it closer than the veto distance to another guest, or into a cart's box? */
+const YB2 = 0.62 * 0.62;
+/* who yields to whom (a strict order, so two walkers can never wait for each other): queue members, then walkers just out of a junction (s < 2.5), then walkers inside a junction (older admission first), then everyone else by id.
+   The lower-ranked walker keeps 0.62 m away; the higher-ranked one only stops at the hard limit (0.52 m). Adjacent lanes are 0.7 m apart, so walkers in them pass freely. */
+const rk = o => o.state === 'queue' ? 0 : o.mv ? 2 : o.lane && o.s < 2.5 ? 1 : 3;
+const outranks = (o, w) => { const a = rk(o), b = rk(w); return a !== b ? a < b : a === 2 ? o.pri < w.pri : o.uid < w.uid; };
+function guestBlocked(w, nx, nz) {
+  const cx = Math.floor(nx / 4), cz = Math.floor(nz / 4);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const l = grid.get(cellK(cx + i, cz + j)); if (!l) continue;
+    for (const o of l) { if (o === w || o.state === 'off') continue;
+      const dx = o.x - nx, dz = o.z - nz, d2 = dx * dx + dz * dz;
+      if (d2 < (outranks(o, w) ? YB2 : VETO2)) { const ox = o.x - w.x, oz = o.z - w.z; if (d2 < ox * ox + oz * oz) return true; } } }
+  for (const c of carts) if (inCartBox(nx, nz, c, GM) && !inCartBox(w.x, w.z, c, GM)) return true;
+  return false;
+}
+function clearSpot(x, z, r, ex) {
+  const cx = Math.floor(x / 4), cz = Math.floor(z / 4);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const l = grid.get(cellK(cx + i, cz + j)); if (l) for (const o of l) if (o !== ex && o.state !== 'off' && Math.hypot(o.x - x, o.z - z) < r) return false; }
+  for (const c of carts) if (inCartBox(x, z, c, 0.6)) return false;
+  return true;
+}
+function setPos(w, x, z) { const dx = x - w.x, dz = z - w.z, d = Math.hypot(dx, dz); if (d > 1e-5) { w.step += d; if (d > 0.002) w.hd = Math.atan2(dx, dz); } w.x = x; w.z = z; }
+
+/* ---- lane / move bookkeeping ---- */
+/* a guest heading for a queue holds one of its slots until it joins or gives up, so the line can never overflow on arrival */
+function dropGoal(g) { if (g.hq) { g.hq.head--; g.hq = null; } g.goal = null; }
+function release(w) {
+  if (w.mv) { const m = w.mv; m.list.splice(m.list.indexOf(w), 1); m.lo.inflight--; w.mv = null; }
+  if (w.from) { const d = w.from.dep, i = d.indexOf(w); if (i >= 0) d.splice(i, 1); w.from = null; }
+  if (w.lane) { const l = w.lane.list, i = l.indexOf(w); if (i >= 0) l.splice(i, 1); w.lane = null; }
+  if (w.xin) { w.xin.X.g--; w.xin = null; }
+  if (w.away && w.away.q.exiting === w) { w.away.q.exiting = null; w.away.L.e.exitHold = false; }
+  w.away = null; dropGoal(w);
+}
+function placeOnLane(g, L, s) {
+  laneAt(L, s, PP); g.x = PP.x; g.z = PP.z; g.lane = L; g.edge = L.e; g.s = s; g.mv = null; g.state = 'walk'; g.route = []; g.goal = null; g.hold = 0; g.arr = false; g.xin = null; g.wt = 0; g.still = 0;
+  g.hd = g.yaw = Math.atan2(L.e.dx, L.e.dz); L.list.push(g); gridAdd(g);
+}
+/* the outgoing lane can take one more walker without the newcomer ever having to wait inside the junction. Worst case: everyone already on the first stretch is packed against the end of that stretch
+   (the lane end, or the first crossing that is closed / has a cart near it) */
+function canLand(lo) {
+  let n = lo.inflight, eff = Math.max(0, lo.len - 2.2);        // 2.2 m slack: the front walker may stop short of the end (queue tail, departing mover, yield)
+  const x = lo.xs.find(q => q.X.mode >= 1);           // a crossing that is closing or closed: the first stretch is all the lane can hold
+  if (x) { eff = x.cs - 0.1; for (const o of lo.list) if (o.s < x.cs) n++; } else n += lo.list.length;
+  return n <= Math.floor(eff / GAP + 1e-9);
+}
+/* may `w` step into crossing `x` on lane L? Closed: no. Closing: only if it can then stand clear of the crossing, i.e. the stretch up to the next crossing (or the lane end) has room even if every barrier ahead stays shut */
+function xEnter(w, L, x) {
+  const X = x.X;
+  if (X.mode >= 2 || X.ban) return false;
+  if (X.mode === 0) return true;
+  const i = L.xs.indexOf(x), end = i + 1 < L.xs.length ? L.xs[i + 1].cs - 0.1 : L.len - 1.6;
+  let n = 0; for (const o of L.list) if (o !== w && o.s >= x.cs && o.s < end + 0.3) n++;
+  return n <= Math.floor((end - x.ce) / GAP);
+}
+function movePos(m, ms, o) {
+  const c = m.cum; let i = 1; while (i < c.length - 1 && c[i] < ms) i++;
+  const t = clamp((ms - c[i - 1]) / Math.max(1e-6, c[i] - c[i - 1]), 0, 1); o.x = lerp(m.pts[i - 1].x, m.pts[i].x, t); o.z = lerp(m.pts[i - 1].z, m.pts[i].z, t); return o;
+}
+/* a move is admitted only if every mover already in the junction has passed the last point where its path comes within CT of this move's path (and no older refused waiter has a conflicting path): whatever the speeds or stalls, two movers then never come closer than CT */
+function clearToStart(m, virt) {
+  let mn = 1e9; for (const o of m.list) mn = Math.min(mn, o.ms);
+  if (mn < GAP) return false;
+  for (const o of m.n.moves) if (o !== m) { const r = o.rel.get(m); if (r < 0) continue; for (const x of o.list) if (x.ms <= r) return false; }
+  for (const v of virt) if (v[0] !== m && v[0].rel.get(m) >= 0 && park.now - v[1] >= FIFO_T) return false;
+  return true;
+}
+function admit(w, m) {
+  const L = w.lane; L.list.splice(L.list.indexOf(w), 1); L.dep.push(w); w.from = L; w.lane = null; w.mv = m; w.ms = 0; w.edge = m.eo; w.route.shift(); w.wt = 0; w.pri = ++admN; m.list.push(w); m.lo.inflight++;
+}
+function land(w, m) {
+  m.list.splice(m.list.indexOf(w), 1); m.lo.inflight--;
+  if (w.from) { const i = w.from.dep.indexOf(w); if (i >= 0) w.from.dep.splice(i, 1); w.from = null; }
+  w.mv = null; w.lane = m.lo; w.edge = m.lo.e; w.s = 0; w.wt = 0; m.lo.list.push(w);
+}
+
+/* ---- the per-substep walk: moves, lanes, admissions, carts ---- */
+function stepMoves(dt) {
+  for (const m of moves) {
+    if (!m.list.length) continue;
+    const arr = m.list.slice().sort((a, b) => b.ms - a.ms), done = [];
+    for (let i = 0; i < arr.length; i++) {
+      const w = arr[i]; let lim = m.len;
+      if (i > 0) lim = Math.min(lim, arr[i - 1].ms - GAP);
+      else { let rear = 1e9; for (const o of m.lo.list) rear = Math.min(rear, o.s); if (rear < 1e9) lim = Math.min(lim, m.len + rear - GAP); }
+      let ns = Math.min(w.ms + w.speed * dt, Math.max(lim, w.ms));
+      if (ns > w.ms) { movePos(m, ns, PP); if (guestBlocked(w, PP.x, PP.z)) ns = w.ms; else setPos(w, PP.x, PP.z); }
+      w.still = ns === w.ms ? w.still + dt : 0; w.ms = w.s = ns;
+      if (w.from && ns >= GAP) { const d = w.from.dep, k = d.indexOf(w); if (k >= 0) d.splice(k, 1); w.from = null; }
+      if (ns >= m.len - 1e-6) done.push(w);
+    }
+    for (const w of done) land(w, m);
+  }
+}
+function stepLanes(dt) {
+  for (const L of lanes) {
+    const ls = L.list; if (!ls.length) continue; if (ls.length > 1) ls.sort((a, b) => b.s - a.s);
+    for (let i = 0; i < ls.length; i++) {
+      const w = ls[i]; let lim = L.len;
+      if (i > 0) lim = Math.min(lim, ls[i - 1].s - GAP);
+      else if (L.dep.length) { let mn = 1e9; for (const o of L.dep) mn = Math.min(mn, o.ms); lim = Math.min(lim, L.len + mn - GAP); }
+      for (const x of L.xs) if (w.s <= x.cs) { if (!xEnter(w, L, x)) lim = Math.min(lim, x.cs - 0.02); break; }
+      if (!w.route.length && w.goal && w.goal.ent && w.goal.ent.queue) {           // last leg into a queue: stay a queue-gap behind the last guest in line
+        const q = w.goal.ent.queue, t = q.list[q.list.length - 1]; if (t) lim = Math.min(lim, L.len - Math.max(0, 1.0 - (q.L - t.qd)));
+      }
+      let ns = Math.min(w.s + (w.hold > 0 ? 0 : w.speed) * dt, Math.max(lim, w.s));
+      if (ns > w.s) { laneAt(L, ns, PP); if (guestBlocked(w, PP.x, PP.z)) ns = w.s; else setPos(w, PP.x, PP.z); }
+      if (ns !== w.s) for (const x of L.xs) {
+        if (w.s <= x.cs && ns > x.cs) { w.xin = x; x.X.g++; } else if (w.xin === x && ns > x.ce) { x.X.g--; w.xin = null; }
+      }
+      w.still = ns === w.s ? w.still + dt : 0; w.s = ns;
+      if (ns >= L.len - 1e-3) { if (!w.route.length) w.arr = true; else if (!w.wt) w.wt = park.now + i * 1e-6; } else w.wt = 0;
+    }
+  }
+}
+function admitAll() {
+  const by = new Map();
+  for (const L of lanes) { const w = L.list[0]; if (w && w.route.length && w.s >= L.len - 1e-3) { const k = L.e.to; (by.get(k) || by.set(k, []).get(k)).push(w); } }
+  for (const [nid, ws] of by) {
+    ws.sort((a, b) => a.wt - b.wt); const N = G.nodes[nid], virt = [];
+    for (const w of ws) {
+      /* a U-turn that cannot land for UT_T seconds (the lane it wants is full of walkers who want the opposite U-turn: n1<>n2, a stall branch and the hub) is swapped for any other way out of this junction that has room */
+      if (w.route[0].to === w.lane.e.from && park.now - w.wt > UT_T) {
+        const alts = G.adj[nid].filter(e => e.to !== w.lane.e.from && e.to !== 'gate' && !skipClosed(e) && (N.mvBy[w.lane.id + '|' + e.key] || []).some(m => !m.lo.e.exitHold && canLand(m.lo)));
+        if (alts.length) { const e = alts[Math.floor(Math.random() * alts.length)]; dropGoal(w); w.route = [e]; w.goal = { type: 'stroll', node: e.to }; park.debug.uturnBroken = (park.debug.uturnBroken || 0) + 1; }
+      }
+      let cands = N.mvBy[w.lane.id + '|' + w.route[0].key]; if (!cands) continue;
+      if (cands.length > 1 && Math.random() < 0.5) cands = [cands[1], cands[0]];
+      for (const m of cands) {
+        if (m.lo.e.exitHold || !canLand(m.lo)) continue;           // a stall guest is stepping onto this edge from beside the queue
+        if (!clearToStart(m, virt)) { virt.push([m, w.wt]); continue; }
+        admit(w, m); break;
+      }
+    }
+  }
+}
+function cartBlocked(c, P) {
+  const cx = Math.floor(P.x / 4), cz = Math.floor(P.z / 4);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const l = grid.get(cellK(cx + i, cz + j)); if (l) for (const o of l) if (o.state !== 'off' && inCartBox(o.x, o.z, P, GM)) return true; }
+  for (const o of carts) if (o !== c && Math.hypot(o.x - P.x, o.z - P.z) < 3.6) return true;
+  return false;
+}
+function stepCarts(dt) {
+  const LO = SERVICE.L;
+  for (const c of carts) {
+    if (c.hold > 0) { c.hold -= dt; continue; }
+    let adv = c.speed * dt, ahead = 1e9; for (const o of carts) if (o !== c) ahead = Math.min(ahead, mod(o.ps - c.ps, LO));
+    adv = Math.min(adv, Math.max(0, ahead - CGAP));
+    if (adv > 0) {
+      SERVICE.at(c.ps + adv, CPOSE); CPOSE.yaw = Math.atan2(CPOSE.tx, CPOSE.tz);
+      if (cartBlocked(c, CPOSE)) adv = 0; else { c.ps = mod(c.ps + adv, LO); c.x = CPOSE.x; c.z = CPOSE.z; c.yaw = CPOSE.yaw; }
+    }
+    if (Math.random() < dt * 0.03) c.hold = rand(2, 5);
+  }
+}
+for (const c of carts) { SERVICE.at(c.ps, CPOSE); c.x = CPOSE.x; c.z = CPOSE.z; c.yaw = Math.atan2(CPOSE.tx, CPOSE.tz); }
+
+/* ---- guest planning ---- */
+const skipClosed = e => e.px !== undefined && e.px.mode >= 1;
+function bfsAll(from, skip) {
+  const prev = { [from]: null }, q = [from];
+  while (q.length) { const n = q.shift(); for (const e of G.adj[n]) if (!(e.to in prev) && !(skip && skip(e))) { prev[e.to] = e; q.push(e.to); } }
+  return prev;
+}
+function routeTo(prev, to) { const r = []; let c = to; while (prev[c]) { r.unshift(prev[c]); c = prev[c].from; } return r; }
+const WALK_K = 40, near = (prev, n) => { let d = 0, c = n; while (prev[c]) { d += prev[c].len; c = prev[c].from; } return Math.exp(-d / WALK_K); };    // guests favour what is close: the spine junctions are the park's bottleneck
+function pickGoal(g, prev, from, uturn) {
+  const ok = n => n in prev;
+  if (!park.open || park.time >= 22 || g.visits >= g.maxVisits) { if (ok('gate')) return { type: 'leave', node: 'gate' }; }
+  else {
+    const r = Math.random();
+    if (r < 0.62) {
+      const e = pickW(rides.filter(x => x.queue && x.queue.list.length + x.queue.head < x.queue.cap && x !== g.last && ok(x.queue.node)), x => POP[x.id] * near(prev, x.queue.node) / (1 + x.queue.list.length * 0.05));
+      if (e && !e.wClosed && (!e.wHold || Math.random() < 0.3)) return { type: 'ride', ent: e, node: e.queue.node };       // a closed or held ride's share of visits is simply lost (they stroll or shop instead): the spine, the park's bottleneck, never carries more than on a normal day
+    }
+    else if (r < 0.86) { const e = pickW(stalls.filter(x => x.queue.list.length + x.queue.head < x.queue.cap && x !== g.last && ok(x.queue.node)), x => near(prev, x.queue.node) * (x.id === 'stall-balloon' ? (g.balloon ? 0 : 0.7) : 1 / (1 + x.queue.list.length * 0.25))); if (e) return { type: 'stall', ent: e, node: e.queue.node }; }
+  }
+  const st = STROLL.filter(n => ok(n) && n !== from);
+  if (st.length) return { type: 'stroll', node: st[Math.floor(Math.random() * st.length)] };
+  return uturn || !ok('gate') ? null : { type: 'leave', node: 'gate' };      // nothing worth walking to ahead: head home rather than turn round
+}
+/* turn round on the spot at a dead-end queue node (queue full): the lane tapers to the node, so the swap is seamless */
+function leafTurn(g) {
+  const L = g.lane, R = L.e.rev.lanes[0]; if (R.e.exitHold || !canLand(R)) return false;       // exitHold: a served stall guest is stepping onto R
+  const s0 = Math.max(0, L.len - g.s);       // same spot on the reverse lane (a closing line turns round up to 0.8 m short of the lane end): no jump
+  for (const o of R.list) if (o.s < s0 + GAP) return false;
+  L.list.splice(L.list.indexOf(g), 1); R.list.push(g); g.lane = R; g.edge = R.e; g.s = s0; g.wt = 0; return true;
+}
+/* closed ride: the tail guest of the draining line steps onto the ride exit lane through the same admission rules as a rider leaving the ride */
+function drainOut(q, g) {
+  const L = G.adj[q.node][0].lanes[0]; if (L.e.exitHold || !canLand(L)) return false;
+  for (const o of L.list) if (o.s < GAP) return false;
+  laneAt(L, 0, PP); const cx = Math.floor(PP.x / 4), cz = Math.floor(PP.z / 4);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const l = grid.get(cellK(cx + i, cz + j)); if (l) for (const o of l) if (o !== g && o.state !== 'off' && Math.hypot(o.x - PP.x, o.z - PP.z) < (o.q === q ? 0.6 : 0.65)) return false; }       // the exit lane start is 0.7 m from the node: a guest still arriving there (it turns round at the node) is at least that far, and the veto distance is 0.62
+  for (const c of carts) if (inCartBox(PP.x, PP.z, c, 0.6)) return false;
+  q.list.pop(); g.q = null; placeOnLane(g, L, 0); park.drained = (park.drained || 0) + 1; return true;
+}
+function planWalk(g) {
+  const L = g.lane, from = L.e.to, N = G.nodes[from];
+  if (N.leaf) { if (g.s < L.len - (N.q && ents[from].queue.draining ? 0.8 : 1e-3)) return; if (N.q) leafTurn(g);       // closing line: the last queue guest may stand in the way a little short of the lane end
+    else { release(g); g.state = 'off'; park.departed = (park.departed || 0) + 1; } return; }
+  let prev = bfsAll(from, e => skipClosed(e) || e === L.e.rev), goal = pickGoal(g, prev, from), route;       // first choice: a goal that needs no U-turn here
+  if (!goal) { prev = bfsAll(from, skipClosed); goal = pickGoal(g, prev, from, true); }
+  if (goal) route = routeTo(prev, goal.node);
+  else {
+    const opts = G.adj[from].filter(e => !skipClosed(e) && e.to !== 'gate'); if (!opts.length) { g.hold = 1; return; }
+    const e = opts[Math.floor(Math.random() * opts.length)]; goal = { type: 'stroll', node: e.to }; route = [e];
+  }
+  g.goal = goal; g.route = route; g.arr = false; if (goal.ent) { g.hq = goal.ent.queue; g.hq.head++; }
+}
+function handleArrival(g) {
+  g.arr = false; const goal = g.goal;
+  if (!goal || goal.type === 'stroll') { dropGoal(g); return; }
+  if (goal.type === 'leave') { release(g); g.state = 'off'; park.departed = (park.departed || 0) + 1; return; }
+  if (goal.ent.wClosed) { dropGoal(g); return; }                           // the ride closed while this guest was on the way: turn round at the dead end
+  const q = goal.ent.queue, tail = q.list[q.list.length - 1];
+  if (q.full) { dropGoal(g); return; }                                     // cannot happen with slot holding; kept as a guard: turn round at the dead end
+  if (tail && tail.qd > q.L - 1.0 + 1e-6) { g.arr = true; return; }
+  const lst = g.lane.list; lst.splice(lst.indexOf(g), 1); g.lane = null;
+  g.state = 'queue'; g.q = q; g.qd = q.L; g.last = goal.ent; q.list.push(g); dropGoal(g); g.route = []; q.at(q.L, PP); g.x = PP.x; g.z = PP.z;
+}
+function setupGuest(g) {
+  g.speed = 1.2 + Math.random() * 0.7; g.balloon = false; g.visits = 0; g.maxVisits = 3 + Math.floor(Math.random() * 5); g.last = null;
+  g.shirt = new THREE.Color(SHIRT[Math.floor(Math.random() * SHIRT.length)]); g.skin = new THREE.Color(SKIN[Math.floor(Math.random() * SKIN.length)]); g.umb = Math.random() < 0.72; g.ucol = new THREE.Color(UMB[Math.floor(Math.random() * UMB.length)]); g.dirty = true;
+}
+function spotOK(L, s) {
+  laneAt(L, s, PP); if (!clearSpot(PP.x, PP.z, 1.2)) return false;
+  for (const o of L.list) if (Math.abs(o.s - s) < GAP + 0.3) return false;
+  return true;
+}
+function spawnGuest(g, anywhere) {
+  let L, s = 0;
+  if (anywhere) {
+    for (let k = 0; k < 40 && !L; k++) {
+      const e = G.edges[Math.floor(Math.random() * G.edges.length)], c = e.lanes[Math.floor(Math.random() * e.lanes.length)]; if (c.len < 1) continue;
+      s = Math.random() * c.len; if (c.xs.some(x => s > x.cs - 1.5 && s < x.ce + 1.5)) continue;
+      if (spotOK(c, s)) L = c;
+    }
+    if (!L) return false;
+  } else { L = G.adj.gate[0].lanes[Math.random() < 0.5 ? 0 : 1]; if (!spotOK(L, 0)) return false; }
+  setupGuest(g); placeOnLane(g, L, s); return true;
+}
+function placeExit(g) {
+  const L = G.adj[g.exitNode][0].lanes[0]; if (!canLand(L)) return;
+  for (const o of L.list) if (o.s < GAP) return;
+  laneAt(L, 0, PP); if (!clearSpot(PP.x, PP.z, 1.0)) return;
+  placeOnLane(g, L, 0); g.visits++;
+}
+/* a served stall guest steps out in front of the posts, walks a corridor 1.9 m beside the queue (posts stand at 1.25 m) to a waiting spot that is off every path lane, then steps sideways onto the lane
+   start through the same admission as ride exits. Nobody times out: the waiter holds its spot until the lane takes it, and waiters line up along the corridor away from the lane entry */
+/* rail posts of a queue, 1.25 m either side of its line; posts that stand in the path lanes leaving the queue mouth, on another leg of the queue line (corners) or, at a stall, in the mouth in front of the counter are left out so no walker passes through one */
+function queuePosts(q) {
+  const out = [], P = q.pts, stall = q.id.startsWith('stall-'), A = G.nodes[q.node], B = G.nodes[G.adj[q.node][0].to];
+  for (let i = 1; i < P.length; i++) {
+    const a = P[i - 1], c = P[i], len = Math.hypot(c.x - a.x, c.z - a.z), ang = Math.atan2(c.x - a.x, c.z - a.z), n = Math.max(1, Math.round(len / 2.2));
+    for (let k = stall && i === 1 ? 1 : 0; k <= n; k++) for (const sd of [-1.25, 1.25]) {
+      const t = k / n, x = lerp(a.x, c.x, t) + Math.cos(ang) * sd, z = lerp(a.z, c.z, t) - Math.sin(ang) * sd;
+      if (dist2seg(x, z, A.x, A.z, B.x, B.z) < 1.65) continue;
+      let near = 9; for (let j = 1; j < P.length; j++) near = Math.min(near, dist2seg(x, z, P[j - 1].x, P[j - 1].z, P[j].x, P[j].z));
+      if (near >= 1.0) out.push({ x, z });
+    }
+  }
+  return out;
+}
+const lat0 = (S, F, dx, dz) => ((S.x - F.x) * -dz + (S.z - F.z) * dx) < 0 ? -1 : 1;
+function startAway(g, q) {
+  const L = G.adj[q.node][0].lanes[0], S = laneAt(L, 0, { x: 0, z: 0 }), F = q.pts[0], b = q.pts[q.pts.length - 1], l = Math.hypot(b.x - F.x, b.z - F.z) || 1, dx = (b.x - F.x) / l, dz = (b.z - F.z) / l;
+  const loc = (a, c) => ({ x: F.x + dx * a - dz * c, z: F.z + dz * a + dx * c });
+  if (!q.exitPts) {          // chosen once per stall: [just in front of the queue head (clear of the counter), corridor, waiting spot, step-in point on the lane at s <= 1.45]
+    const posts = queuePosts(q), e = L.e, H = { x: 0, z: 0 }, side = P => (P.x - b.x) * -e.dz + (P.z - b.z) * e.dx;
+    const edgeD = P => { let m = 9; for (const [e1] of G.pairs) { const A = G.nodes[e1.from], B = G.nodes[e1.to]; m = Math.min(m, dist2seg(P.x, P.z, A.x, A.z, B.x, B.z)); } return m; };
+    const postD = (P, Q) => { let m = 9; for (const p of posts) m = Math.min(m, dist2seg(p.x, p.z, P.x, P.z, Q.x, Q.z)); return m; };
+    let best = null;
+    for (const sg of [-1, 1]) for (const cw of [1.9, 2.6, 3.3]) for (let aw = -2; aw <= 4.01; aw += 0.5) for (const s of [0.6, 0.9, 1.2, 1.45]) {
+      laneAt(L, s, H); const W = loc(l + aw, sg * cw), P1 = loc(-0.15, sg * 1.9); let ok = edgeD(W) >= 1.85 && postD(P1, W) >= 0.45 && postD(W, H) >= 0.45 && (W.x - S.x) * e.dx + (W.z - S.z) * e.dz <= s;
+      for (let t = 0; ok && t <= 1; t += 0.05) { const P = { x: lerp(P1.x, W.x, t), z: lerp(P1.z, W.z, t) }; if (edgeD(P) < 1.2) ok = false; }
+      for (let t = 0; ok && t <= 0.85; t += 0.05) { const P = { x: lerp(W.x, H.x, t), z: lerp(W.z, H.z, t) }; if ((P.x - b.x) * e.dx + (P.z - b.z) * e.dz > -0.3 && side(P) < 0.45) ok = false; }
+      const len = Math.abs(l + aw) + cw + Math.hypot(W.x - H.x, W.z - H.z);
+      if (ok && (!best || len < best.len)) best = { len, sg, W, H: { x: H.x, z: H.z }, s };
+    }
+    if (!best) { laneAt(L, 1.45, H); best = { sg: lat0(S, F, dx, dz), W: loc(l + 1.7, lat0(S, F, dx, dz) * 1.9), H: { x: H.x, z: H.z }, s: 1.45 }; }
+    q.exitPts = [loc(-0.15, 0), loc(-0.15, best.sg * 1.9), best.W, best.H]; q.exitS = best.s;
+  }
+  g.state = 'walk'; g.q = null; g.lane = null; g.mv = null; g.route = []; g.goal = null; g.arr = false; g.ride = null; g.still = 0; g.hold = 0;
+  g.away = { L, q, i: 0, pts: q.exitPts };
+}
+function stepAway(g, dt) {
+  const a = g.away, p = a.pts[a.i], L = a.L, H = a.pts[3], sH = a.q.exitS;
+  const dx = p.x - g.x, dz = p.z - g.z, d = Math.hypot(dx, dz), st = Math.min(d, g.speed * dt);
+  if (d < 1e-4 || st >= d - 1e-6) {
+    if (a.i < 2) { a.i++; return; }
+    if (a.i === 2) {            // at the waiting spot: leave only when the lane can take a newcomer at s = 0
+      if (!a.q.exiting && L.inflight === 0 && canLand(L) && !L.list.some(o => o.s < sH + GAP) && clearSpot(H.x, H.z, 0.6, g)) { a.q.exiting = g; L.e.exitHold = true; a.i = 3; } else g.still += dt; return;
+    }
+    a.q.exiting = null; L.e.exitHold = false; g.away = null; placeOnLane(g, L, sH); g.visits++; return;
+  }
+  const nx = g.x + dx / d * st, nz = g.z + dz / d * st;
+  if (guestBlocked(g, nx, nz)) { g.still += dt; return; }
+  g.still = 0; setPos(g, nx, nz);
+}
+const timeline = { spawnT: 0 };
+function updateGuests(dt) {
+  const h = park.time, target = h < park.openH || h >= 22 ? 0 : Math.round(40 + 100 * Math.exp(-(((h - 15.5) / 4.2) ** 2)));
+  let active = 0;
+  gridBuild();
+  for (const g of guests) {
+    if (g.state === 'off') { if (!g.wasOff) { g.wasOff = true; g.offT = park.now; } continue; }
+    g.wasOff = false; active++;
+    if (g.state === 'walk' && g.away) continue;
+    if (g.state === 'walk') {
+      if (g.hold > 0) g.hold -= dt;
+      if (g.arr && !g.mv) handleArrival(g);
+      if (g.state === 'walk' && g.lane && !g.mv && !g.goal && g.hold <= 0) planWalk(g);
+    } else if (g.state === 'exit') placeExit(g);
+    else if (g.state === 'ride' && g.until <= park.now) { const r = g.ride; r.onboard.splice(r.onboard.indexOf(g), 1); exitGuest(g, r.queue.node); }
+  }
+  park.guestCount = active;
+  timeline.spawnT -= dt;
+  if (active < target && timeline.spawnT <= 0) { const g = guests.find(x => x.state === 'off' && x.wasOff && park.now - x.offT >= 1.5); if (g && spawnGuest(g, false)) { timeline.spawnT = 0.5; park.entries++; } }
+  const n = Math.ceil(dt / 0.05);
+  for (let i = 0; i < n; i++) { const d = dt / n; gridBuild(); stepMoves(d); stepLanes(d); admitAll(); stepCarts(d); for (const g of guests) if (g.away) stepAway(g, d); }
+}
+function updateRidesStalls(dt) {
+  const hr = dt * park.timeScale / 60, G2 = park.groupSize;
+  for (const r of rides) {
+    if (r.queue) r.queue.update(dt);
+    r.status = !park.open || r.wClosed ? 'Closed' : r.wHold ? 'Hold' : 'Open'; r.note = !park.open ? 'Park closed' : r.wClosed ? 'Closed for rain' : r.wHold ? 'Wind hold' : '';
+    if (r.queue) r.queue.draining = !!r.wClosed;
+    if (r.queue && r.status !== 'Open') r.resumed = true;       // the first dispatch after a Hold/Closed spell spans the spell: not a dispatch interval
+    if (r.queue && r.status === 'Open') { const w = waitRaw(r); r.wS = r.wS === undefined ? w : r.wS + (w - r.wS) * (1 - Math.exp(-dt / 20)); }
+    r.rph = r.status === 'Open' ? Math.round(r.hourlyCap * Math.min(1, r.util) * (1 + 0.04 * Math.sin(park.now * 0.35 + r.hourlyCap))) : 0;
+    r.ridesToday += r.rph * hr;
+  }
+  for (const s of stalls) {
+    const q = s.queue; q.update(dt); const f = q.list[0];
+    if (!s.cur && f && f.qd <= 0.2) { s.cur = f; s.curT = s.svc * (0.8 + Math.random() * 0.4); }
+    if (s.cur) { s.curT -= dt; if (s.curT <= 0) {
+      const g = s.cur; q.list.shift(); s.cur = null; s.served++; s.serveT.push(park.now); s.orders += ORD; s.revenue += ORD * s.price;
+      if (s.id === 'stall-balloon' || Math.random() < 0.14) g.balloon = true; startAway(g, q); } }
+    while (s.serveT.length && s.serveT[0] < park.now - 60) s.serveT.shift();
+    s.ordersHr = s.serveT.length * ORD;
+  }
+  const wr = rawWait(); waitK = waitK === undefined ? wr : waitK + (wr - waitK) * (1 - Math.exp(-dt / 60));
+}
+const guestsRoot = { body: null, head: null, balloon: null, umb: null };
+const UMB = [PAL.accent, PAL.cream, PAL.butter, PAL.sky, PAL.lilac, PAL.peach, PAL.white, PAL.accent];
+{
+  const bb = new Bag(); bb.cyl(0.24, 0.3, 0.95, 0xffffff, 0, 0.72, 0, 8); bb.box(0.16, 0.38, 0.2, 0xffffff, -0.13, 0.2, 0); bb.box(0.16, 0.38, 0.2, 0xffffff, 0.13, 0.2, 0);
+  const hb = new Bag(); hb.sph(0.26, 0xffffff, 0, 1.45, 0, 8, 6);
+  const lb = new Bag(); lb.sph(0.4, PAL.accent, 0, 2.55, 0, 8, 6); lb.cyl(0.015, 0.015, 1.0, PAL.dark, 0, 1.75, 0, 3);
+  const ub = new Bag(); ub.add(new THREE.ConeGeometry(0.52, 0.26, 8), 0xffffff, 0, 2.0, 0); ub.cyl(0.015, 0.015, 0.9, 0x8a786c, 0, 1.6, 0, 3); ub.sph(0.04, 0xffffff, 0, 2.15, 0, 4, 3);
+  guestsRoot.body = new THREE.InstancedMesh(bb.build().geometry, VC, MAXG); guestsRoot.head = new THREE.InstancedMesh(hb.build().geometry, VC, MAXG); guestsRoot.balloon = new THREE.InstancedMesh(lb.build().geometry, VC, MAXG); guestsRoot.umb = new THREE.InstancedMesh(ub.build().geometry, VC, MAXG);
+  for (const m of Object.values(guestsRoot)) { m.frustumCulled = false; m.castShadow = true; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); world.add(m); }
+  guestsRoot.body.receiveShadow = true;
+  const white = new THREE.Color(1, 1, 1); for (let i = 0; i < MAXG; i++) { guestsRoot.balloon.setColorAt(i, white); guestsRoot.umb.setColorAt(i, white); }
+  const cb = new Bag(); cb.box(1.5, 0.7, 2.6, PAL.butter, 0, 0.7, 0); cb.box(1.5, 0.25, 1.0, PAL.accent, 0, 1.15, -0.5); cb.box(1.4, 0.18, 1.2, PAL.white, 0, 1.25, -0.5); cb.box(1.4, 0.8, 0.9, PAL.cream, 0, 1.1, 1.0);
+  for (const sx of [-1, 1]) for (const sz of [-0.9, 0.9]) cb.cyl(0.3, 0.3, 0.25, PAL.dark, sx * 0.8, 0.3, sz, 8, 0, 0, Math.PI / 2);
+  const cg = cb.build().geometry; carts.forEach(c => { c.mesh = new THREE.Mesh(cg, VC); c.mesh.castShadow = true; world.add(c.mesh); });
+}
+const _o = new THREE.Object3D(), _ob = new THREE.Object3D(), _zero = new THREE.Matrix4().makeScale(0, 0, 0), WIND = { x: 0.82, z: 0.57 };       // WIND: unit vector the wind blows towards
+function renderGuests(dt) {
+  const k = 1 - Math.exp(-10 * dt), uS = Math.min(1, env.rain * 1.6), wt = env.wind * 0.3; guestsRoot.umb.visible = uS > 0.01;
+  for (const c of carts) { c.mesh.position.set(c.x, 0, c.z); c.mesh.rotation.y = c.yaw; }
+  for (let i = 0; i < MAXG; i++) {
+    const g = guests[i]; g.id = i;
+    if (g.state === 'walk' || g.state === 'queue') {
+      const da = ((g.hd - g.yaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI; g.yaw += da * k; g.ph += g.step * 7;
+      _o.position.set(g.x, g.step > 0.002 ? Math.abs(Math.sin(g.ph)) * 0.09 : 0, g.z); _o.rotation.set(0, g.yaw, 0); _o.scale.setScalar(0.85); _o.updateMatrix();
+      guestsRoot.body.setMatrixAt(i, _o.matrix); guestsRoot.head.setMatrixAt(i, _o.matrix);
+      if (g.balloon) { if (wt > 0.005) { const sw = wt * (0.8 + 0.4 * Math.sin(park.now * 2.6 + g.uid)); _ob.position.copy(_o.position); _ob.rotation.set(WIND.z * sw, g.yaw, -WIND.x * sw); _ob.scale.copy(_o.scale); _ob.updateMatrix(); guestsRoot.balloon.setMatrixAt(i, _ob.matrix); } else guestsRoot.balloon.setMatrixAt(i, _o.matrix); } else guestsRoot.balloon.setMatrixAt(i, _zero);
+      if (uS > 0.01 && g.umb && !g.balloon) {       // narrower canopies on three heights so neighbours do not interpenetrate
+        _o.scale.set(0.66 * uS, 0.85 * uS, 0.66 * uS); _o.position.y += (g.uid % 3) * 0.12 * uS; _o.updateMatrix(); guestsRoot.umb.setMatrixAt(i, _o.matrix); } else guestsRoot.umb.setMatrixAt(i, _zero);
+      if (g.dirty) { guestsRoot.body.setColorAt(i, g.shirt); guestsRoot.head.setColorAt(i, g.skin); guestsRoot.umb.setColorAt(i, g.ucol); g.dirty = false; guestsRoot.body.instanceColor.needsUpdate = true; guestsRoot.head.instanceColor.needsUpdate = true; guestsRoot.umb.instanceColor.needsUpdate = true; }
+    } else { guestsRoot.body.setMatrixAt(i, _zero); guestsRoot.head.setMatrixAt(i, _zero); guestsRoot.balloon.setMatrixAt(i, _zero); guestsRoot.umb.setMatrixAt(i, _zero); }
+  }
+  for (const m of Object.values(guestsRoot)) m.instanceMatrix.needsUpdate = true;
+}
+/* debug: positions are the simulated ones (no visual relaxation exists); `relax` is kept false for test harnesses */
+park.debug = { relax: false, lanes, moves, crossings: PX, ring: RING, service: SERVICE, minSep() {
+  const vis = guests.filter(g => g.state === 'walk' || g.state === 'queue');
+  let gg = 1e9, gc = 1e9, cc = 1e9, near = 0;
+  for (let i = 0; i < vis.length; i++) { for (let j = i + 1; j < vis.length; j++) { const d = Math.hypot(vis[i].x - vis[j].x, vis[i].z - vis[j].z); gg = Math.min(gg, d); if (d < 0.5) near++; } for (const c of carts) gc = Math.min(gc, Math.hypot(vis[i].x - c.x, vis[i].z - c.z)); }
+  for (let i = 0; i < carts.length; i++) for (let j = i + 1; j < carts.length; j++) cc = Math.min(cc, Math.hypot(carts[i].x - carts[j].x, carts[i].z - carts[j].z));
+  return { guestGuest: +gg.toFixed(2), guestCart: +gc.toFixed(2), cartCart: +cc.toFixed(2), walking: vis.length, pairsUnder05: near };
+} };
+
+/* ---- parade schedule + crossing barriers ---- */
+let paradeHead = null, paradeHeld = 0, paradeShown = false;
+const HOT = 7, CLOSE_LEAD = 6, BAN_LEAD = 14;      // a float is "at" a crossing within HOT metres; barriers drop CLOSE_LEAD park-minutes before the show
+function clearWalker(a) {
+  park.debug.cleared = (park.debug.cleared || 0) + 1;
+  if (a.state === 'queue') { const i = a.q.list.indexOf(a); if (i >= 0) a.q.list.splice(i, 1); }
+  release(a); a.state = 'off';
+}
+function purgeRoutes() { for (const g of guests) if (g.state === 'walk' && g.route.some(e => e.px && e.px.mode >= 1)) { g.route = []; dropGoal(g); } }
+function updateParade(dt) {
+  const h = park.time; let st = 'Parked', prog = null, toStart = 1e9;
+  for (const s of SHOWS) {
+    if (h >= s - WARN_MIN / 60 && h < s) { st = 'Assembling'; toStart = (s - h) * 60; }
+    else if (h >= s && h < s + SHOW_MIN / 60) { st = 'On route'; prog = (h - s) * 60 / SHOW_MIN; }
+  }
+  if (st !== park.paradeState) { if (st === 'On route') park.showsToday++; park.paradeState = st; park.emit('parade', st); }
+  park.paradeProgress = prog === null ? 0 : prog;
+  if (prog === null) { paradeHead = null; paradeHeld = 0; paradeShown = false; parade.set(null); }
+  else {
+    /* the convoy follows the clock; crossings are closed so nobody is in its way. Safety net only: it pauses while a footprint ahead is occupied and after 10 s clears whoever is still there */
+    const want = prog * parade.total, v = parade.total * park.timeScale / SHOW_MIN, look = 2 + 3 * v * dt;
+    if (paradeHead === null || want < paradeHead) { paradeHead = want; paradeShown = false; }
+    const next = paradeShown ? Math.min(want, paradeHead + 3 * v * dt) : paradeHead, hit = parade.blocker(next, look);
+    if (hit) { paradeHeld += dt; park.debug.holdT = (park.debug.holdT || 0) + dt; if (paradeHeld > 10) { clearWalker(hit); paradeHeld = 9; } } else { paradeHeld = 0; paradeHead = next; paradeShown = true; }
+    parade.held = paradeHeld > 0; if (paradeShown) parade.setHead(paradeHead); else parade.set(null);
+  }
+  const was = PX.map(x => x.mode);
+  for (const X of PX) {
+    let m = st === 'Parked' ? 0 : st === 'Assembling' ? (toStart <= CLOSE_LEAD ? 2 : 1) : (paradeShown && paradeHead > X.sc + HOT + (parade.NF - 1) * parade.SPACING + 1 ? 0 : 2);
+    if (m === 2 && X.mode < 2 && X.g > 0) m = 1;                                           // the barrier drops only on an empty crossing
+    X.ban = m >= 1 && (st === 'On route' || toStart <= BAN_LEAD);                          // nobody new steps in during the last minutes, so the crossing empties before the barrier drops
+    X.mode = m;
+  }
+  if (PX.some((X, i) => X.mode >= 1 && was[i] === 0)) purgeRoutes();
+}
+ents.parade = { id: 'parade', kind: 'parade', name: 'Parkline Parade', pos: parade.pos, follow: true, ringR: 10, labelH: 10, dist: 70 };
+park.parade = parade;
+
+/* ---- live stats for the panel (also the phase-2 data source) ---- */
+park.stats = function (id) {
+  const e = ents[id]; if (!e) return null; const G2 = park.groupSize;
+  if (e.kind === 'ride') {
+    const qn = e.queue ? e.queue.list.length * G2 * QK : 0;
+    return { id, title: e.name, kind: 'Ride', status: e.status, note: e.note, series: 'wait', rows: [['Status', e.status], ['Cycle phase', e.phase], ['Riders / hour', fmtN(e.rph)], ['Capacity / hour', fmtN(e.hourlyCap)],
+      ['Wait', e.queue ? waitTxt(e) : '-'], ['Queue', e.queue ? qn + ' guests' : '-'], ['Rides today', fmtN(e.ridesToday)]] };
+  }
+  if (e.kind === 'stall') return { id, title: e.name, kind: 'Food stall', status: park.open ? 'Open' : 'Closed', series: 'orders', rows: [['Status', park.open ? 'Open' : 'Closed'], ['Orders / hour', fmtN(e.ordersHr)],
+    ['Revenue today', '$' + fmtN(e.revenue)], ['Orders today', fmtN(e.orders)], ['Queue', e.queue.list.length * G2 * QK + ' guests']] };
+  if (e.kind === 'queue') { const o = e.owner, n = e.queue.list.length * G2 * QK;
+    return { id, title: e.name, kind: 'Queue', status: o.kind === 'ride' ? o.status : 'Open', note: o.note, series: 'queue', rows: [['Line length', n + ' guests'], ['Line capacity', e.queue.cap * G2 * QK + ' guests'],
+      ['Wait', (o.kind === 'ride' ? waitTxt(o) : Math.ceil(e.queue.list.length * o.svc / 60 * 5) + ' min')], ['Serves', o.name]] }; }
+  if (e.kind === 'parade') return { id, title: e.name, kind: 'Parade', status: park.paradeState, series: 'show', rows: [['Status', park.paradeState], ['Progress', Math.round(park.paradeProgress * 100) + '%'],
+    ['Next show', park.nextShow()], ['Shows today', park.showsToday + ' / ' + SHOWS.length], ['Floats', String(parade.floats.length)], ['Route', Math.round(parade.Lr) + ' m']] };
+};
+/* one number per entity for the detail chart (wait minutes, orders per hour, queue guests) */
+park.metric = function (id) {
+  const e = ents[id]; if (!e) return 0;
+  if (e.kind === 'ride') return e.queue && e.status !== 'Open' ? NaN : waitOf(e);       // NaN while on Hold / Closed: the detail chart shows a gap
+  if (e.kind === 'stall') return e.ordersHr || 0; if (e.kind === 'queue') return e.queue.list.length * park.groupSize * QK; return park.paradeProgress * 100;
+};
+
+
+
+/* ============ 5. CAMERA & SELECTION ============ */
+
+const AREAS = { 'Entrance': { x: 0, z: 62, dist: 88 }, 'Thrill zone': { x: 56, z: -20, dist: 105 }, 'Water zone': { x: -60, z: -14, dist: 95 }, 'Kids zone': { x: -22, z: -40, dist: 78 }, 'Lake': { x: -62, z: 50, dist: 80 } };
+const cam = { tx: 0, ty: 0, tz: 18, yaw: 0.785, pitch: 0.85, dist: 235, follow: null, fly: null };
+cam.g = { tx: cam.tx, ty: 0, tz: cam.tz, yaw: cam.yaw, pitch: cam.pitch, dist: cam.dist };
+const BOUND = 100;
+const root = document.documentElement;
+let maxDist = 290, fitted = false;
+function onResize() {
+  renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  const m = innerWidth <= 768 || innerHeight <= 520, land = innerWidth > innerHeight;                     // phones: compact layout; portrait screens may zoom further out to see the park
+  root.classList.toggle('m', m); root.classList.toggle('ml', m && land);
+  maxDist = 290 * clamp(1.1 / camera.aspect, 1, 2.0);
+  if (!fitted) { fitted = true; if (m) { cam.dist = cam.g.dist = land ? 285 : 420; cam.g.tz = cam.tz = land ? 14 : 10; } }
+  cam.g.dist = Math.min(cam.g.dist, maxDist);
+}
+addEventListener('resize', onResize); onResize();
+
+function clampGoal() { const g = cam.g; g.tx = clamp(g.tx, -BOUND, BOUND); g.tz = clamp(g.tz, -BOUND, BOUND); g.dist = clamp(g.dist, 24, maxDist); g.pitch = clamp(g.pitch, 0.4, 1.3); }
+function userTook(breakFollow) { if (cam.fly) { Object.assign(cam.g, { tx: cam.tx, ty: cam.ty, tz: cam.tz, yaw: cam.yaw, pitch: cam.pitch, dist: cam.dist }); cam.fly = null; } if (breakFollow) cam.follow = null; }
+function panBy(dx, dy) {
+  userTook(true); const g = cam.g, k = 2 * g.dist * Math.tan(camera.fov * Math.PI / 360) / innerHeight, sy = Math.sin(g.yaw), cy = Math.cos(g.yaw);
+  g.tx -= cy * dx * k; g.tz += sy * dx * k; g.tx += -sy * dy * k / Math.sin(g.pitch); g.tz += -cy * dy * k / Math.sin(g.pitch); clampGoal();
+}
+function rotateBy(dyaw, dpitch) { userTook(false); cam.g.yaw += dyaw; cam.g.pitch += dpitch; clampGoal(); }
+function zoomBy(f) { userTook(false); cam.g.dist *= f; clampGoal(); }
+
+const ptrs = new Map(); let downInfo = null;
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+canvas.addEventListener('pointerdown', e => {
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {} ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY, btn: e.button });
+  if (ptrs.size === 1) downInfo = { x: e.clientX, y: e.clientY, t: performance.now(), btn: e.button, moved: 0 }; else downInfo = null;
+});
+canvas.addEventListener('pointermove', e => {
+  const p = ptrs.get(e.pointerId); if (!p) return;
+  if (ptrs.size === 1) {
+    const dx = e.clientX - p.x, dy = e.clientY - p.y; if (downInfo) downInfo.moved += Math.abs(dx) + Math.abs(dy);
+    if (p.btn === 2 || p.btn === 1) rotateBy(-dx * 0.006, dy * 0.004); else if (downInfo && downInfo.moved > 3 || !downInfo) panBy(dx, dy);
+    p.x = e.clientX; p.y = e.clientY;
+  } else if (ptrs.size === 2) {
+    const [a, b] = [...ptrs.values()], d0 = Math.hypot(a.x - b.x, a.y - b.y), a0 = Math.atan2(b.y - a.y, b.x - a.x), cx0 = (a.x + b.x) / 2, cy0 = (a.y + b.y) / 2;
+    p.x = e.clientX; p.y = e.clientY;
+    const d1 = Math.hypot(a.x - b.x, a.y - b.y), a1 = Math.atan2(b.y - a.y, b.x - a.x);
+    if (d0 > 8 && d1 > 8) zoomBy(d0 / d1); let da = a1 - a0; if (da > Math.PI) da -= 2 * Math.PI; if (da < -Math.PI) da += 2 * Math.PI; rotateBy(-da, 0);
+    panBy((a.x + b.x) / 2 - cx0, (a.y + b.y) / 2 - cy0);
+  }
+});
+const endPtr = e => {
+  const had = ptrs.has(e.pointerId); ptrs.delete(e.pointerId);
+  if (had && downInfo && e.type === 'pointerup' && ptrs.size === 0 && downInfo.btn === 0 && downInfo.moved < 6 && performance.now() - downInfo.t < 600) park.select(pick(e.clientX, e.clientY));
+  if (!ptrs.size) downInfo = null;
+};
+canvas.addEventListener('pointerup', endPtr); canvas.addEventListener('pointercancel', endPtr);
+canvas.addEventListener('wheel', e => { e.preventDefault(); zoomBy(Math.exp(clamp(e.deltaY, -200, 200) * 0.0012)); }, { passive: false });
+
+/* ---- selection: raycast, ring, label, glass panel ---- */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(cx, cy) {
+  ndc.set(cx / innerWidth * 2 - 1, -(cy / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  let fall = null;
+  for (const h of ray.intersectObjects(pickables, true)) {
+    let o = h.object, vis = true, id = null;
+    while (o) { if (!o.visible) vis = false; if (!id && o.userData.entityId) id = o.userData.entityId; o = o.parent; }
+    if (!vis || !id) continue;
+    if (h.object.userData.proxy) { fall = fall || id; continue; }      // a hit proxy only counts when no real mesh was hit
+    return id;
+  }
+  return fall;
+}
+const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 56), new THREE.MeshBasicMaterial({ color: PAL.accent, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }));
+ring.rotation.x = -Math.PI / 2; ring.visible = false; ring.renderOrder = 5; scene.add(ring);
+const disc = new THREE.Mesh(new THREE.CircleGeometry(1, 48), new THREE.MeshBasicMaterial({ color: PAL.accent, transparent: true, opacity: 0.12, depthWrite: false }));
+disc.rotation.x = -Math.PI / 2; disc.visible = false; scene.add(disc);
+const $ = id => document.getElementById(id), labelEl = $('label');
+let sel = null;
+function startFly(dest, dist, dur = 1.5) {
+  cam.fly = { t0: park.now, dur, dest, dist: Math.min(dist * clamp(1.15 / camera.aspect, 1, 2.4), maxDist), from: { tx: cam.tx, ty: cam.ty, tz: cam.tz, dist: cam.dist, yaw: cam.yaw, pitch: cam.pitch } };
+}
+park.select = function (id) {
+  if (!id || !ents[id]) { sel = null; ring.visible = disc.visible = false; labelEl.style.display = 'none'; cam.follow = null; this.selected = null; this.emit('select', null, null); return; }
+  const e = ents[id]; sel = e; this.selected = id; ring.visible = disc.visible = true; labelEl.textContent = e.name; labelEl.style.display = 'block';
+  cam.follow = e.follow ? e : null;
+  startFly(() => { const p = e.pos(); return { x: p.x, y: e.follow ? p.y * 0.4 : 0, z: p.z }; }, e.dist || 70);
+  this.emit('select', id, e);
+};
+park.flyToArea = function (name) {
+  const key = Object.keys(AREAS).find(k => k.toLowerCase() === String(name).toLowerCase() || k.toLowerCase().startsWith(String(name).toLowerCase())); if (!key) return false;
+  const a = AREAS[key]; this.select(null); startFly(() => ({ x: a.x, y: 0, z: a.z }), a.dist, 1.8); this.emit('area', key); return true;
+};
+park.areas = Object.keys(AREAS);
+
+/* phones: keep the look-at point in the middle of the free part of the screen (between the KPI strip and the open sheet or dock), by shifting the camera's principal point */
+const vo = { x: 0, y: 0, cx: 0, cy: 0 };
+function freeRegion() {
+  if (!root.classList.contains('m')) { vo.x = vo.y = 0; return; }
+  const vis = e => e && getComputedStyle(e).display !== 'none' ? e.getBoundingClientRect() : null, W = innerWidth, H = innerHeight;
+  let top = vis($('kpis')) ? $('kpis').getBoundingClientRect().bottom : 56, bottom = H, left = 0, right = W;
+  const dock = vis($('dock')), land = root.classList.contains('ml');
+  if (land) { for (const id of ['detail', 'tracker', 'table']) { const r = vis($(id)); if (r) right = Math.min(right, r.left); } if (dock) bottom = dock.top; }
+  else { bottom = dock ? dock.top : H; for (const id of ['detail', 'tracker', 'table']) { const r = vis($(id)); if (r) bottom = Math.min(bottom, r.top); } }
+  vo.x = W / 2 - (left + right) / 2; vo.y = H / 2 - (top + bottom) / 2;
+}
+const _v = V3();
+function updateCamera(dt) {
+  const g = cam.g;
+  if (cam.fly) {
+    const f = cam.fly, u = Math.min(1, (park.now - f.t0) / f.dur), e = ease(u), d = f.dest();
+    cam.tx = lerp(f.from.tx, d.x, e); cam.ty = lerp(f.from.ty, d.y, e); cam.tz = lerp(f.from.tz, d.z, e); cam.dist = lerp(f.from.dist, f.dist, e); cam.pitch = lerp(f.from.pitch, 0.85, e);
+    let dy = ((0.785 - f.from.yaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI; cam.yaw = f.from.yaw + dy * e;
+    Object.assign(g, { tx: cam.tx, ty: cam.ty, tz: cam.tz, yaw: cam.yaw, pitch: cam.pitch, dist: cam.dist });
+    if (u >= 1) cam.fly = null;
+  } else {
+    if (cam.follow) { const p = cam.follow.pos(); g.tx = p.x; g.tz = p.z; g.ty = p.y * 0.4; }
+    const k = 1 - Math.exp(-9 * dt); for (const key of ['tx', 'ty', 'tz', 'yaw', 'pitch', 'dist']) cam[key] += (g[key] - cam[key]) * k;
+  }
+  camera.position.set(cam.tx + cam.dist * Math.sin(cam.yaw) * Math.cos(cam.pitch), cam.ty + cam.dist * Math.sin(cam.pitch), cam.tz + cam.dist * Math.cos(cam.yaw) * Math.cos(cam.pitch));
+  camera.lookAt(cam.tx, cam.ty, cam.tz);
+  scene.fog.near = Math.max(260, cam.dist * 1.15); scene.fog.far = scene.fog.near + 300;
+  vo.t = (vo.t || 0) - dt; if (vo.t <= 0) { vo.t = 0.15; freeRegion(); }
+  const kv = 1 - Math.exp(-8 * dt); vo.cx += (vo.x - vo.cx) * kv; vo.cy += (vo.y - vo.cy) * kv;
+  if (Math.abs(vo.cx) > 0.3 || Math.abs(vo.cy) > 0.3 || vo.on) { vo.on = Math.abs(vo.cx) > 0.3 || Math.abs(vo.cy) > 0.3; if (vo.on) camera.setViewOffset(innerWidth, innerHeight, vo.cx, vo.cy, innerWidth, innerHeight); else camera.clearViewOffset(); }
+}
+function updateSelection(dt) {
+  if (!sel) return;
+  const p = sel.pos(), pulse = 1 + Math.sin(park.now * 4) * 0.04;
+  ring.position.set(p.x, 0.25, p.z); ring.scale.setScalar(sel.ringR * pulse); disc.position.set(p.x, 0.2, p.z); disc.scale.setScalar(sel.ringR);
+  _v.set(p.x, sel.follow ? p.y + 6 : sel.labelH, p.z).project(camera);
+  const vis = _v.z < 1 && Math.abs(_v.x) < 1.2 && Math.abs(_v.y) < 1.2; labelEl.style.display = vis ? 'block' : 'none';
+  labelEl.style.transform = `translate(${(_v.x * 0.5 + 0.5) * innerWidth}px,${(-_v.y * 0.5 + 0.5) * innerHeight}px) translate(-50%,-100%)`;
+}
+
+
+/* ============ 6. ENVIRONMENT: day/night, weather, lights, rain, fireworks ============ */
+/* env.* are smoothed 0..1 factors; park.weather / park.todMode / park.time pick their targets. Everything here is visual (the weather's effect on the sim lives in park.setWeather). */
+const smooth01 = u => { u = clamp(u, 0, 1); return u * u * (3 - 2 * u); };
+const COL = { dayBg: new THREE.Color(PAL.cream), duskBg: new THREE.Color(0xF2BE9E), nightBg: new THREE.Color(0x21243A), festBg: new THREE.Color(0x2E2140), rainBg: new THREE.Color(0xC4BCB1),
+  daySky: new THREE.Color(0xfff6e6), nightSky: new THREE.Color(0x8794c8), dayGnd: new THREE.Color(0xf0e0c6), nightGnd: new THREE.Color(0x433a5c), sunDay: new THREE.Color(0xfff0d8), sunDusk: new THREE.Color(0xffb68a), moon: new THREE.Color(0xa9bbff) };
+const _bg = new THREE.Color(), _sc = new THREE.Color(), SUN_NOW = V3(70, 110, 50), SUN_T = V3(), MOON = V3(-60, 100, -50);
+const lightHour = () => typeof park.timeOfDay === 'number' ? park.timeOfDay : park.time;
+function dayTarget() {
+  if (park.weather === 'festive' || park.todMode === 'night') return 0; if (park.todMode === 'day') return 1;
+  const h = lightHour(); return h < 5.5 ? 0 : h < 7 ? smooth01((h - 5.5) / 1.5) : h < 18.2 ? 1 : h < 20.2 ? 1 - smooth01((h - 18.2) / 2) : 0;
+}
+
+/* soft round sprite shared by every glow and firework point */
+const glowTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.22, 'rgba(255,255,255,.8)'); g.addColorStop(0.55, 'rgba(255,255,255,.2)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+const mkGlowMat = size => new THREE.PointsMaterial({ map: glowTex, size, sizeAttenuation: true, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 });
+const glowMat = mkGlowMat(3.4), festMat = mkGlowMat(3.0);
+function bulbGeo(list) {
+  const p = new Float32Array(list.length * 3), c = new Float32Array(list.length * 3), col = new THREE.Color();
+  list.forEach((b, i) => { p.set([b[0], b[1], b[2]], i * 3); col.set(b[3]); c.set([col.r, col.g, col.b], i * 3); });
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3)); return g;
+}
+const WARM = 0xFFD9A0, GLOWC = [PAL.accent, 0xFFF1D0, 0xFFB547, 0xFFC9A8];
+const mkPoints = (list, mat) => { const p = new THREE.Points(bulbGeo(list), mat); p.frustumCulled = false; p.visible = false; return p; };
+
+/* lamp posts along the guest paths (outside the paving, clear of lanes, queues, the parade avenue and the service road) and flag poles on rooftops */
+const LAMPS = (() => {
+  const rp = Array.from({ length: 360 }, (_, i) => RING.at(i / 360 * RING.L, { x: 0, z: 0 })).map(o => ({ x: o.x, z: o.z })), sp = Array.from({ length: 60 }, (_, i) => SERVICE.at(i / 60 * SERVICE.L, { x: 0, z: 0 })).map(o => ({ x: o.x, z: o.z }));
+  const qs = Object.values(ents).filter(e => e.queue).map(e => e.queue), picnic = [[-14, 49], [-20, 49], [-26, 51], [14, 49], [19, 49], [16.5, 54], [18, -38], [18, -43]];
+  const sdist = (x, z, pts) => pts.reduce((m, p, i) => i ? Math.min(m, dist2seg(x, z, pts[i - 1].x, pts[i - 1].z, p.x, p.z)) : m, 99);
+  const keep = (x, z) => {
+    if (Math.hypot(x - FOUNTAIN.x, z - FOUNTAIN.z) < 8.5 || Math.hypot(x - 28, z - 52) < 8 || Math.abs(x) > 8 && Math.abs(x) < 20 && z > 66) return false;
+    if (stalls.some(s => { const p = s.pos(); return Math.hypot(x - p.x, z - p.z) < 7.5; })) return false;
+    if (x > 30 && x < 86 && z > -42 && z < 8 || x > -84 && x < -38 && z > -34 && z < 8 || x > -62 && x < 62 && z > 66) return false;
+    if (((x - LAKE.x) / (LAKE.rx + 4)) ** 2 + ((z - LAKE.z) / (LAKE.rz + 4)) ** 2 < 1 || Math.hypot(x + 24, z + 50.8) < 12.5 || Math.hypot(x - 34, z + 52) < 17) return false;
+    if (picnic.some(c => Math.hypot(x - c[0], z - c[1]) < 4.6) || rp.some(p => Math.hypot(p.x - x, p.z - z) < 6.5) || sp.some(p => Math.hypot(p.x - x, p.z - z) < 5.5)) return false;
+    if (qs.some(q => sdist(x, z, q.pts) < 4.2)) return false;
+    for (const [e] of G.pairs) { const A = G.nodes[e.from], B = G.nodes[e.to]; if (dist2seg(x, z, A.x, A.z, B.x, B.z) < 4.2) return false; }
+    for (const id in G.nodes) if (!G.nodes[id].q && Math.hypot(x - G.nodes[id].x, z - G.nodes[id].z) < 6.2) return false;
+    return true;
+  };
+  const out = [], pairs = [];
+  for (const [e] of G.pairs) {
+    if (G.nodes[e.from].q || G.nodes[e.to].q) continue; const A = G.nodes[e.from], nx = -e.dz, nz = e.dx, n = Math.max(1, Math.floor((e.len - 12) / 14));
+    for (let i = 0; i <= n; i++) {
+      const s = n ? 6 + i * (e.len - 12) / n : e.len / 2, sides = [];
+      for (const sd of [-1, 1]) { const x = A.x + e.dx * s + nx * sd * 4.4, z = A.z + e.dz * s + nz * sd * 4.4; if (keep(x, z) && out.every(o => Math.hypot(o.x - x, o.z - z) > 9)) { const l = { x, z, ax: -nx * sd, az: -nz * sd }; out.push(l); sides.push(l); } }
+      if (sides.length === 2) pairs.push(sides);
+    }
+  }
+  return { list: out, pairs };
+})();
+const FLAGS = [[-9, 10.6, 72, PAL.accent], [9, 10.6, 72, PAL.accent], [CAR.x, 12.5, CAR.z, PAL.accent], [56, 5.0, -7.2, PAL.accent], [-52, 4.1, -6, PAL.accent], [98, 19.2, 0, PAL.accent], [28, 5.5, 52, PAL.accent],
+  ...stalls.map((s, i) => { const p = s.pos(); return [p.x, 4.7, p.z, i % 2 ? PAL.accent : PAL.cream]; })];
+{
+  const b = new Bag();
+  for (const l of LAMPS.list) {
+    b.cyl(0.3, 0.36, 0.3, PAL.stone, l.x, 0.15, l.z, 8); b.cyl(0.09, 0.12, 4.3, PAL.white, l.x, 2.3, l.z, 6);
+    b.box(1.3, 0.1, 0.1, PAL.white, l.x + l.ax * 0.6, 4.4, l.z + l.az * 0.6, 0, Math.atan2(l.ax, l.az) + Math.PI / 2, 0); b.sph(0.3, PAL.cream, l.x + l.ax * 1.2, 4.3, l.z + l.az * 1.2, 8, 6);
+  }
+  for (const f of FLAGS) b.cyl(0.05, 0.05, 2.4, PAL.white, f[0], f[1] + 1.2, f[2], 5);
+  world.add(b.build(false, true));
+  const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0, 0, 0, 0, -0.95, 0, 1.6, -0.47, 0]), 3)); fg.computeVertexNormals();
+  const fm = new THREE.InstancedMesh(fg, new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide, roughness: 0.8, flatShading: true }), FLAGS.length); fm.frustumCulled = false; fm.castShadow = true;
+  FLAGS.forEach((f, i) => fm.setColorAt(i, new THREE.Color(f[3]))); world.add(fm); HOOKS.flags = fm;
+}
+
+/* glowing bulbs: one static Points object, plus ones riding the wheel, the carousel canopy and the parade floats */
+{
+  const L = [];
+  for (const l of LAMPS.list) L.push([l.x + l.ax * 1.2, 4.1, l.z + l.az * 1.2, WARM]);
+  for (let x = -10; x <= 10.1; x += 2.5) L.push([x, 8.2, 73.2, Math.round(x / 2.5) % 2 ? WARM : PAL.accent]);
+  for (const s of stalls) { const p = s.pos(), q = s.queue.pts[0], f = Math.atan2(q.x - p.x, q.z - p.z), c = Math.cos(f), sn = Math.sin(f); for (let i = 0; i < 6; i++) { const lx = -1.68 + i * 0.67, lz = 2.95; L.push([p.x + lx * c + lz * sn, 2.4, p.z - lx * sn + lz * c, i % 2 ? WARM : PAL.accent]); } }
+  for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2; L.push([FOUNTAIN.x + Math.cos(a) * 3.7, 0.55, FOUNTAIN.z + Math.sin(a) * 3.7, i % 2 ? 0xBFE6EE : WARM]); }
+  for (let p = 0; p < coaster.S.L; p += 8) { const q = coaster.frame(p); L.push([q.x, q.y + 0.9, q.z, Math.round(p / 8) % 2 ? PAL.accent : 0xFFF1D0]); }
+  for (let i = 0; i < 30; i++) { const u = i / 30, p = flume.curve.getPointAt(u); L.push([p.x, p.y + 0.9, p.z, i % 2 ? 0xBFE6EE : 0xFFF1D0]); }
+  for (let i = 0; i < 44; i++) { const a = i / 44 * Math.PI * 2; L.push([Math.cos(a) * 98, 14.95, Math.sin(a) * 88, i % 2 ? PAL.accent : WARM]); }
+  L.push([-43.5, 1.7, 48.5, WARM], [-43.5, 1.7, 51.5, WARM]); for (let i = 0; i < 9; i++) { const a = Math.PI * (0.62 + i * 0.095); L.push([LAKE.x + Math.cos(a) * (LAKE.rx + 1.4), 0.9, LAKE.z + Math.sin(a) * (LAKE.rz + 1.4), WARM]); }
+  for (const e of Object.values(ents)) if (e.kind === 'queue') { const q = e.queue.pts[e.queue.pts.length - 1]; L.push([q.x, 2.3, q.z, WARM]); }
+  HOOKS.glow = mkPoints(L, glowMat); world.add(HOOKS.glow);
+  const W = [], wr = HOOKS.ferrisWheel; for (const z of [-1.7, 1.7]) { for (let k = 0; k < 24; k++) { const a = k * Math.PI / 12; W.push([Math.cos(a) * 11.3, Math.sin(a) * 11.3, z, k % 2 ? PAL.accent : 0xFFF1D0]); } for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; W.push([Math.cos(a) * 5, Math.sin(a) * 5, z, WARM]); } } W.push([0, 0, 0, 0xFFF1D0]);
+  wr.add(HOOKS.ferrisGlow = mkPoints(W, glowMat));
+  const C = []; for (let k = 0; k < 20; k++) { const a = k / 20 * Math.PI * 2; C.push([Math.sin(a) * 8.4, 8.0, Math.cos(a) * 8.4, k % 2 ? PAL.accent : 0xFFF1D0]); } for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2; C.push([Math.sin(a) * 6.8, 1.1, Math.cos(a) * 6.8, WARM]); } C.push([0, 12.4, 0, 0xFFF1D0]);
+  HOOKS.carouselRot.add(HOOKS.carouselGlow = mkPoints(C, glowMat));
+  const P = []; for (let i = 0; i < parade.NF; i++) for (const o of [[-2.3, 1.7, -3.6], [2.3, 1.7, -3.6], [-2.3, 1.7, 3.6], [2.3, 1.7, 3.6], [-2.4, 1.6, 0], [2.4, 1.6, 0], [0, 6.8, 0]]) P.push([o[0], o[1], o[2], i % 2 ? PAL.accent : WARM]);
+  HOOKS.paradeGlow = mkPoints(P, glowMat); HOOKS.paradeOff = P; world.add(HOOKS.paradeGlow);
+  const F = [];
+  for (const [a, b] of LAMPS.pairs) for (let k = 1; k < 9; k++) { const t = k / 9; F.push([lerp(a.x + a.ax * 1.2, b.x + b.ax * 1.2, t), 4.1 - Math.sin(Math.PI * t) * 0.8, lerp(a.z + a.az * 1.2, b.z + b.az * 1.2, t), GLOWC[k % 4]]); }
+  for (let i = 0; i < 40; i++) { const a = i / 40 * Math.PI * 2; F.push([Math.cos(a) * 14.4, 0.5, 60 + Math.sin(a) * 14.4, GLOWC[i % 4]]); }
+  HOOKS.fest = mkPoints(F, festMat); world.add(HOOKS.fest);
+}
+/* a few real point lights (fixed count, so no shader recompiles): they only warm the nearest rides at night */
+const nightLights = [[34, 14, -44], [0, 9, 54], [-24, 15, -44]].map(p => { const l = new THREE.PointLight(0xffd2a0, 0, 70, 1.6); l.position.set(...p); scene.add(l); return l; });
+
+/* "CLOSED" / "WIND HOLD" signs over the queue entrances */
+function mkSign(text, dark) {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 96; const x = c.getContext('2d');
+  x.fillStyle = dark ? '#3b2f2a' : '#F43F5E'; x.beginPath(); x.roundRect(6, 8, 244, 80, 22); x.fill(); x.strokeStyle = '#fff'; x.lineWidth = 4; x.stroke();
+  x.fillStyle = '#fff'; x.font = '700 40px Fredoka, Manrope, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 50);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false })); sp.scale.set(6.4, 2.4, 1); sp.visible = false; world.add(sp); return sp;
+}
+const SIGNS = [['flume', 'CLOSED', true], ['boats', 'CLOSED', true], ['coaster', 'WIND HOLD', false]].map(([id, t, d]) => { const n = G.nodes['q-' + id], sp = mkSign(t, d); sp.position.set(n.x, 4.2, n.z); return { r: ents[id], sp }; });
+
+/* rain: GPU streaks tiled around the camera target (no per-frame CPU cost) */
+const rainMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { uT: { value: 0 }, uC: { value: new THREE.Vector2() }, uS: { value: 120 }, uH: { value: 80 }, uA: { value: 0 } },
+  vertexShader: `attribute float e; uniform float uT, uS, uH; uniform vec2 uC; varying float vA;
+    void main(){ float sz = uS * 2.0, sp = 46.0 + 16.0 * fract(position.x * 91.7 + position.z * 17.3);
+      vec2 b = uC - uS; vec2 xz = b + mod(position.xz * sz - b, sz);
+      float y = mod(position.y * uH - uT * sp, uH); vec3 p = vec3(xz.x, y, xz.y) + e * vec3(-1.0, 4.2, -0.7); vA = 1.0 - e * 0.75;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
+  fragmentShader: `uniform float uA; varying float vA; void main(){ gl_FragColor = vec4(0.5, 0.62, 0.78, vA * uA); }` });
+const rainLines = (() => {
+  const N = 7000, p = new Float32Array(N * 6), e = new Float32Array(N * 2);
+  for (let i = 0; i < N; i++) { const x = Math.random(), y = Math.random(), z = Math.random(); p.set([x, y, z, x, y, z], i * 6); e[i * 2 + 1] = 1; }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('e', new THREE.BufferAttribute(e, 1));
+  const m = new THREE.LineSegments(g, rainMat); m.frustumCulled = false; m.visible = false; m.renderOrder = 6; scene.add(m); return m;
+})();
+
+/* fireworks: one pooled Points object; rockets rise, burst into accent + warm sparks, which fall and fade */
+const FWN = 1500, fwP = new Float32Array(FWN * 3), fwC = new Float32Array(FWN * 3), fwV = new Float32Array(FWN * 3), fwB = new Float32Array(FWN * 3), fwL = new Float32Array(FWN), fwM = new Float32Array(FWN), fwG = new Float32Array(FWN);
+let fwHead = 0, fwAlive = 0, fwTimer = 1;
+const fwGeo = new THREE.BufferGeometry(); fwGeo.setAttribute('position', new THREE.BufferAttribute(fwP, 3)); fwGeo.setAttribute('color', new THREE.BufferAttribute(fwC, 3));
+const fwPts = new THREE.Points(fwGeo, mkGlowMat(3.6)); fwPts.material.opacity = 1; fwPts.frustumCulled = false; fwPts.visible = false; fwPts.renderOrder = 7; scene.add(fwPts);
+for (let i = 0; i < FWN; i++) fwP[i * 3 + 1] = -500;
+const FWCOL = [PAL.accent, PAL.accent, 0xFFB547, 0xFFC9A8, 0xFFF1D0, 0xFF8A4C].map(h => new THREE.Color(h)), rockets = [];
+function fwEmit(x, y, z, vx, vy, vz, col, life, grav) {
+  const i = fwHead++ % FWN; fwP.set([x, y, z], i * 3); fwV.set([vx, vy, vz], i * 3); fwB.set([col.r, col.g, col.b], i * 3); fwL[i] = fwM[i] = life; fwG[i] = grav;
+}
+function fwBurst(x, y, z) {
+  const c1 = FWCOL[Math.floor(Math.random() * FWCOL.length)], c2 = FWCOL[Math.floor(Math.random() * FWCOL.length)], ring = Math.random() < 0.3, tilt = rand(-0.6, 0.6), n = 110, sp = rand(11, 19);
+  for (let k = 0; k < n; k++) {
+    let dx, dy, dz; if (ring) { const a = k / n * Math.PI * 2; dx = Math.cos(a); dy = Math.sin(a) * Math.sin(tilt); dz = Math.sin(a) * Math.cos(tilt); }
+    else { const u = rand(-1, 1), a = rand(0, Math.PI * 2), r = Math.sqrt(1 - u * u); dx = r * Math.cos(a); dy = u; dz = r * Math.sin(a); }
+    const v = sp * (ring ? 1 : rand(0.55, 1)); fwEmit(x, y, z, dx * v, dy * v, dz * v, k % 3 ? c1 : c2, rand(1.4, 2.2), rand(5, 9));
+  }
+  fwEmit(x, y, z, 0, 0, 0, FWCOL[4], 0.35, 0);
+}
+function updateFireworks(dt) {
+  if (env.fest > 0.6) {
+    fwTimer -= dt; if (fwTimer <= 0) { fwTimer = rand(0.45, 1.3); const a = rand(0, Math.PI * 2), r = Math.sqrt(Math.random()) * clamp(cam.dist * 0.35, 12, 50), th = clamp(cam.dist * 0.3, 26, 62); rockets.push({ x: clamp(cam.tx + Math.cos(a) * r, -95, 95), y: 0, z: clamp(cam.tz - 0.3 * r + Math.sin(a) * r * 0.8, -95, 95), vy: rand(48, 58), ty: rand(th * 0.75, th) }); }
+  }
+  for (let i = rockets.length - 1; i >= 0; i--) { const r = rockets[i]; r.y += r.vy * dt; r.vy *= 1 - 0.25 * dt; fwEmit(r.x, r.y, r.z, rand(-1, 1), rand(-4, 0), rand(-1, 1), FWCOL[2], 0.5, 6); if (r.y >= r.ty) { fwBurst(r.x, r.y, r.z); rockets.splice(i, 1); } }
+  let alive = 0;
+  for (let i = 0; i < FWN; i++) {
+    if (fwL[i] <= 0) continue; alive++; const j = i * 3; fwL[i] -= dt;
+    if (fwL[i] <= 0) { fwP[j + 1] = -500; fwC[j] = fwC[j + 1] = fwC[j + 2] = 0; continue; }
+    const dr = 1 - 1.3 * dt; fwV[j] *= dr; fwV[j + 1] = fwV[j + 1] * dr - fwG[i] * dt; fwV[j + 2] *= dr;
+    fwP[j] += fwV[j] * dt; fwP[j + 1] += fwV[j + 1] * dt; fwP[j + 2] += fwV[j + 2] * dt;
+    const f = Math.pow(clamp(fwL[i] / (fwM[i] * 0.75), 0, 1), 1.3) * (0.75 + 0.25 * Math.sin(park.now * 30 + i)); fwC[j] = fwB[j] * f; fwC[j + 1] = fwB[j + 1] * f; fwC[j + 2] = fwB[j + 2] * f;
+  }
+  fwAlive = alive; fwPts.visible = alive > 0 || rockets.length > 0; if (alive || rockets.length) { fwGeo.attributes.position.needsUpdate = true; fwGeo.attributes.color.needsUpdate = true; }
+}
+
+const _t = new THREE.Object3D(), _f = new THREE.Object3D(); _t.rotation.order = 'YXZ'; let treesSwayed = false, festT = 0;
+function updateEnv(dt) {
+  const k = 1 - Math.exp(-dt * 1.3), w = park.weather;
+  env.day += (dayTarget() - env.day) * k;
+  env.over += ((w === 'rain' ? 0.85 : w === 'windy' ? 0.3 : 0) - env.over) * k;
+  env.rain += ((w === 'rain' ? 1 : 0) - env.rain) * Math.min(1, k * 1.6);
+  env.wind += ((w === 'windy' ? 1 : 0) - env.wind) * k;
+  env.fest += ((w === 'festive' ? 1 : 0) - env.fest) * k;
+  env.twi = 4 * env.day * (1 - env.day);
+  const nt = 1 - env.day;
+  _bg.copy(COL.nightBg).lerp(COL.festBg, env.fest).lerp(COL.dayBg, env.day).lerp(COL.duskBg, env.twi * 0.7).lerp(COL.rainBg, env.over * 0.55 * env.day);
+  scene.background.copy(_bg); scene.fog.color.copy(_bg); HOOKS.outerMat.color.copy(_bg);
+  hemi.intensity = lerp(0.34, 1.5, env.day) * (1 - 0.3 * env.over); hemi.color.copy(COL.nightSky).lerp(COL.daySky, env.day); hemi.groundColor.copy(COL.nightGnd).lerp(COL.dayGnd, env.day);
+  sun.intensity = lerp(0.42, 1.7, env.day) * (1 - 0.6 * env.over); sun.color.copy(COL.moon).lerp(COL.sunDay, env.day).lerp(COL.sunDusk, env.twi * 0.8);
+  const a = (clamp(lightHour(), 6, 20) - 6) / 14 * Math.PI; SUN_T.set(-Math.cos(a) * 95, 28 + Math.sin(a) * 95, 45); SUN_NOW.lerp(SUN_T, k); sun.position.lerpVectors(MOON, SUN_NOW, env.day);
+  for (const l of nightLights) l.intensity = nt * 220 * (1 - env.rain * 0.3);
+  const go = clamp(nt * 1.2 - 0.05, 0, 1); glowMat.opacity = go; festMat.opacity = clamp(go * env.fest * 1.2, 0, 1);
+  const gv = go > 0.02; HOOKS.glow.visible = HOOKS.ferrisGlow.visible = HOOKS.carouselGlow.visible = gv; HOOKS.fest.visible = festMat.opacity > 0.02;
+  if (HOOKS.fest.visible) { festT -= dt; if (festT <= 0) { festT = 0.18; const c = HOOKS.fest.geometry.attributes.color, n = c.count, ph = Math.floor(park.now * 3.5); for (let i = 0; i < n; i++) { const col = FWCOL[(i + ph) % FWCOL.length]; c.setXYZ(i, col.r, col.g, col.b); } c.needsUpdate = true; } }
+  /* parade float lights follow the floats */
+  const pg = HOOKS.paradeGlow; pg.visible = gv && parade.active;
+  if (pg.visible) { const pa = pg.geometry.attributes.position, O = HOOKS.paradeOff; parade.floats.forEach((f, i) => { const c = Math.cos(f.rotation.y), s = Math.sin(f.rotation.y); for (let j = 0; j < 7; j++) { const o = O[i * 7 + j]; if (f.visible) pa.setXYZ(i * 7 + j, f.position.x + o[0] * c + o[2] * s, f.position.y + o[1], f.position.z - o[0] * s + o[2] * c); else pa.setXYZ(i * 7 + j, 0, -300, 0); } }); pa.needsUpdate = true; }
+  for (const sg of SIGNS) sg.sp.visible = sg.r.status === 'Closed' && park.open || sg.r.status === 'Hold';
+  /* rain */
+  rainMat.uniforms.uT.value += dt; rainMat.uniforms.uC.value.set(cam.tx, cam.tz); rainMat.uniforms.uS.value = clamp(cam.dist * 0.75, 70, 170); rainMat.uniforms.uA.value = env.rain * (0.55 + 0.3 * env.day); rainLines.visible = env.rain > 0.02;
+  /* wind: trees lean and sway, flags stream */
+  if (env.wind > 0.01 || treesSwayed) {
+    const T = HOOKS.trees; treesSwayed = env.wind > 0.01;
+    T.tr.forEach((o, i) => { const amp = env.wind * (0.05 + 0.045 * Math.sin(park.now * 1.7 + o.x * 0.21 + o.z * 0.13) + 0.02 * Math.sin(park.now * 4.1 + i)); _t.position.set(o.x, 0, o.z); _t.scale.set(o.s, o.sy, o.s); _t.rotation.set(WIND.z * amp, o.ry, -WIND.x * amp); _t.updateMatrix(); T.trunk.setMatrixAt(i, _t.matrix); T.crown.setMatrixAt(i, _t.matrix); });
+    T.trunk.instanceMatrix.needsUpdate = T.crown.instanceMatrix.needsUpdate = true;
+  }
+  const wy = Math.atan2(-WIND.z, WIND.x);
+  FLAGS.forEach((f, i) => { _f.position.set(f[0], f[1] + 2.35, f[2]); _f.rotation.set(0, wy + Math.sin(park.now * (2.2 + env.wind * 4) + i * 1.7) * (0.18 + env.wind * 0.35), Math.sin(park.now * 5 + i) * 0.05 * (0.4 + env.wind * 2)); _f.scale.set(1 + env.wind * 0.3, 1 - env.wind * 0.1, 1); _f.updateMatrix(); HOOKS.flags.setMatrixAt(i, _f.matrix); });
+  HOOKS.flags.instanceMatrix.needsUpdate = true;
+  updateFireworks(dt);
+}
+park.env = env;
+Object.assign(park.debug, { fw: () => ({ alive: fwAlive, rockets: rockets.length }), lamps: LAMPS, flags: FLAGS });
+
+
+/* ============ 7. DASHBOARD (top bar, KPIs, detail, ride cycle, table, alerts) ============ */
+const ICON = {
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>', bell: '<path d="M6 17v-6a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21.5h4"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', auto: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>',
+  rain: '<path d="M7 15a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 8a3.5 3.5 0 0 1-1 7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>', wind: '<path d="M3 9h10a2.5 2.5 0 1 0-2.5-2.5M3 14h14a3 3 0 1 1-3 3M3 19h7"/>',
+  spark: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/>',
+  chev: '<path d="M6 9l6 6 6-6"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', close: '<path d="M6 6l12 12M18 6L6 18"/>', pin: '<path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  warn: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/>', clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>', ban: '<circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/>',
+  pause: '<path d="M9 6v12M15 6v12"/>', flag: '<path d="M6 21V4M6 5h11l-2.5 3.5L17 12H6"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+};
+const svgI = n => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>`;
+document.querySelectorAll('[data-ic]').forEach(el => { el.innerHTML = svgI(el.dataset.ic); });
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const WXI = { clear: 'sun', rain: 'rain', windy: 'wind', festive: 'spark' }, WAIT_HI = 10, WAIT_LO = 7, HN = 60;
+const HIST = { guests: [], wait: [], rev: [], ent: {} };
+let tab = 'rides', trId = 'coaster', uiT = 0, trT = 0, smpT = 0;
+const sortS = {};
+
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 2200); }
+function setSheet(n) { root.dataset.sheet = n; document.querySelectorAll('#dock button').forEach(b => b.classList.toggle('on', b.dataset.sheet === n)); }
+
+/* ---- menus ---- */
+const dds = [...document.querySelectorAll('.dd')], topEl = $('top');
+function closeMenus(keep) { dds.forEach(d => { if (d !== keep) d.classList.remove('open'); }); $('sres').classList.remove('on'); }
+dds.forEach(d => d.querySelector(':scope > .btn').addEventListener('click', e => { e.stopPropagation(); const o = !d.classList.contains('open'); closeMenus(); d.classList.toggle('open', o); if (d.id === 'dAl' && o) markSeen(); }));
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.dd, #search')) closeMenus(); if (!e.target.closest('#sec, #bBurger')) topEl.classList.remove('menu'); });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeMenus(); topEl.classList.remove('menu'); $('q').value = ''; sHits = []; $('q').blur(); }
+  else if (e.key === '/' && !/input|select|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); $('q').focus(); }
+});
+$('bBurger').addEventListener('click', () => { closeMenus(); topEl.classList.toggle('menu'); });
+const afterPick = () => { closeMenus(); topEl.classList.remove('menu'); };
+
+/* area switcher */
+$('mArea').innerHTML = Object.keys(AREAS).map(k => `<button data-area="${k}">${svgI('pin')}<span>${k}</span><span class="tick">${svgI('check')}</span></button>`).join('');
+$('mArea').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { park.flyToArea(b.dataset.area); afterPick(); } });
+park.on('area', k => { $('areaName').textContent = k; $('mArea').querySelectorAll('button').forEach(b => b.classList.toggle('cur', b.dataset.area === k)); });
+/* weather menu */
+$('mWx').innerHTML = Object.keys(WX).map(k => `<button data-wx="${k}">${svgI(WXI[k])}<span>${WX[k].name}</span><span class="tick">${svgI('check')}</span></button>`).join('');
+$('mWx').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { park.setWeather(b.dataset.wx); afterPick(); } });
+function paintWeather() {
+  const k = park.weather; $('wxIc').innerHTML = svgI(WXI[k]); $('wxName').textContent = WX[k].name;
+  $('mWx').querySelectorAll('button').forEach(b => b.classList.toggle('cur', b.dataset.wx === k));
+}
+/* day / night toggle: Auto -> Day -> Night */
+function paintTod() { const m = park.todMode, n = typeof park.timeOfDay === 'number' ? fmtT(park.timeOfDay) : m[0].toUpperCase() + m.slice(1); $('todIc').innerHTML = svgI(m === 'auto' ? 'auto' : m === 'day' ? 'sun' : 'moon'); $('todName').textContent = n; $('bTod').title = 'Lighting: ' + n + (park.weather === 'festive' ? ' (festive night forces night)' : ''); }
+$('bTod').addEventListener('click', () => { park.setTimeOfDay(park.todMode === 'auto' ? 'day' : park.todMode === 'day' ? 'night' : 'auto'); afterPick(); });
+park.on('timeofday', paintTod);
+/* user menu (static) */
+$('mUser').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { toast({ profile: 'Profile: Mia Larsen, park operations', shift: 'Shift 08:00 - 17:00, no open notes', settings: 'Settings are read-only in this demo', out: 'Signed-in demo account stays active' }[b.dataset.u]); afterPick(); } });
+
+/* ---- search (type-ahead over rides, stalls, queues, parade) ---- */
+let sHits = [], sIdx = 0;
+const KINDN = { ride: 'Ride', stall: 'Stall', queue: 'Queue', parade: 'Parade' };
+function paintSearch() {
+  const box = $('sres'); if (!sHits.length) { box.innerHTML = '<div class="none">No matches</div>'; box.classList.add('on'); return; }
+  const q = $('q').value.trim().toLowerCase().split(/\s+/)[0];
+  box.innerHTML = sHits.map((h, i) => { const k = h.name.toLowerCase().indexOf(q), nm = k >= 0 ? esc(h.name.slice(0, k)) + '<mark>' + esc(h.name.slice(k, k + q.length)) + '</mark>' + esc(h.name.slice(k + q.length)) : esc(h.name);
+    return `<div class="row${i === sIdx ? ' hl' : ''}" role="option" data-i="${i}">${nm}<small>${h.kind}</small></div>`; }).join('');
+  box.classList.add('on');
+}
+function runSearch() {
+  const q = $('q').value.trim().toLowerCase(); if (!q) { sHits = []; $('sres').classList.remove('on'); return; }
+  const tk = q.split(/\s+/);
+  sHits = Object.values(ents).map(e => ({ id: e.id, name: e.name, kind: KINDN[e.kind], hay: (e.name + ' ' + KINDN[e.kind]).toLowerCase() })).filter(h => tk.every(t => h.hay.includes(t)))
+    .sort((a, b) => (b.name.toLowerCase().startsWith(q) ? 1 : 0) - (a.name.toLowerCase().startsWith(q) ? 1 : 0) || a.name.localeCompare(b.name)).slice(0, 8);
+  sIdx = 0; paintSearch();
+}
+function pickHit(i) { const h = sHits[i]; if (!h) return; park.select(h.id); $('q').value = ''; $('q').blur(); sHits = []; afterPick(); }
+$('q').addEventListener('input', runSearch); $('q').addEventListener('focus', runSearch);
+$('q').addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (sHits.length) { sIdx = (sIdx + (e.key === 'ArrowDown' ? 1 : -1) + sHits.length) % sHits.length; paintSearch(); } }
+  else if (e.key === 'Enter') { e.preventDefault(); pickHit(sIdx); }
+});
+$('sres').addEventListener('click', e => { const r = e.target.closest('.row'); if (r) pickHit(+r.dataset.i); });
+
+/* ---- live data ---- */
+let waitK;       // the Average wait KPI: guest-weighted mean of the open rides' smoothed waits, smoothed again over about a minute
+function rawWait() {
+  let ws = 0, wn = 0, wsu = 0, no = 0;
+  for (const r of rides) if (r.queue && r.status === 'Open') { const w = waitOf(r), n = r.queue.list.length; ws += w * n; wn += n; wsu += w; no++; }
+  return wn ? ws / wn : wsu / Math.max(1, no);
+}
+function parkTotals() {
+  const gs = park.groupSize * KG;
+  const tickets = park.entries * gs * TICKET, fb = stalls.reduce((a, s) => a + s.revenue, 0), merch = park.merch;
+  return { guests: park.guestCount * gs, wait: waitK ?? rawWait(), rev: tickets + fb + merch, tickets, fb, merch };
+}
+const push = (a, v) => { a.push(v); if (a.length > HN) a.shift(); };
+function sample() {
+  const t = parkTotals(); push(HIST.guests, t.guests); push(HIST.wait, t.wait); push(HIST.rev, t.rev);
+  for (const id in ents) push(HIST.ent[id] ||= [], park.metric(id));
+}
+function prefillHist() {       // two hours of believable history before the first live sample: slow waves that land exactly on the current value
+  const t = parkTotals(), wave = (i, ph, A) => A * (Math.sin(ph + i * 0.13) + 0.6 * Math.sin(ph * 1.7 + i * 0.05) - Math.sin(ph + 39 * 0.13) - 0.6 * Math.sin(ph * 1.7 + 39 * 0.05));
+  for (let i = 0; i < 40; i++) { const f = i / 39; push(HIST.guests, t.guests * (0.86 + 0.14 * f + wave(i, 0.4, 0.02))); push(HIST.wait, Math.max(0, t.wait * (0.92 + 0.08 * f + wave(i, 1.9, 0.05)))); push(HIST.rev, t.rev * (0.92 + 0.08 * f)); }
+  for (const id in ents) { const e = ents[id], v = e.kind === 'ride' && e.queue ? waitOf(e) : park.metric(id), ph = id.length * 0.9 + id.charCodeAt(id.length - 1) * 0.37; HIST.ent[id] = Array.from({ length: 40 }, (_, i) => Math.max(0, v * (0.9 + 0.1 * i / 39 + wave(i, ph, 0.07)))); }
+}
+function sparkSVG(a, W = 100, H = 30) {
+  if (a.length < 2) return ''; let mn = Math.min(...a), mx = Math.max(...a); const rg = Math.max(mx - mn, Math.abs(mx) * 0.03 + 1e-6); mn = (mn + mx) / 2 - rg / 2;
+  const pts = a.map((v, i) => [i / (a.length - 1) * W, H - 3 - (v - mn) / rg * (H - 6)]), d = 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path class="ar" d="${d}L${W} ${H}L0 ${H}Z"/><path class="ln" d="${d}"/></svg>`;
+}
+const money = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + (v / 1e3).toFixed(1) + 'k';
+const KPIS = [
+  { id: 'guests', label: 'Guests in park', sub: t => `Entries today ${fmtN(park.entries * park.groupSize * KG)}`, val: t => fmtN(t.guests), delta: (a, n) => { const p = a[Math.max(0, a.length - 16)]; const d = p ? (n - p) / p * 100 : 0; return `<b>${d >= 0 ? '▲' : '▼'} ${Math.abs(d).toFixed(1)}%</b><span> vs 30 min ago</span>`; }, cur: t => t.guests, hist: HIST.guests },
+  { id: 'wait', label: 'Average wait', sub: t => { let b = null; for (const r of rides) if (r.queue && r.status === 'Open' && (!b || waitOf(r) > waitOf(b))) b = r; return b && waitOf(b) >= 0.5 ? `Longest: ${esc(b.name)} ${Math.ceil(waitOf(b))} min` : 'No queues'; }, val: t => t.wait.toFixed(1) + '<small>min</small>', delta: (a, n) => { const p = a[Math.max(0, a.length - 16)], d = n - (p || n); return `<b>${d >= 0 ? '▲' : '▼'} ${Math.abs(d).toFixed(1)} min</b><span> vs 30 min ago</span>`; }, cur: t => t.wait, hist: HIST.wait },
+  { id: 'rev', label: 'Revenue today', sub: t => `Tickets ${money(t.tickets)} \u00B7 F&amp;B ${money(t.fb)}`, val: t => money(t.rev), delta: (a, n) => { const p = a[Math.max(0, a.length - 31)], d = n - (p || n); return `<b>+${money(Math.max(0, d))}</b><span> last hour</span>`; }, cur: t => t.rev, hist: HIST.rev },
+];
+$('kpis').innerHTML = KPIS.map(k => `<div class="kpi glass" id="kpi-${k.id}"><div class="l">${k.label}</div><div class="v"></div><div class="d"></div><div class="sub"></div><div class="sp"></div></div>`).join('');
+function paintKpis() {
+  const t = parkTotals();
+  for (const k of KPIS) { const el = $('kpi-' + k.id), n = k.cur(t); el.querySelector('.v').innerHTML = k.val(t); el.querySelector('.d').innerHTML = k.delta(k.hist, n); el.querySelector('.sub').innerHTML = k.sub(t); }
+}
+function paintSparks() { for (const k of KPIS) $('kpi-' + k.id).querySelector('.sp').innerHTML = sparkSVG(k.hist); }
+
+/* ---- detail panel ---- */
+function chartHTML(st) {
+  const id = st.id;
+  if (st.series === 'show') {
+    const x = h => ((h - park.openH) / (park.closeH - park.openH) * 292 + 4).toFixed(1);
+    return `<div class="h">Show schedule<b>${park.nextShow()}</b></div><div class="cv"><svg viewBox="0 0 300 70" preserveAspectRatio="none"><line class="gl" x1="4" x2="296" y1="42" y2="42"/>${SHOWS.map(s => `<rect x="${x(s)}" y="30" width="${(SHOW_MIN / 840 * 292 * 14 / 14).toFixed(1)}" height="24" rx="4" fill="${park.paradeState === 'On route' && park.time >= s && park.time < s + SHOW_MIN / 60 ? '#F43F5E' : 'rgba(244,63,94,.35)'}"/>`).join('')}<path d="M${x(park.time)} 18l-5-9h10z" fill="#F43F5E"/></svg></div><div class="ax"><span>09:00</span><span>16:00</span><span>23:00</span></div>`;
+  }
+  const a = HIST.ent[id] || [], v = a.length ? a[a.length - 1] : 0, title = { wait: 'Wait time (min)', orders: 'Orders / hour', queue: 'Guests in line' }[st.series];
+  let mn = 0, mx = Math.max(...a.filter(q => q === q), 1) * 1.15; const W = 300, H = 78, pts = a.map((q, i) => [i / Math.max(1, a.length - 1) * W, q === q ? H - 3 - (q - mn) / (mx - mn) * (H - 8) : null]);
+  let d = '', ar = '', run = [];       // a NaN sample (Hold / Closed) breaks the line: gap
+  const flush = () => { if (run.length) { const l = run.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L'); d += 'M' + l; ar += 'M' + l + 'L' + run[run.length - 1][0].toFixed(1) + ' ' + H + 'L' + run[0][0].toFixed(1) + ' ' + H + 'Z'; run = []; } };
+  for (const p of pts) { if (p[1] === null) flush(); else run.push(p); } flush();
+  return `<div class="h">${title}<b>${st.series === 'wait' ? (st.status !== 'Open' ? st.status : v === v ? v.toFixed(1) : '–') : fmtN(v)}</b></div><div class="cv"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${[0.25, 0.5, 0.75].map(f => `<line class="gl" x1="0" x2="${W}" y1="${(H * f).toFixed(1)}" y2="${(H * f).toFixed(1)}"/>`).join('')}<path class="ar" d="${ar}"/><path class="ln" d="${d}"/></svg></div><div class="ax"><span>2 h ago</span><span>now</span></div>`;
+}
+const pillHTML = st => { const s = st.note || st.status;
+  if (st.status === 'Closed') return `<span class="pill closed">${svgI('ban')}${esc(s)}</span>`;
+  if (st.status === 'Hold' || st.status === 'Assembling') return `<span class="pill hold">${svgI(st.status === 'Hold' ? 'pause' : 'clock')}${esc(s)}</span>`;
+  if (st.status === 'On route') return `<span class="pill hot"><i></i>${esc(s)}</span>`;
+  return `<span class="pill"><i></i>${esc(s)}</span>`; };
+function renderDetail() {
+  const st = sel ? park.stats(sel.id) : null;
+  $('dEmpty').classList.toggle('hid', !!st); $('dBody').classList.toggle('hid', !st); if (!st) return;
+  $('dKind').textContent = st.kind; $('dTitle').textContent = st.title;
+  const p = $('dPill'); p.outerHTML = pillHTML(st).replace('<span class="pill', '<span id="dPill" class="pill');
+  $('dStats').innerHTML = st.rows.filter(r => r[0] !== 'Status').map(r => { const m = /^(-?\$?[\d,.]+%?)\s*(.*)$/.exec(r[1]); const wide = !m && String(r[1]).length > 13;
+    return `<div${wide ? ' style="grid-column:span 2"' : ''}><dt>${esc(r[0])}</dt><dd>${m ? esc(m[1]) + (m[2] ? '<small>' + esc(m[2]) + '</small>' : '') : esc(r[1])}</dd></div>`; }).join('');
+  $('dChart').innerHTML = chartHTML(st);
+}
+$('dx').addEventListener('click', () => park.select(null));
+
+/* ---- ride cycle tracker ---- */
+$('trSel').innerHTML = rides.map(r => `<option value="${r.id}">${esc(r.name)}</option>`).join('');
+$('trSel').addEventListener('change', e => { trId = e.target.value; paintTracker(); });
+$('trSteps').innerHTML = PH6.map((n, i) => `<li><b>${i + 1}</b><span>${n}</span><i class="bar"><u></u></i></li>`).join('');
+function cycleState(r) {
+  let ph = r.phase, u = 0;
+  if (r.id === 'coaster') { const { st, S } = coaster; u = ph === 'Loading' ? st.t / 7 : ph === 'Dispatch' ? (st.p - S.pStop) / (S.pLift - S.pStop) : ph === 'Lift' ? (st.p - S.pLift) / (S.pPeak - S.pLift) : ph === 'Ride' ? (st.p - S.pPeak) / (S.pBrake - S.pPeak) : ph === 'Brake' ? (st.p - S.pBrake) / (S.pEnd - S.pBrake) : st.t / 6; }
+  else if (r.id === 'flume') u = r.phaseU || 0;
+  else if (r.id === 'monorail') { const { st, L } = monorail; u = ph === 'Loading' ? st.t / 9 : ph === 'Dispatch' ? st.p / 24 : ph === 'Ride' ? (st.p - 24) / (L - 70) : ph === 'Brake' ? (st.p - (L - 46)) / 46 : st.t / 6; }
+  else u = r.phaseT / r.cycle[r.cycIdx][1];
+  u = clamp(u, 0, 1);
+  if (r.id !== 'coaster' && r.id !== 'flume' && ph === 'Ride') { if (u < 0.18) { ph = 'Lift'; u /= 0.18; } else u = (u - 0.18) / 0.82; }       // rides without a lift hill: the first part of the ride is the spin-up
+  return { idx: Math.max(0, PH6.indexOf(ph)), u, phase: ph };
+}
+function paintTracker() {
+  const r = ents[trId], c = cycleState(r), items = $('trSteps').children;
+  for (let i = 0; i < 6; i++) { const li = items[i]; li.className = i < c.idx ? 'done' : i === c.idx ? 'cur' : ''; li.querySelector('u').style.width = (i < c.idx ? 100 : i === c.idx ? Math.round(c.u * 100) : 0) + '%'; }
+  const bad = r.status === 'Hold' || r.status === 'Closed';
+  $('trSteps').classList.toggle('dim', bad); const tp = $('trPill'); tp.className = 'pill ' + (r.status === 'Closed' ? 'closed' : r.status === 'Hold' ? 'hold' : ''); tp.innerHTML = r.status === 'Open' ? `<i></i>${c.phase}` : `${svgI(r.status === 'Hold' ? 'pause' : 'ban')}${r.status}`;
+  const nt = $('trNote'); nt.classList.toggle('on', bad);
+  if (bad) nt.innerHTML = svgI(r.status === 'Hold' ? 'pause' : 'ban') + (r.status === 'Hold' ? (r.phase === 'Loading' ? 'Wind hold: the train waits in the station and the queue is held' : 'Wind hold: the train finishes this lap, then waits in the station; the queue is held') : r.wClosed ? 'Closed for rain: no new riders, the queue drains through the exits' : 'Park closed');
+  const extra = r.id === 'coaster' ? `Speed <b>${Math.round(coaster.st.v * 3.6)} km/h</b>` : r.cycle ? `Phase ends in <b>${Math.max(0, Math.ceil(r.cycle[r.cycIdx][1] - r.phaseT))} s</b>` : '';
+  $('trInfo').innerHTML = `<span>Riders aboard <b>${r.onboard.length * park.groupSize}</b></span><span>Cycles today <b>${r.cycles}</b></span>${extra ? `<span>${extra}</span>` : ''}`;
+}
+
+/* ---- tabbed table ---- */
+const G2n = () => park.groupSize;
+const TABS = {
+  rides: { cols: [['name', 'Ride'], ['status', 'Status'], ['rph', 'Riders/h'], ['cap', 'Capacity/h', 1], ['wait', 'Wait min'], ['queue', 'Queue'], ['today', 'Today', 1]],
+    rows: () => rides.map(r => ({ id: r.id, name: r.name, status: r.status, rph: r.rph, cap: r.hourlyCap, wait: r.queue && r.status === 'Open' ? Math.ceil(waitOf(r)) : null, queue: r.queue ? r.queue.list.length * G2n() * QK : null, today: Math.round(r.ridesToday) })) },
+  queues: { cols: [['name', 'Queue'], ['serves', 'Serves', 1], ['len', 'Length'], ['cap', 'Capacity', 1], ['wait', 'Wait min']],
+    rows: () => Object.values(ents).filter(e => e.kind === 'queue').map(e => ({ id: e.id, name: e.name, serves: e.owner.name, len: e.queue.list.length * G2n() * QK, cap: e.queue.cap * G2n() * QK, status: e.owner.kind === 'ride' ? e.owner.status : 'Open', wait: e.owner.kind === 'ride' ? (e.owner.status !== 'Open' ? null : Math.ceil(waitOf(e.owner))) : Math.ceil(e.queue.list.length * e.owner.svc / 60 * 5) })) },
+  stalls: { cols: [['name', 'Stall'], ['status', 'Status'], ['ord', 'Orders/h'], ['queue', 'Queue'], ['rev', 'Revenue'], ['ordT', 'Orders today', 1]],
+    rows: () => stalls.map(s => ({ id: s.id, name: s.name, status: park.open ? 'Open' : 'Closed', ord: s.ordersHr, queue: s.queue.list.length * G2n() * QK, rev: s.revenue, ordT: s.orders })) },
+};
+const tbHead = document.querySelector('#table thead'), tbBody = document.querySelector('#table tbody'), rowEls = { rides: {}, queues: {}, stalls: {} };
+function paintHead() {
+  const S = sortS[tab] || {}; tbHead.innerHTML = '<tr>' + TABS[tab].cols.map(c => `<th data-k="${c[0]}" class="${S.key === c[0] ? 's' : ''}${c[2] ? ' lo' : ''}">${c[1]}<span class="ar">${S.key === c[0] ? (S.dir > 0 ? '▲' : '▼') : ''}</span></th>`).join('') + '</tr>';
+  tbBody.innerHTML = ''; for (const id in rowEls[tab]) tbBody.appendChild(rowEls[tab][id]);
+}
+function cellText(k, v, r) {
+  if (v === null || v === undefined) return k === 'wait' && r.status && r.status !== 'Open' ? r.status : '–'; if (k === 'status') return `<span class="st ${v}">${v}</span>`; if (k === 'rev') return '$' + fmtN(v);
+  return typeof v === 'number' ? fmtN(v) : esc(v);
+}
+function paintTable() {
+  const T = TABS[tab], rows = T.rows(), S = sortS[tab];
+  if (S) rows.sort((a, b) => { const x = a[S.key], y = b[S.key]; return (typeof x === 'string' ? x.localeCompare(y) : (x ?? -1) - (y ?? -1)) * S.dir; });
+  let prev = null;
+  rows.forEach(r => {
+    let tr = rowEls[tab][r.id];
+    if (!tr) { tr = rowEls[tab][r.id] = document.createElement('tr'); tr.dataset.id = r.id; tr.innerHTML = T.cols.map(c => `<td${c[2] ? ' class="lo"' : ''}></td>`).join(''); }
+    T.cols.forEach((c, i) => { const td = tr.children[i], h = cellText(c[0], r[c[0]], r); if (td.dataset.h !== h) { td.innerHTML = h; td.dataset.h = h; } td.classList.toggle('hi', c[0] === 'wait' && r.wait !== null && r.wait >= WAIT_HI); });
+    tr.classList.toggle('sel', !!sel && sel.id === r.id);
+    if (tr.parentNode !== tbBody || (prev ? prev.nextSibling : tbBody.firstChild) !== tr) tbBody.insertBefore(tr, prev ? prev.nextSibling : tbBody.firstChild);
+    prev = tr;
+  });
+}
+tbHead.addEventListener('click', e => { const th = e.target.closest('th'); if (!th) return; const S = sortS[tab]; sortS[tab] = { key: th.dataset.k, dir: S && S.key === th.dataset.k ? -S.dir : (th.dataset.k === 'name' || th.dataset.k === 'serves' ? 1 : -1) }; paintHead(); paintTable(); });
+tbBody.addEventListener('click', e => { const tr = e.target.closest('tr'); if (tr) park.select(tr.dataset.id); });
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { tab = b.dataset.tab; document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b)); paintHead(); paintTable(); $('table').classList.remove('col'); }));
+$('tbCol').addEventListener('click', () => $('table').classList.toggle('col'));
+document.querySelectorAll('#dock button').forEach(b => b.addEventListener('click', () => setSheet(root.dataset.sheet === b.dataset.sheet ? 'none' : b.dataset.sheet)));
+
+/* ---- alerts: generated from the simulation ---- */
+const alerts = [], acond = {};
+function addAlert(key, text, ent, icon, live) { alerts.unshift({ key, text, ent, icon, live, time: park.clock, seen: false }); if (alerts.length > 24) alerts.pop(); paintAlerts(); }
+function resolveAlert(key) { for (const a of alerts) if (a.key === key && a.live) { a.live = false; a.done = park.clock; } paintAlerts(); }
+function markSeen() { alerts.forEach(a => { a.seen = true; }); paintAlerts(); }
+function paintAlerts() {
+  const n = alerts.filter(a => !a.seen).length, live = alerts.filter(a => a.live).length; $('badge').textContent = n > 9 ? '9+' : n; $('badge').style.display = n ? '' : 'none'; $('alSub').textContent = live ? live + ' active' : 'all clear';
+  $('alist').innerHTML = alerts.length ? alerts.map((a, i) => `<button class="al${a.live ? ' live' : ''}" data-i="${i}"><b class="ai">${svgI(a.icon)}</b><div>${esc(a.text)}<span>${a.live ? 'Active since ' + a.time : a.done ? a.time + ', cleared ' + a.done : a.time}</span></div></button>`).join('') : '<div class="empty">All quiet. Alerts from the park appear here.</div>';
+}
+$('alist').addEventListener('click', e => { const b = e.target.closest('.al'); if (!b) return; const a = alerts[+b.dataset.i]; if (a && a.ent) park.select(a.ent); afterPick(); });
+park.on('weather', (k, was) => {
+  paintWeather(); paintTod(); const w = WX[k];
+  for (const r of rides) {
+    const ck = 'closed:' + r.id, hk = 'hold:' + r.id;
+    if (r.wClosed) addAlert(ck, `${r.name} closed for rain`, r.id, 'ban', true); else if (acond[ck]) { resolveAlert(ck); addAlert('open:' + r.id, `${r.name} reopened`, r.id, 'check', false); }
+    if (r.wHold) addAlert(hk, `${r.name} on wind hold`, r.id, 'pause', true); else if (acond[hk]) { resolveAlert(hk); addAlert('open:' + r.id, `${r.name} released from wind hold`, r.id, 'check', false); }
+    acond[ck] = r.wClosed; acond[hk] = r.wHold;
+  }
+  if (k !== was) addAlert('wx', 'Weather: ' + w.name, null, WXI[k], false); toast('Weather: ' + w.name);
+});
+park.on('parade', st => {
+  if (st === 'Assembling') addAlert('parade', `Parade assembling, starts ${fmtT(SHOWS.find(s => s > park.time - 0.001) ?? SHOWS[0])}`, 'parade', 'flag', true);
+  else if (st === 'On route') { resolveAlert('parade'); addAlert('parade', 'Parade is on route', 'parade', 'flag', true); }
+  else { resolveAlert('parade'); addAlert('parade-end', 'Parade finished, crossings reopen', 'parade', 'check', false); }
+});
+function checkAlerts() {
+  for (const r of rides) if (r.queue) {
+    const w = waitOf(r), k = 'wait:' + r.id;
+    if (!acond[k] && r.status === 'Open' && w >= WAIT_HI) { acond[k] = true; addAlert(k, `${r.name}: ${Math.round(w)} min wait`, r.id, 'clock', true); }
+    else if (acond[k] && (w < WAIT_LO || r.status !== 'Open')) { acond[k] = false; resolveAlert(k); }
+  }
+}
+
+/* ---- selection + frame hooks ---- */
+park.on('select', id => {
+  const e = id && ents[id]; if (e) { const r = e.kind === 'ride' ? e : e.kind === 'queue' && e.owner.kind === 'ride' ? e.owner : null; if (r) { trId = r.id; $('trSel').value = r.id; } }
+  if (root.classList.contains('m')) setSheet(e ? 'detail' : root.dataset.sheet === 'detail' ? 'none' : root.dataset.sheet);
+  renderDetail(); paintTracker(); paintTable();
+});
+function clockText() { $('clock').textContent = park.clock; const o = $('open'); o.textContent = park.open ? 'Open' : 'Closed'; o.classList.toggle('on', park.open); }
+function uiUpdate(dt) {
+  document.body.classList.toggle('night', env.day < 0.5);
+  trT -= dt; if (trT <= 0) { trT = 0.1; paintTracker(); }
+  smpT -= dt; if (smpT <= 0) { smpT = 2; sample(); paintSparks(); }
+  uiT -= dt; if (uiT <= 0) { uiT = 0.5; clockText(); paintKpis(); renderDetail(); paintTable(); checkAlerts(); }
+}
+root.dataset.sheet = 'none'; paintHead(); paintWeather(); paintTod(); paintAlerts(); $('trSel').value = trId;
+park.ui = { alerts, hist: HIST, totals: parkTotals, setSheet, toast, cycleState };
+
+/* ============ 8. MAIN LOOP ============ */
+
+Object.assign(park.debug, { fountain: FOUNTAIN, queuePosts, scene, cam, info: renderer.info, project(x, y, z) { const v = V3(x, y, z).project(camera); return { x: (v.x * 0.5 + 0.5) * innerWidth, y: (-v.y * 0.5 + 0.5) * innerHeight, z: v.z }; } });
+function newDay() {
+  park.time = park.openH; park.day++; park.showsToday = 0; park.departed = 0; park.entries = 0; park.merch = 0;
+  waitK = undefined; for (const r of rides) { r.wS = undefined; r.ridesToday = 0; r.cycles = 0; r.onboard.length = 0; if (r.queue) r.queue.list.length = 0; }
+  for (const s of stalls) { s.revenue = 0; s.orders = 0; s.served = 0; s.serveT.length = 0; s.cur = null; s.queue.list.length = 0; }
+  for (const e of Object.values(ents)) if (e.queue) e.queue.head = 0;
+  for (const g of guests) { release(g); g.state = 'off'; }
+  park.emit('newday', park.day);
+}
+function simStep(dt) {
+  park.now += dt; park.time += dt * park.timeScale / 60; if (park.time >= park.closeH) newDay();
+  for (const w of walkers) w.step = 0;
+  updateParade(dt); updateRidesStalls(dt); updateGuests(dt);
+  for (const a of anims) a(dt, park.now);
+}
+park.debug.walkers = walkers; park.debug.G = G;
+Object.defineProperty(park.debug, 'paradeHead', { get: () => paradeHead });
+park.debug.advance = (sec, step = 0.05) => { for (let t = 0; t < sec; t += step) simStep(step); };
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.1);
+  simStep(dt); renderGuests(dt); updateEnv(dt); updateCamera(dt); updateSelection(dt); uiUpdate(dt);
+  park.emit('tick', dt);
+  renderer.render(scene, camera);
+}
+for (const r of rides) r.ridesToday = Math.round(r.hourlyCap * 0.7 * (park.time - park.openH));
+for (const s of stalls) { s.orders = Math.round(330 * (park.time - park.openH)); s.revenue = s.orders * s.price; }
+for (let i = 0; i < 110; i++) spawnGuest(guests[i], true);
+park.entries = 110; park.merch = park.entries * park.groupSize * KG * 4; park.guestCount = guests.filter(g => g.state !== 'off').length;
+prefillHist(); clockText(); paintKpis(); paintSparks(); renderDetail(); paintTracker(); paintTable();
+frame(); renderer.setAnimationLoop(frame);
+
+</script>
+</body>
+</html>

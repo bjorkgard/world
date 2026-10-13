@@ -1,0 +1,1935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Railgrid | Metro control</title>
+<meta name="theme-color" content="#e6ebee">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%2300A86B%27/%3E%3Cpath d=%27M9 9h14v10H9zM9 15h14M12 25l2-6M20 25l-2-6%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--green:#00A86B;--green-d:#008a58;--ink:#1d252c;--ink2:#5a6670;--glass:rgba(255,255,255,.62);--glass-b:rgba(255,255,255,.78);--line:rgba(30,45,55,.12);--shadow:0 10px 30px rgba(24,38,50,.14);--soft:rgba(30,45,55,.06)}
+body.night{--ink:#e9eff3;--ink2:#9fb0bb;--glass:rgba(20,28,36,.6);--glass-b:rgba(255,255,255,.13);--line:rgba(255,255,255,.12);--shadow:0 10px 30px rgba(0,0,0,.45);--soft:rgba(255,255,255,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;overflow:hidden;background:#e6ebee;font:13px/1.35 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body.night{background:#0e141b}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+#ui{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#ui>*{pointer-events:auto}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--glass-b);border-radius:16px;box-shadow:var(--shadow)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.hidden{display:none!important}
+
+#top{position:absolute;left:12px;right:12px;top:12px;min-height:58px;display:flex;align-items:center;gap:10px;padding:8px 12px;z-index:30}
+.brand{display:flex;align-items:center;gap:9px;flex:none}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--green);display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(0,168,107,.4)}
+.logo svg{width:20px;height:20px;stroke-width:2}
+.brand b{font-size:16px;letter-spacing:.2px;display:block;line-height:1.1}
+.brand em{font-style:normal;font-size:10.5px;color:var(--ink2);display:block}
+.search{position:relative;flex:1 1 220px;min-width:90px;max-width:300px}
+.search>svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink2);width:16px;height:16px;pointer-events:none}
+.search input{width:100%;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:0 10px 0 33px;font:inherit;outline:none}
+.search input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,168,107,.18)}
+.drop{position:absolute;top:calc(100% + 8px);left:0;min-width:240px;max-height:60vh;overflow:auto;padding:6px;display:none;z-index:40;background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--glass-b);border-radius:14px;box-shadow:var(--shadow)}
+.drop.open{display:block}
+.drop.right{left:auto;right:0}
+.drop .it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 10px;border-radius:9px}
+.drop .it:hover,.drop .it.on{background:rgba(0,168,107,.14)}
+.drop .it small{display:block;color:var(--ink2);font-size:11px}
+.drop .ty{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--green);width:46px;flex:none;font-weight:600}
+.drop .none{padding:10px;color:var(--ink2)}
+#areas{display:flex;gap:3px;padding:3px;background:var(--soft);border-radius:12px;flex:none}
+#areas button{padding:6px 10px;border-radius:9px;font-weight:500;color:var(--ink2);white-space:nowrap}
+#areas button:hover{color:var(--ink)}
+#areas button.on{background:var(--green);color:#fff;box-shadow:0 3px 10px rgba(0,168,107,.35)}
+#areaSel{display:none;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;padding:0 8px;max-width:130px}
+#areaSel option{color:#1d252c}
+.sp{flex:1}
+.menuwrap{position:relative;flex:none}
+.chip{display:flex;align-items:center;gap:7px;height:36px;padding:0 11px;border-radius:11px;background:var(--soft);font-weight:500}
+.chip:hover,.icon:hover{background:rgba(0,168,107,.14)}
+.icon{position:relative;width:36px;height:36px;border-radius:11px;background:var(--soft);display:grid;place-items:center}
+.icon b{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;border-radius:9px;background:#e5484d;color:#fff;font-size:10px;display:grid;place-items:center;padding:0 4px;font-weight:600}
+.icon b:empty{display:none}
+#clock{font-variant-numeric:tabular-nums;font-weight:600;font-size:15px;letter-spacing:.3px;flex:none;text-align:right;line-height:1.1}
+#clock small{display:block;font-size:10px;color:var(--ink2);font-weight:500;letter-spacing:0}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00A86B,#2fbf86);color:#fff;font-weight:700;font-size:12px;display:grid;place-items:center}
+.dnl{font-size:10px;position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);display:none}
+
+#kpis{position:absolute;left:12px;top:82px;display:flex;gap:10px;z-index:20}
+.kpi{width:178px;padding:11px 13px 10px;position:relative;overflow:hidden}
+.kpi h4 .sm{display:none}
+.kpi h4{font-size:11px;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px}
+.kpi .v{font-size:26px;font-weight:700;line-height:1.15;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:13px;color:var(--ink2);font-weight:500}
+.kpi .d{font-size:11px;color:var(--ink2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .d.up{color:var(--green)}.kpi .d.dn{color:#d9534f}
+.kpi canvas{position:absolute;right:9px;top:30px;width:56px;height:22px}
+
+#detail{position:absolute;right:12px;top:82px;width:330px;max-height:calc(100% - 94px);overflow:auto;padding:14px;z-index:20}
+#detail .hd{display:flex;align-items:flex-start;gap:10px}
+#detail .ico{width:38px;height:38px;border-radius:11px;background:var(--green);color:#fff;display:grid;place-items:center;flex:none}
+#detail h3{font-size:16px;line-height:1.2}
+#detail .sub{color:var(--ink2);font-size:12px}
+#detail .x{margin-left:auto;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--ink2)}
+#detail .x:hover{background:var(--soft)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(0,168,107,.16);color:var(--green-d)}
+body.night .pill{color:#5be0a8}
+.pill.warn{background:rgba(240,160,30,.2);color:#b36a00}.pill.bad{background:rgba(229,72,77,.18);color:#c43338}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#9aa;flex:none}
+.dot.G{background:#25c97a;box-shadow:0 0 8px #25c97a}.dot.Y{background:#ffb300;box-shadow:0 0 8px #ffb300}.dot.R{background:#ff453a;box-shadow:0 0 8px #ff453a}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.stat{padding:8px 10px;border-radius:11px;background:var(--soft)}
+.stat label{display:block;font-size:10.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px}
+.stat b{font-size:15px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:6px}
+.stat.wide{grid-column:span 2}
+.bar{height:6px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--green);border-radius:4px;transition:width .4s}
+.bar i.hot{background:#e5484d}.bar i.mid{background:#f0a01e}
+#chart{width:100%;height:64px;margin-top:10px;display:block}
+.btns{display:flex;gap:8px;margin-top:12px}
+.btn{flex:1;height:34px;border-radius:10px;background:var(--soft);font-weight:600}
+.btn:hover{background:rgba(0,168,107,.16)}.btn.on{background:var(--green);color:#fff}
+.idle{padding:6px 2px;color:var(--ink2)}.idle b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+
+#tracker{position:absolute;left:12px;bottom:12px;width:470px;padding:12px 14px 12px;z-index:20}
+#tracker .th{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+#tracker .th b{font-size:13px}#tracker .th span{color:var(--ink2);font-size:12px}
+.steps{display:flex;position:relative}
+.step{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--ink2);font-weight:500}
+.step:before{content:'';position:absolute;top:8px;left:-50%;width:100%;height:3px;background:var(--soft);z-index:0}
+.step:first-child:before{display:none}
+.step.done:before,.step.on:before{background:var(--green)}
+.step i{display:block;width:19px;height:19px;border-radius:50%;margin:0 auto 5px;background:var(--glass-b);border:2px solid var(--line);position:relative;z-index:1}
+.step.done i{background:var(--green);border-color:var(--green)}
+.step.on i{background:#fff;border-color:var(--green);box-shadow:0 0 0 4px rgba(0,168,107,.25);animation:pulse 1.4s infinite}
+.step.on{color:var(--ink);font-weight:600}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(0,168,107,.05)}}
+#trkMsg{margin-top:10px;font-size:12px;color:var(--ink2)}#trkMsg b{color:var(--ink)}
+
+#table{position:absolute;left:494px;right:354px;bottom:12px;height:232px;display:flex;flex-direction:column;z-index:20;overflow:hidden}
+#table .tabs{display:flex;align-items:center;gap:4px;padding:8px 10px 6px;border-bottom:1px solid var(--line);flex:none}
+#table .tabs button{padding:6px 12px;border-radius:9px;font-weight:600;color:var(--ink2)}
+#table .tabs button.on{background:var(--green);color:#fff}
+#table .tabs .cnt{margin-left:auto;color:var(--ink2);font-size:11px}
+#tgl{display:none;width:30px;height:30px;border-radius:8px;place-items:center}
+.twrap{overflow:auto;flex:1}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink2);padding:7px 9px;font-weight:600}
+td{padding:6px 9px;font-size:12.5px;white-space:nowrap;border-top:1px solid var(--line)}
+tbody tr{cursor:pointer}tbody tr:hover{background:rgba(0,168,107,.1)}tbody tr.sel{background:rgba(0,168,107,.2)}
+td .dot{margin-right:6px}
+.late{color:#d9534f;font-weight:600}.early{color:var(--green)}
+
+#tag{position:absolute;left:0;top:0;pointer-events:none;z-index:15;transform:translate(-50%,-100%);padding:5px 10px;border-radius:10px;background:var(--green);color:#fff;font-weight:600;font-size:12px;white-space:nowrap;box-shadow:0 6px 16px rgba(0,168,107,.4);display:none}
+#tag:after{content:'';position:absolute;left:50%;bottom:-5px;width:10px;height:10px;background:var(--green);transform:translateX(-50%) rotate(45deg)}
+#toast{position:absolute;left:50%;top:84px;transform:translate(-50%,-14px);padding:9px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.3s;z-index:50;max-width:92vw;text-align:center;font-weight:500}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#boot{position:fixed;inset:0;display:grid;place-items:center;background:#e6ebee;color:#1d252c;z-index:99;transition:opacity .6s;font-weight:600;letter-spacing:.3px;text-align:center;padding:20px}
+#boot.done{opacity:0;pointer-events:none}
+#boot i{display:block;width:44px;height:44px;border-radius:12px;background:var(--green);margin:0 auto 14px;animation:pulse 1.2s infinite}
+
+@media (max-width:1240px){
+  #areas{display:none}#areaSel{display:block}
+  #tracker{width:420px}#table{left:444px}
+}
+@media (max-width:900px),(max-height:500px) and (orientation:landscape){
+  #top{flex-wrap:wrap;gap:8px;left:8px;right:8px;top:8px;padding:8px 10px}
+  .brand em{display:none}.brand b{font-size:15px}
+  .search{order:2;flex:1 1 120px;max-width:none}
+  .sp{display:none}
+  #areaSel{order:3;flex:1 1 90px;max-width:none}
+  .menuwrap,#clock{order:4}
+  .menuwrap:last-child{order:2;margin-left:auto}
+  #clock{font-size:13px}#clock small{display:none}
+  .chip span{display:none}.chip{padding:0 9px}
+  .drop{position:fixed;left:8px!important;right:8px!important;top:auto;min-width:0;max-height:55vh}
+  #top .search .drop{position:absolute;left:0!important;right:0!important}
+  #kpis{left:8px;right:8px;top:calc(var(--topH,110px) + 14px);gap:6px}
+  .kpi{flex:1;width:auto;padding:8px 9px 7px;min-width:0}.kpi .v{font-size:19px}.kpi .d{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi canvas{display:none}.kpi h4 .lg{display:none}.kpi h4 .sm{display:inline}.kpi h4{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #detail{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:50vh;padding:12px}
+  #tracker{position:static;width:auto;margin-top:12px;padding:10px 0 0;background:none;border:0;box-shadow:none;border-top:1px solid var(--line);border-radius:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .step{font-size:9px}
+  #table{left:8px;right:8px;bottom:8px;height:40vh}
+  #table.col{height:46px}
+  #tgl{display:grid}
+  body.has-sel #table{display:none}
+}
+@media (max-height:500px) and (orientation:landscape){
+  #detail{left:auto;right:8px;top:calc(var(--topH,58px) + 14px);bottom:8px;width:min(380px,46vw);max-height:none}
+  body.has-sel #kpis{display:none}
+}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="c" tabindex="0"></canvas>
+<div id="ui">
+  <header id="top" class="glass">
+    <div class="brand"><div class="logo"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 11h14M9 21l2-4M15 21l-2-4"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/></svg></div><div><b>Railgrid</b><em>Green Line control</em></div></div>
+    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search train, station, signal" autocomplete="off" spellcheck="false" aria-label="Search"><div id="qres" class="drop"></div></div>
+    <nav id="areas" aria-label="Areas"></nav><select id="areaSel" aria-label="Area"></select>
+    <div class="sp"></div>
+    <div class="menuwrap"><button id="wxBtn" class="chip" aria-label="Weather"><svg viewBox="0 0 24 24" id="wxIco"></svg><span id="wxLabel">Clear</span></button><div id="wxMenu" class="drop right"></div></div>
+    <div id="clock">00:00:00<small>--</small></div>
+    <div class="menuwrap"><button id="alBtn" class="icon" aria-label="Alerts"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><b id="alCount"></b></button><div id="alMenu" class="drop right"></div></div>
+    <button id="dnBtn" class="icon" aria-label="Day or night" title="Day / night: auto"><svg viewBox="0 0 24 24" id="dnIco"></svg></button>
+    <div class="menuwrap"><button id="userBtn" class="avatar" aria-label="User">NB</button><div id="userMenu" class="drop right"><div class="it" style="cursor:default"><div><b>N. Bjorkgard</b><small>Duty controller, control room 1</small></div></div><div class="it" style="cursor:default"><div>Shift<small>Day 06:00 to 14:00</small></div></div><button class="it" id="signOut">Sign out</button></div></div>
+  </header>
+  <section id="kpis">
+    <div class="kpi glass"><h4><span class="lg">Trains in service</span><span class="sm">In service</span></h4><div class="v" id="k1">-</div><div class="d" id="k1d">-</div><canvas id="s1" width="140" height="56"></canvas></div>
+    <div class="kpi glass"><h4>On-time</h4><div class="v" id="k2">-</div><div class="d" id="k2d">-</div><canvas id="s2" width="140" height="56"></canvas></div>
+    <div class="kpi glass"><h4>Riders today</h4><div class="v" id="k3">-</div><div class="d" id="k3d">-</div><canvas id="s3" width="140" height="56"></canvas></div>
+  </section>
+  <aside id="detail" class="glass"></aside>
+  <section id="tracker" class="glass">
+    <div class="th"><b>Journey tracker</b><span id="trkWho">Select a train</span></div>
+    <div class="steps" id="steps"></div>
+    <div id="trkMsg">Click a train in the scene or the Trains table to follow its journey.</div>
+  </section>
+  <section id="table" class="glass">
+    <div class="tabs"><button data-tab="trains" class="on">Trains</button><button data-tab="stations">Stations</button><button data-tab="signals">Signals</button><span class="cnt" id="tcnt"></span><button id="tgl" aria-label="Expand table"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg></button></div>
+    <div class="twrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+  <div id="tag"></div>
+  <div id="toast" class="glass"></div>
+</div>
+<div id="boot"><div><i></i>Loading Railgrid</div></div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// ==SIM-BEGIN==
+const TAU = Math.PI * 2;
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const mod = (a, n) => ((a % n) + n) % n;
+function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+const GEO = { HX: 64, HZ: 38, R: 20, OFF: 3.6 };
+const CAR_L = 5.4, CAR_W = 2.6, CAR_GAP = 0.7, NCARS = 4;
+const TRAIN_LEN = NCARS * CAR_L + (NCARS - 1) * CAR_GAP;
+const V_MAX = 11, ACC = 1.0, DEC = 1.5, EMERG = 3.2;
+const PLAT_HALF = 19, OPT_FREE = 7, CAP = 240, ST_CAP = 220;
+const DEPOT_X = 100, DEPOT_Z = 18;
+const PARK = { headX: 108, z: -27 };
+
+// signed distance to a rounded rectangle outline (negative inside)
+function sdRR(x, z, hx, hz, r) {
+  const qx = Math.abs(x) - (hx - r), qz = Math.abs(z) - (hz - r);
+  return Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qz), 0) - r;
+}
+// clockwise rounded rectangle polyline starting at (0,-hz) heading +x
+function rrPoints(hx, hz, r, step) {
+  const pts = [], sx = hx - r, sz = hz - r;
+  const line = (x0, z0, x1, z1) => { const n = Math.max(1, Math.round(Math.hypot(x1 - x0, z1 - z0) / step)); for (let i = 0; i < n; i++) { const t = i / n; pts.push([x0 + (x1 - x0) * t, z0 + (z1 - z0) * t]); } };
+  const arc = (cx, cz, a0) => { const n = Math.max(6, Math.round(r * Math.PI / 2 / step)); for (let i = 0; i < n; i++) { const a = a0 + Math.PI / 2 * i / n; pts.push([cx + r * Math.cos(a), cz + r * Math.sin(a)]); } };
+  line(0, -hz, sx, -hz); arc(sx, -sz, -Math.PI / 2);
+  line(hx, -sz, hx, sz); arc(sx, sz, 0);
+  line(sx, hz, -sx, hz); arc(-sx, sz, Math.PI / 2);
+  line(-hx, sz, -hx, -sz); arc(-sx, -sz, Math.PI);
+  line(-sx, -hz, 0, -hz);
+  return pts;
+}
+function bezier(p0, c1, c2, p1, n) {
+  const pts = [];
+  for (let i = 0; i < n; i++) { const t = i / n, u = 1 - t; pts.push([u * u * u * p0[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * p1[0], u * u * u * p0[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * p1[1]]); }
+  return pts;
+}
+
+class Path {
+  constructor(pts, closed) {
+    this.pts = pts; this.closed = !!closed;
+    const n = pts.length, ns = closed ? n : n - 1;
+    this.cum = new Float64Array(ns + 1); let L = 0;
+    for (let i = 0; i < ns; i++) { const a = pts[i], b = pts[(i + 1) % n]; L += Math.hypot(b[0] - a[0], b[1] - a[1]); this.cum[i + 1] = L; }
+    this.len = L; this.ns = ns;
+  }
+  at(d, o) {
+    o = o || { x: 0, z: 0, tx: 1, tz: 0 };
+    d = this.closed ? mod(d, this.len) : clamp(d, 0, this.len);
+    let lo = 0, hi = this.ns - 1;
+    while (lo < hi) { const m = (lo + hi + 1) >> 1; if (this.cum[m] <= d) lo = m; else hi = m - 1; }
+    const a = this.pts[lo], b = this.pts[(lo + 1) % this.pts.length];
+    const sl = (this.cum[lo + 1] - this.cum[lo]) || 1, t = (d - this.cum[lo]) / sl;
+    o.x = a[0] + (b[0] - a[0]) * t; o.z = a[1] + (b[1] - a[1]) * t;
+    o.tx = (b[0] - a[0]) / sl; o.tz = (b[1] - a[1]) / sl;
+    return o;
+  }
+  slice(a, b, step) {
+    const n = Math.max(2, Math.ceil((b - a) / (step || 1)) + 1), pts = [], o = {};
+    for (let i = 0; i < n; i++) { this.at(a + (b - a) * i / (n - 1), o); pts.push([o.x, o.z]); }
+    return new Path(pts, false);
+  }
+  nearest(x, z) {
+    let best = 1e18, bd = 0; const n = this.pts.length;
+    for (let i = 0; i < this.ns; i++) {
+      const a = this.pts[i], b = this.pts[(i + 1) % n], dx = b[0] - a[0], dz = b[1] - a[1];
+      const t = clamp(((x - a[0]) * dx + (z - a[1]) * dz) / (dx * dx + dz * dz || 1), 0, 1);
+      const px = a[0] + dx * t - x, pz = a[1] + dz * t - z, d2 = px * px + pz * pz;
+      if (d2 < best) { best = d2; bd = this.cum[i] + t * (this.cum[i + 1] - this.cum[i]); }
+    }
+    return { d: bd, dist: Math.sqrt(best) };
+  }
+}
+
+const SEASONS = {
+  clear:    { key: 'clear', name: 'Clear', speed: 1.0, brake: 1.0, car: 1.0, pax: 1.0, dwell: 1.0, note: 'Normal service' },
+  monsoon:  { key: 'monsoon', name: 'Monsoon', speed: 0.72, brake: 0.7, car: 0.7, pax: 0.85, dwell: 1.1, note: 'Wet tracks, speeds cut 28%' },
+  fog:      { key: 'fog', name: 'Fog', speed: 0.8, brake: 0.85, car: 0.75, pax: 0.9, dwell: 1.0, note: 'Low visibility, speeds cut 20%' },
+  festival: { key: 'festival', name: 'Festival rush', speed: 1.0, brake: 1.0, car: 0.85, pax: 2.4, dwell: 1.3, note: 'Crowds x2.4, longer dwell' },
+};
+const STATIONS_DEF = [
+  { id: 'STN-01', code: 'HRB', name: 'Harbour Gate', x: -30, side: -1 },
+  { id: 'STN-02', code: 'OLM', name: 'Old Market', x: 30, side: -1 },
+  { id: 'STN-03', code: 'TCH', name: 'Tech Park', x: 30, side: 1 },
+  { id: 'STN-04', code: 'CPL', name: 'Central Plaza', x: -30, side: 1 },
+];
+const ROUTES = { A: [0, 1, 2, 3], B: [1, 0, 3, 2] };
+
+function planRun(d) { // planned stop-to-stop run time (s) for distance d, clear-weather physics + 12% slack
+  const dFull = V_MAX * V_MAX / 2 * (1 / ACC + 1 / DEC);
+  const t = d >= dFull ? V_MAX * (1 / ACC + 1 / DEC) + (d - dFull) / V_MAX : Math.sqrt(2 * d / (1 / ACC + 1 / DEC)) * (1 / ACC + 1 / DEC);
+  return t * 1.12 + 3;
+}
+
+function buildBlocks(track, specials, maxLen) {
+  const L = track.len, sp = specials.map(s => Object.assign({}, s)).sort((p, q) => p.a - q.a);
+  const n = sp.length;
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n, wrap = j === 0 ? L : 0, gap = sp[j].a + wrap - sp[i].b;
+    if (gap < 25) {
+      if (sp[j].tag === 'PLAT') sp[j].a = sp[i].b - wrap;
+      else if (sp[i].tag === 'PLAT') sp[i].b = sp[j].a + wrap;
+    }
+  }
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    out.push(sp[i]);
+    const j = (i + 1) % n, wrap = j === 0 ? L : 0, g0 = sp[i].b, gap = sp[j].a + wrap - g0;
+    if (gap >= 25) { const k = Math.max(1, Math.round(gap / maxLen)), p = gap / k; for (let m = 0; m < k; m++) out.push({ a: g0 + m * p, b: g0 + (m + 1) * p, tag: 'LINE' }); }
+  }
+  return out;
+}
+
+function createSim(opts) {
+  opts = opts || {};
+  const rnd = mulberry32(opts.seed || 1);
+  const S = { time: 0, rnd, events: [], pax: [], eventSeq: 0, riderBase: 84210, ridersF: 0, depotBusy: false, depotVisits: 0, washActive: false, stopCount: 0 };
+  S.f = { speed: 1, brake: 1, car: 1, pax: 1, dwell: 1 }; S.season = SEASONS.clear; S.fT = Object.assign({}, S.f);
+  S.dec = DEC; S.acc = ACC; S.vcruise = V_MAX;
+  S.emit = (level, text, ref) => { S.events.push({ id: ++S.eventSeq, t: S.time, level, text, ref }); if (S.events.length > 60) S.events.shift(); };
+
+  // ---- tracks
+  const hxA = GEO.HX + GEO.OFF, hzA = GEO.HZ + GEO.OFF, rA = GEO.R + GEO.OFF;
+  const hxB = GEO.HX - GEO.OFF, hzB = GEO.HZ - GEO.OFF, rB = GEO.R - GEO.OFF;
+  const tracks = {
+    A: { id: 'A', name: 'Outer line (clockwise)', path: new Path(rrPoints(hxA, hzA, rA, 1.0), true), blocks: [], route: ROUTES.A },
+    B: { id: 'B', name: 'Inner line (anticlockwise)', path: new Path(rrPoints(hxB, hzB, rB, 1.0).reverse(), true), blocks: [], route: ROUTES.B },
+  };
+  tracks.A.len = tracks.A.path.len; tracks.B.len = tracks.B.path.len;
+  S.tracks = tracks; S.geo = { hxA, hzA, rA, hxB, hzB, rB };
+
+  // ---- stations
+  S.stations = STATIONS_DEF.map((d, i) => {
+    const st = Object.assign({ idx: i, zp: d.side * GEO.HZ, wait: { A: 20 + rnd() * 60, B: 20 + rnd() * 60 }, plat: {}, sc: {}, stopHead: {}, arrivals: { A: [], B: [] }, headway: { A: null, B: null }, alerted: false, lastArr: { A: null, B: null }, load: 0 }, d);
+    for (const k of ['A', 'B']) {
+      const zt = d.side * (k === 'A' ? hzA : hzB);
+      const sc = tracks[k].path.nearest(d.x, zt).d;
+      st.sc[k] = sc; st.stopHead[k] = mod(sc + TRAIN_LEN / 2 * (k === 'A' ? 1 : 1), tracks[k].len);
+    }
+    return st;
+  });
+
+  // ---- junction geometry on A (depot lead is mirror-symmetric about z = 0)
+  const arcA = Math.PI / 2 * rA, sNE = hxA - rA, sSE = sNE + arcA + 2 * (hzA - rA);
+  const jd = { a: sNE + 5, b: sNE + 21 }, jm = { a: sSE + arcA - 21, b: sSE + arcA - 5 };
+  const pa = tracks.A.path, P0 = pa.at(jd.a), T0z = P0.tz;
+  const Q1 = [P0.x + 16 * P0.tx, P0.z + 16 * P0.tz];
+  { /* solve straight run `a` and arc radius `Rr` so the arc ends heading south at x = DEPOT_X, z = -DEPOT_Z */
+    const m11 = P0.tx, m12 = 1 - P0.tz, m21 = P0.tz, m22 = P0.tx, r1 = DEPOT_X - Q1[0], r2 = -DEPOT_Z - Q1[1], det = m11 * m22 - m12 * m21;
+    var runA = (r1 * m22 - m12 * r2) / det, arcR = (m11 * r2 - m21 * r1) / det;
+  }
+  const half = [];
+  for (let i = 0; i < 16; i++) half.push([P0.x + P0.tx * i, P0.z + P0.tz * i]);
+  const nStraight = Math.ceil(runA);
+  for (let i = 0; i < nStraight; i++) half.push([Q1[0] + P0.tx * runA * i / nStraight, Q1[1] + P0.tz * runA * i / nStraight]);
+  const Qt = [Q1[0] + P0.tx * runA, Q1[1] + P0.tz * runA], Cc = [Qt[0] - arcR * P0.tz, Qt[1] + arcR * P0.tx], phi = Math.acos(clamp(T0z, -1, 1));
+  const r0 = [Qt[0] - Cc[0], Qt[1] - Cc[1]], nArc = Math.ceil(arcR * phi);
+  for (let i = 0; i < nArc; i++) { const th = phi * i / nArc, c = Math.cos(th), sn = Math.sin(th); half.push([Cc[0] + r0[0] * c - r0[1] * sn, Cc[1] + r0[0] * sn + r0[1] * c]); }
+  const iQ1 = 16, iE1 = half.length;
+  const lp = half.slice();
+  for (let j = 0; j < 2 * DEPOT_Z; j++) lp.push([DEPOT_X, -DEPOT_Z + j]);
+  const iE2 = lp.length;
+  for (let i = half.length - 1; i >= 0; i--) lp.push([half[i][0], -half[i][1]]);
+  const iQ2 = lp.length - 16;
+  lp.push([half[0][0], -half[0][1]]);
+  const lead = new Path(lp, false), P1 = pa.at(jm.b);
+  const dQ1 = lead.cum[iQ1], dE1 = lead.cum[iE1], dE2 = lead.cum[iE2], dQ2 = lead.cum[iQ2];
+  S.lead = lead; S.leadMarks = { dQ1, dE1, dE2, dQ2, arcR, runA, jdEnd: P1 };
+
+  // ---- blocks
+  const mkBlock = (id, track, a, b, tag, path, extra) => {
+    const bl = Object.assign({ id, track, a, b, tag, path, len: path.len, next: null, nextBranch: null, branch: null, owner: null, occ: false, ring: null, vlim: V_MAX, station: -1 }, extra || {});
+    // curvature => speed limit
+    let curved = false; const o1 = {}, o2 = {};
+    for (let d = 0; d + 4 <= path.len; d += 4) { path.at(d, o1); path.at(d + 4, o2); if (Math.abs(o1.tx * o2.tz - o1.tz * o2.tx) > 0.05) { curved = true; break; } }
+    bl.vlim = (extra && extra.vlim) || (tag === 'PLAT' ? 7.5 : curved ? 8.5 : V_MAX);
+    return bl;
+  };
+  S.blocks = []; S.rings = {};
+  for (const k of ['A', 'B']) {
+    const tr = tracks[k], L = tr.len, specials = [];
+    S.stations.forEach(st => { const a = mod(st.sc[k] - PLAT_HALF, L); specials.push({ a, b: a + 2 * PLAT_HALF, tag: 'PLAT', st: st.idx }); });
+    if (k === 'A') { specials.push({ a: jd.a, b: jd.b, tag: 'JD' }); specials.push({ a: jm.a, b: jm.b, tag: 'JM' }); }
+    const list = buildBlocks(tr, specials, 28);
+    const ring = { blocks: [], free() { let n = 0; for (const b of this.blocks) if (!b.owner) n++; return n; } };
+    list.forEach((sp, i) => {
+      const bl = mkBlock(k + String(i + 1).padStart(2, '0'), k, sp.a, sp.b, sp.tag, tr.path.slice(sp.a, sp.b, 1), { ring, idx: i, station: sp.tag === 'PLAT' ? sp.st : -1 });
+      if (sp.tag === 'PLAT') S.stations[sp.st].plat[k] = bl;
+      if (sp.tag === 'JD') S.JD = bl; if (sp.tag === 'JM') S.JM = bl;
+      ring.blocks.push(bl); tr.blocks.push(bl); S.blocks.push(bl);
+    });
+    ring.blocks.forEach((b, i) => { b.next = ring.blocks[(i + 1) % ring.blocks.length]; });
+    S.rings[k] = ring;
+  }
+  S.JD.branch = lead.slice(0, dQ1, 1); S.JM.branch = lead.slice(dQ2, lead.len, 1);
+  const L1 = mkBlock('L01', 'L', 0, 0, 'LEAD', lead.slice(dQ1, dE1, 1), { vlim: 6 });
+  const W1 = mkBlock('W01', 'L', 0, 0, 'WASH', lead.slice(dE1, dE2, 1), { vlim: 1.8 });
+  const L2 = mkBlock('L02', 'L', 0, 0, 'LEAD', lead.slice(dE2, dQ2, 1), { vlim: 6 });
+  L1.next = W1; W1.next = L2; L2.next = S.JM; S.JD.nextBranch = L1;
+  S.JD.vlim = 6.5; S.JM.vlim = 6.5;
+  S.leadBlocks = [L1, W1, L2]; S.WASH = W1; S.blocks.push(L1, W1, L2);
+  tracks.L = { id: 'L', name: 'Depot lead', path: lead, blocks: [L1, W1, L2] };
+  // signals: one per block, at block entry
+  S.signals = S.blocks.map(b => { const sg = { id: 'SIG-' + b.id, block: b, aspect: 'G', since: 0, changes: 0 }; b.sig = sg; return sg; });
+
+  // ---- trains
+  const tmpA = { x: 0, z: 0, tx: 1, tz: 0 }, tmpB = { x: 0, z: 0, tx: 1, tz: 0 };
+  class Train {
+    constructor(num, track, parked) {
+      this.num = num; this.id = 'RG-' + num; this.track = track; this.route = track ? track.route : null; this.parked = !!parked;
+      this.ncars = NCARS; this.length = TRAIN_LEN; this.segs = []; this.s = 0; this.v = 0; this.state = parked ? 'parked' : 'run'; this.stopS = null;
+      this.load = 40 + Math.floor(rnd() * 80); this.open = 0; this.toDepot = false; this.lapsSinceWash = 0; this.stopsDone = 0;
+      this.delay = 0; this.plannedArr = 0; this.schedDep = 0; this.nextStation = null; this.curStation = null; this.dw = null;
+      this.departT = -99; this.heldSince = null; this.heldReported = false; this.clampHits = 0; this.phase = 'section'; this.lastHeadway = null; this.ts = 0; this.washed = 0;
+    }
+    sample(d, o) { const sg = this.segs; let k = sg.length - 1; while (k > 0 && d < sg[k].start) k--; return sg[k].path.at(d - sg[k].start, o); }
+    carPose(i, o) {
+      const c = i * (CAR_L + CAR_GAP) + CAR_L / 2;
+      o.l = CAR_L; o.w = CAR_W;
+      if (this.parked) { o.x = PARK.headX + c; o.z = PARK.z; o.yaw = Math.PI; return o; }
+      const f = this.sample(this.s - c + 1.9, tmpA), r = this.sample(this.s - c - 1.9, tmpB);
+      o.x = (f.x + r.x) / 2; o.z = (f.z + r.z) / 2; o.yaw = Math.atan2(-(f.z - r.z), f.x - r.x);
+      return o;
+    }
+    headBlock() { const sg = this.segs; for (let k = sg.length - 1; k >= 0; k--) if (this.s >= sg[k].start) return sg[k].block; return sg[0].block; }
+    nextBlock(b) { return (b === S.JD && this.toDepot) ? b.nextBranch : b.next; }
+    pathOf(nb, prev) { if (nb === S.JD && this.toDepot) return nb.branch; if (nb === S.JM && prev.track === 'L') return nb.branch; return nb.path; }
+    reserve(last, endS) {
+      const nb = this.nextBlock(last.block);
+      if (!nb || (nb.owner && nb.owner !== this)) return false;
+      if (nb.ring) {
+        const free = nb.ring.free(), fromLead = last.block.track === 'L', mand = !fromLead && this.s >= last.start;
+        if (fromLead ? free < 3 : mand ? false : free < OPT_FREE) return false;
+      }
+      nb.owner = this;
+      this.segs.push({ block: nb, path: this.pathOf(nb, last.block), start: endS });
+      if (nb === S.JM && last.block.track === 'L') { this.toDepot = false; this.lapsSinceWash = 0; this.washed++; S.depotBusy = false; S.depotVisits++; S.emit('info', this.id + ' washed, rejoining the main line', { type: 'train', id: this.id }); }
+      if (nb === S.WASH) S.emit('info', this.id + ' entering depot wash', { type: 'train', id: this.id });
+      return true;
+    }
+    extend(need) {
+      for (let g = 0; g < 8; g++) {
+        const last = this.segs[this.segs.length - 1], endS = last.start + last.path.len;
+        if (endS - this.s >= need) return;
+        if (!this.reserve(last, endS)) return;
+      }
+    }
+    scanStop() {
+      if (this.stopS !== null || !this.nextStation) return;
+      for (const sg of this.segs) if (sg.block.tag === 'PLAT' && sg.block.station === this.nextStation.idx && sg.start + sg.path.len > this.s) {
+        const v = sg.start + mod(this.nextStation.stopHead[this.track.id] - sg.block.a, this.track.len);
+        if (v > this.s - 1e-6) this.stopS = v;
+      }
+    }
+    arrive() {
+      const st = this.nextStation, dir = this.track.id;
+      this.state = 'dwell'; this.v = 0; this.curStation = st; this.stopS = null; this.stopsDone++; S.stopCount++;
+      const arrT = S.time; this.delay = arrT - this.plannedArr;
+      S.arr.push(this.delay <= 45 ? 1 : 0); if (S.arr.length > 30) S.arr.shift();
+      if (this.delay > 60) S.emit('warn', this.id + ' ' + Math.round(this.delay) + ' s late at ' + st.name, { type: 'train', id: this.id });
+      if (st.lastArr[dir] !== null) { st.headway[dir] = arrT - st.lastArr[dir]; this.lastHeadway = st.headway[dir]; }
+      st.lastArr[dir] = arrT;
+      const a = Math.round(this.load * (0.18 + 0.24 * rnd())), b = Math.min(Math.round(st.wait[dir]), Math.max(0, CAP - (this.load - a)));
+      const exch = clamp(4 + (a + b) / 8, 4, 16) * S.f.dwell;
+      this.dw = { t: 0, a, b, exch, pPrev: 0, accA: 0, accB: 0 };
+      this.schedDep = Math.max(arrT + 2 + exch + 3, this.plannedArr + 18 * S.f.dwell);
+    }
+    leave() {
+      const st = this.curStation, dir = this.track.id, route = this.route;
+      this.state = 'run'; this.open = 0; this.departT = S.time; this.dw = null;
+      const i = route.indexOf(st.idx), nx = S.stations[route[(i + 1) % route.length]];
+      if (dir === 'A' && st.idx === 0) {
+        this.lapsSinceWash++;
+        if (this.lapsSinceWash >= 3 && !S.depotBusy) { this.toDepot = true; S.depotBusy = true; }
+      }
+      const planDep = this.plannedArr + 18 * S.f.dwell, legD = mod(nx.stopHead[dir] - st.stopHead[dir], this.track.len), plan = planRun(legD) + (this.toDepot && st.idx === 1 ? 60 : 0);
+      this.plannedArr = Math.max(planDep + plan, S.time + plan - 60); // regulator never lets the plan fall >60 s behind
+      this.nextStation = nx; this.stopS = null;
+    }
+    dwellStep(dt) {
+      const dw = this.dw, st = this.curStation, dir = this.track.id;
+      dw.t += dt;
+      const t = dw.t, ex = dw.exch;
+      this.open = t < 2 ? t / 2 : t < 2 + ex ? 1 : t < 4 + ex ? 1 - (t - 2 - ex) / 2 : 0;
+      const p = clamp((t - 2) / ex, 0, 1), dp = p - dw.pPrev; dw.pPrev = p;
+      if (dp > 0) {
+        this.load += (dw.b - dw.a) * dp; st.wait[dir] = Math.max(0, st.wait[dir] - dw.b * dp); S.ridersF += dw.b * dp;
+        dw.accA += dw.a * dp; dw.accB += dw.b * dp;
+        while (dw.accA >= 1) { dw.accA -= 1; if (S.pax.length < 300) S.pax.push({ kind: 'alight', st: st.idx, dir, car: Math.floor(rnd() * NCARS), door: rnd() < 0.5 ? 0 : 1, train: this.id }); }
+        while (dw.accB >= 1) { dw.accB -= 1; if (S.pax.length < 300) S.pax.push({ kind: 'board', st: st.idx, dir, car: Math.floor(rnd() * NCARS), door: rnd() < 0.5 ? 0 : 1, train: this.id }); }
+      }
+      this.phase = t < 2 ? 'doors' : t < 2 + ex ? 'boarding' : 'ready';
+      if (t >= 5 + ex && S.time >= this.schedDep) this.leave();
+    }
+    update(dt) {
+      if (this.parked) return;
+      if (this.state === 'dwell') { this.dwellStep(dt); return; }
+      const dec = S.dec;
+      this.scanStop();
+      let need = this.v * this.v / (2 * dec) + 4;
+      if (this.stopS !== null) need = Math.min(need, this.stopS - this.s + 2);
+      this.extend(need);
+      this.scanStop();
+      const last = this.segs[this.segs.length - 1], endS = last.start + last.path.len;
+      let target = endS - 1.5, isStop = false;
+      if (this.stopS !== null && this.stopS <= target) { target = this.stopS; isStop = true; }
+      let vlim = S.vcruise;
+      for (const sg of this.segs) {
+        if (sg.start + sg.path.len <= this.s) continue;
+        { const bl = sg.block.vlim * (sg.block === S.WASH ? 1 : S.f.speed); vlim = Math.min(vlim, Math.sqrt(bl * bl + 2 * dec * Math.max(0, sg.start - this.s))); }
+      }
+      const vt = Math.min(vlim, Math.sqrt(2 * dec * Math.max(0, target - this.s)));
+      this.v = vt > this.v ? Math.min(vt, this.v + S.acc * dt) : Math.max(vt, this.v - EMERG * dt);
+      if (this.s + this.v * dt >= target - 1e-9) { this.s = Math.max(this.s, target); this.v = 0; } else this.s += this.v * dt;
+      if (this.s > endS - 0.05) { this.s = endS - 0.05; this.v = 0; this.clampHits++; }
+      if (isStop && this.s >= this.stopS - 1e-9) { this.s = this.stopS; this.arrive(); }
+      // release tail blocks
+      const tail = this.s - TRAIN_LEN - 0.6;
+      while (this.segs.length > 1 && this.segs[0].start + this.segs[0].path.len < tail) this.segs.shift().block.owner = null;
+      // bookkeeping
+      const hb = this.headBlock(), sg0 = this.segs.find(x => x.block === hb);
+      if (hb.track !== 'L' && sg0 && sg0.path === hb.path) this.ts = hb.a + (this.s - sg0.start);
+      if (this.state === 'run') {
+        if (this.v < 0.02) {
+          if (this.heldSince === null) this.heldSince = S.time;
+          else if (!this.heldReported && S.time - this.heldSince > 12 && !isStop) { this.heldReported = true; const nb = this.nextBlock(last.block); S.emit('warn', this.id + ' held at ' + (nb ? nb.sig.id : 'signal') + ', block ahead occupied', { type: 'train', id: this.id }); }
+        } else { this.heldSince = null; this.heldReported = false; }
+        const dStop = this.stopS !== null ? this.stopS - this.s : 1e9;
+        this.phase = hb === S.WASH ? 'wash' : (S.time - this.departT < 6 && this.v < vlim - 0.5 && dStop > 60) ? 'depart' : dStop < 55 ? 'arriving' : 'section';
+      }
+    }
+    held() { return this.state === 'run' && this.heldSince !== null && S.time - this.heldSince > 1; }
+  }
+
+  S.arr = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+  S.trains = [];
+  const mk = (num, tk, stIdx, depAt, laps) => {
+    const T = new Train(num, tracks[tk], false), st = S.stations[stIdx], blk = st.plat[tk];
+    T.segs = [{ block: blk, path: blk.path, start: 0 }]; blk.owner = T;
+    T.s = mod(st.stopHead[tk] - blk.a, tracks[tk].len); T.curStation = st; T.nextStation = st; T.plannedArr = 0; T.lapsSinceWash = laps || 0;
+    T.state = 'dwell'; T.dw = { t: 2.5, a: 0, b: 0, exch: 6 + rnd() * 4, pPrev: 0, accA: 0, accB: 0 }; T.open = 1;
+    T.stopS = null; T.schedDep = depAt; T.plannedArr = depAt - 16;
+    S.trains.push(T); return T;
+  };
+  mk(101, 'A', 0, 3, 2); mk(103, 'A', 2, 14, 0); mk(105, 'A', 3, 26, 0);
+  mk(102, 'B', 1, 8, 0); mk(104, 'B', 3, 20, 0); mk(106, 'B', 2, 32, 0);
+  S.trains.push(new Train(107, null, true));
+  S.trainById = {}; S.trains.forEach(t => { S.trainById[t.id] = t; });
+  S.parkPose = (i, o) => S.trains[6].carPose(i, o);
+
+  // ---- road lanes
+  S.lanes = [];
+  const mkLane = (id, hx, hz, r, off, cw, n, vb, kind) => {
+    let pts = rrPoints(hx + off, hz + off, r + off, 1.5); if (!cw) pts.reverse();
+    const path = new Path(pts, true), cars = [];
+    for (let i = 0; i < n; i++) {
+      const bus = rnd() < 0.14;
+      cars.push({ s: (i + rnd() * 0.3) * path.len / n, v: vb * 0.8, len: bus ? 6.2 : 3.6, bus, vfree: vb * (0.75 + rnd() * 0.5), retarget: rnd() * 15, hue: Math.floor(rnd() * 5), lane: id });
+    }
+    const ln = { id, path, len: path.len, cars, vb, kind, off, cw };
+    S.lanes.push(ln); return ln;
+  };
+  const cl = GEO;
+  mkLane('R1', cl.HX, cl.HZ, cl.R, 5.2, true, 9, 8, 'ring'); mkLane('R2', cl.HX, cl.HZ, cl.R, 2.6, true, 8, 8.5, 'ring');
+  mkLane('R3', cl.HX, cl.HZ, cl.R, -2.6, false, 8, 8.5, 'ring'); mkLane('R4', cl.HX, cl.HZ, cl.R, -5.2, false, 9, 8, 'ring');
+  mkLane('C1', 40, 14, 10, 1.8, true, 6, 6.5, 'coll'); mkLane('C2', 40, 14, 10, -1.8, false, 6, 6.5, 'coll');
+  S.carPose = (ln, i, o) => { ln.path.at(ln.cars[i].s, o); o.yaw = Math.atan2(-o.tz, o.tx); return o; };
+
+  S.setSeason = (key) => {
+    const se = SEASONS[key] || SEASONS.clear; if (S.season === se) return;
+    S.season = se; S.fT = { speed: se.speed, brake: se.brake, car: se.car, pax: se.pax, dwell: se.dwell };
+    S.emit(key === 'clear' ? 'info' : 'warn', 'Season set to ' + se.name + ': ' + se.note, { type: 'weather' });
+  };
+
+  const laneTmp = { x: 0, z: 0, tx: 1, tz: 0 };
+  S.step = (dt) => {
+    S.time += dt;
+    for (const k in S.f) S.f[k] += clamp(S.fT[k] - S.f[k], -0.25 * dt, 0.25 * dt);
+    S.dec = DEC * S.f.brake; S.acc = ACC * Math.sqrt(S.f.brake); S.vcruise = V_MAX * S.f.speed;
+    for (const st of S.stations) {
+      for (const d of ['A', 'B']) {
+        const lam = 0.85 * S.f.pax * (0.75 + 0.25 * Math.sin(S.time / 37 + st.idx * 1.7 + (d === 'A' ? 0 : 2)));
+        st.wait[d] = Math.min(ST_CAP / 2, st.wait[d] + lam * dt);
+      }
+      const c = (st.wait.A + st.wait.B) / ST_CAP; st.load = c;
+      if (c > 0.85 && !st.alerted) { st.alerted = true; S.emit('warn', 'Platform crowding at ' + st.name + ' ' + Math.round(c * 100) + '%', { type: 'station', id: st.id }); }
+      else if (c < 0.7) st.alerted = false;
+    }
+    for (const t of S.trains) t.update(dt);
+    for (const b of S.blocks) b.occ = false;
+    for (const t of S.trains) if (!t.parked) for (const sg of t.segs) if (t.s > sg.start) sg.block.occ = true;
+    S.washActive = !!(S.WASH.owner && S.WASH.occ);
+    for (const sg of S.signals) {
+      const b = sg.block; let a;
+      if (b.owner) a = b.occ ? 'R' : 'G'; else a = (b.next && b.next.owner) ? 'Y' : 'G';
+      if (a !== sg.aspect) { sg.aspect = a; sg.since = S.time; sg.changes++; }
+    }
+    for (const ln of S.lanes) {
+      const cs = ln.cars, n = cs.length;
+      for (let i = 0; i < n; i++) {
+        const c = cs[i], l = cs[(i + 1) % n];
+        c.retarget -= dt; if (c.retarget <= 0) { c.retarget = 10 + rnd() * 15; c.vfree = ln.vb * (0.7 + rnd() * 0.6); }
+        const gap = mod(l.s - c.s, ln.len) - l.len;
+        const vsafe = Math.sqrt(2 * 4 * Math.max(0, gap - 1.6));
+        const vt = Math.min(c.vfree * S.f.car, vsafe);
+        c.v = vt > c.v ? Math.min(vt, c.v + 2.4 * dt) : Math.max(vt, c.v - 9 * dt);
+        c.s += c.v * dt;
+      }
+      for (const c of cs) if (c.s >= ln.len) c.s -= ln.len;
+    }
+  };
+  S.stats = () => {
+    const per = {}; let inService = 0, total = 0;
+    for (const t of S.trains) { per[t.id] = t.stopsDone; total++; if (!t.parked && t.state !== 'parked' && !(t.headBlock && t.segs.length && t.headBlock().track === 'L')) inService++; }
+    return { stops: S.stopCount, depotVisits: S.depotVisits, onTimePct: S.arr.length ? Math.round(100 * S.arr.reduce((a, b) => a + b, 0) / S.arr.length) : 100, riders: Math.round(S.riderBase + S.ridersF), perTrainStops: per, inService, fleet: total };
+  };
+  S.etaTo = (T, st) => {
+    if (T.parked) return null;
+    const route = T.route, dir = T.track.id, lenRoute = route.length;
+    let eta = 0, cur;
+    if (T.state === 'dwell') { cur = T.curStation; eta = Math.max(0, T.schedDep - S.time); if (cur === st) return 0; }
+    else { cur = T.nextStation; eta = T.stopS !== null ? Math.max(0, T.stopS - T.s) / Math.max(T.v, 5) + 1 : mod(cur.stopHead[dir] - (T.ts || 0), T.track.len) / 7.5 + 1; if (cur === st) return eta; }
+    const dwelling = T.state === 'dwell';
+    for (let k = 0; k < lenRoute; k++) {
+      const i = route.indexOf(cur.idx), nx = S.stations[route[(i + 1) % lenRoute]];
+      const dd = mod(nx.stopHead[dir] - cur.stopHead[dir], T.track.len), kk = 1 / S.acc + 1 / S.dec, dF = S.vcruise * S.vcruise / 2 * kk; // first leg from a dwell: season physics (vcruise/acc/dec)
+      eta += dwelling && k === 0 ? (dd >= dF ? S.vcruise * kk + (dd - dF) / S.vcruise : Math.sqrt(2 * dd / kk) * kk) + 1 : planRun(dd) + 16; cur = nx; if (cur === st) return eta;
+    }
+    return eta;
+  };
+  return S;
+}
+// ==SIM-END==
+
+// ================================================================
+//  3D layer: renderer, helpers, materials
+// ================================================================
+const $ = (id) => document.getElementById(id);
+const IS_TOUCH = matchMedia('(pointer:coarse)').matches;
+const sim = createSim({ seed: 11 });
+const Y_DECK = 6.5, Y_RAIL = 6.85, Y_PLAT = 7.1, Y_BRIDGE = 11.5;
+const GREEN = 0x00a86b;
+const ST = sim.stations, TRN = sim.trains;
+
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, IS_TOUCH ? 1.5 : 2));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xe6ebee);
+scene.fog = new THREE.FogExp2(0xe6ebee, 0.0007);
+const camera = new THREE.PerspectiveCamera(26, window.innerWidth / window.innerHeight, 2, 2200);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.09;
+controls.screenSpacePanning = false;
+controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE };
+controls.minDistance = 16; controls.maxDistance = 360;
+controls.minPolarAngle = 0.18; controls.maxPolarAngle = 1.32;
+controls.panSpeed = 1.1; controls.rotateSpeed = 0.7; controls.zoomSpeed = 0.9;
+
+// ---- materials -------------------------------------------------
+const NIGHT = { value: 0 };           // 0 day .. 1 night, shared with window shader
+const matList = [];                   // standard mats whose env intensity follows daylight
+const wetList = [];                   // mats that go darker/glossier in rain
+const glowList = [];                  // emissive mats scaled by night
+function clay(color, rough, extra) {
+  const m = new THREE.MeshStandardMaterial(Object.assign({ color, roughness: rough === undefined ? 0.88 : rough, metalness: 0 }, extra));
+  matList.push(m); return m;
+}
+function wetMat(color, rough, wetRough) {
+  const m = clay(color, rough);
+  wetList.push({ m, r0: rough, r1: wetRough, c0: new THREE.Color(color), c1: new THREE.Color(color).multiplyScalar(0.78) });
+  return m;
+}
+function glowMat(color, emissive, max, rough) {
+  const m = clay(color, rough === undefined ? 0.5 : rough, { emissive: new THREE.Color(emissive), emissiveIntensity: 0 });
+  glowList.push({ m, max }); return m;
+}
+const M = {
+  ground: wetMat(0xdde0e2, 0.92, 0.45), groundSide: clay(0xc5cacd), base: clay(0xaab0b5),
+  road: wetMat(0xaeb4b9, 0.95, 0.3), sidewalk: clay(0xe9ebec), pad: clay(0xd3d7da),
+  deck: wetMat(0xcfd3d6, 0.85, 0.4), parapet: clay(0xf1f2f3), accent: clay(GREEN, 0.6),
+  ballast: wetMat(0x8e969c, 0.95, 0.5), rail: wetMat(0x6b7379, 0.4, 0.15), sleeper: clay(0x9aa1a6),
+  pillar: clay(0xe3e5e7), steel: clay(0xd8dbdd, 0.5), dark: clay(0x3b444b, 0.7),
+  water: clay(0x9dc6c4, 0.25, { transparent: true, opacity: 0.88 }), bed: clay(0x8ea7a8),
+  glass: clay(0xbfe9d8, 0.15, { transparent: true, opacity: 0.32, depthWrite: false }),
+  roofGlass: clay(0xcdeee0, 0.15, { transparent: true, opacity: 0.22, depthWrite: false }),
+  platform: clay(0xeef0f1), canopy: clay(0xf5f6f7), tower: clay(0xe9ebed),
+  tree1: clay(GREEN, 0.9), tree2: clay(0x2fbf86, 0.9), tree3: clay(0x6fd3a6, 0.9), park: clay(0xbfe6d3, 0.95),
+  white: clay(0xffffff),
+};
+M.pillar.side = THREE.FrontSide;
+for (const k of ['deck', 'ballast', 'road', 'sidewalk', 'parapet', 'accent', 'rail']) M[k].side = THREE.DoubleSide;
+M.stripLight = glowMat(0xffffff, 0xffe2a8, 2.2);
+M.windowGlass = glowMat(0x22323b, 0xffd9a0, 1.1, 0.25);
+M.doorSlot = glowMat(0xefe4cf, 0xffe0a8, 1.2, 0.6);
+M.lampHead = glowMat(0xf4f4f4, 0xfff0c8, 3.0);
+M.signHead = clay(0x363e44, 0.6);
+M.trainBody = clay(0xffffff, 0.55, { vertexColors: true });
+M.doorPanel = clay(GREEN, 0.5);
+M.headLight = new THREE.MeshBasicMaterial({ color: 0xfff6d6 });
+M.tailLight = new THREE.MeshBasicMaterial({ color: 0xff3b30 });
+M.carBody = clay(0xffffff, 0.6, { vertexColors: true });
+
+// window shader for city buildings (world-space window grid, lit at night)
+function windowed(material) {
+  material.onBeforeCompile = (sh) => {
+    sh.uniforms.uNight = NIGHT;
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vWp; varying vec3 vWn;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\n#ifdef USE_INSTANCING\nvec4 wp4 = modelMatrix * instanceMatrix * vec4(transformed, 1.0); vWn = normalize(mat3(modelMatrix) * mat3(instanceMatrix) * objectNormal);\n#else\nvec4 wp4 = modelMatrix * vec4(transformed, 1.0); vWn = normalize(mat3(modelMatrix) * objectNormal);\n#endif\nvWp = wp4.xyz;');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform float uNight; varying vec3 vWp; varying vec3 vWn;')
+      .replace('void main() {', 'void main() {\nfloat winMask = 0.0;')
+      .replace('#include <map_fragment>', `#include <map_fragment>
+      {
+        float vert = step(abs(vWn.y), 0.5);
+        float u = abs(vWn.x) > abs(vWn.z) ? vWp.z : vWp.x;
+        vec2 cell = vec2(u / 2.5, vWp.y / 3.0);
+        vec2 f = fract(cell); vec2 id = floor(cell);
+        float win = step(0.2, f.x) * step(f.x, 0.8) * step(0.24, f.y) * step(f.y, 0.78) * step(2.4, vWp.y) * vert;
+        float h = fract(sin(dot(id, vec2(12.9898, 78.233))) * 43758.5453);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.52, 0.62, 0.68), win * 0.8);
+        winMask = win * step(0.5, h);
+      }`)
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.8, 0.5) * winMask * uNight * 1.3;');
+  };
+  material.customProgramCacheKey = () => 'windowed';
+  return material;
+}
+
+// ---- geometry helpers -------------------------------------------
+const _m4 = new THREE.Matrix4(), _q = new THREE.Quaternion(), _e = new THREE.Euler(), _v = new THREE.Vector3(), _s = new THREE.Vector3(), _c = new THREE.Color();
+function tint(geo, color, x, y, z, ry) {
+  if (ry) geo.rotateY(ry);
+  geo.translate(x || 0, y || 0, z || 0);
+  if (geo.index) geo = geo.toNonIndexed();
+  const n = geo.attributes.position.count, c = new THREE.Color(color), a = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { a[i * 3] = c.r; a[i * 3 + 1] = c.g; a[i * 3 + 2] = c.b; }
+  geo.setAttribute('color', new THREE.BufferAttribute(a, 3));
+  return geo;
+}
+const bx = (w, h, d, color, x, y, z, ry) => tint(new THREE.BoxGeometry(w, h, d), color, x, y, z, ry);
+const rbx = (w, h, d, r, color, x, y, z) => tint(new RoundedBoxGeometry(w, h, d, 3, r), color, x, y, z);
+function mesh(geo, mat, cast, recv) { const m = new THREE.Mesh(geo, mat); m.castShadow = cast !== false; m.receiveShadow = recv !== false; return m; }
+function plainBox(w, h, d, mat, x, y, z, cast) { const m = mesh(new THREE.BoxGeometry(w, h, d), mat, cast !== false, true); m.position.set(x, y, z); return m; }
+
+// left-of-travel ribbon along a polyline: offsets o0..o1 (positive = left), heights y0..y1
+function ribbon(pts, closed, o0, o1, y0, y1) {
+  const n = pts.length, segs = closed ? n : n - 1, N = [];
+  for (let i = 0; i < n; i++) {
+    const a = pts[closed ? (i - 1 + n) % n : Math.max(0, i - 1)], b = pts[closed ? (i + 1) % n : Math.min(n - 1, i + 1)];
+    let tx = b[0] - a[0], tz = b[1] - a[1]; const l = Math.hypot(tx, tz) || 1; N.push([tz / l, -tx / l]);
+  }
+  const pos = [], nor = [], idx = [], flat = y1 - y0 < 1e-4;
+  const v = (i, o, y) => [pts[i][0] + N[i][0] * o, y, pts[i][1] + N[i][1] * o];
+  const quad = (a, b, c, d, nn) => {
+    const base = pos.length / 3;
+    for (const p of [a, b, c, d]) { pos.push(p[0], p[1], p[2]); nor.push(nn[0], nn[1], nn[2]); }
+    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], wx = c[0] - a[0], wy = c[1] - a[1], wz = c[2] - a[2];
+    const cx = uy * wz - uz * wy, cy = uz * wx - ux * wz, cz = ux * wy - uy * wx;
+    if (cx * nn[0] + cy * nn[1] + cz * nn[2] >= 0) idx.push(base, base + 1, base + 2, base, base + 2, base + 3); else idx.push(base, base + 2, base + 1, base, base + 3, base + 2);
+  };
+  for (let i = 0; i < segs; i++) {
+    const j = (i + 1) % n, sgn = o1 >= o0 ? 1 : -1;
+    quad(v(i, o0, y1), v(j, o0, y1), v(j, o1, y1), v(i, o1, y1), [0, 1, 0]);
+    if (flat) continue;
+    quad(v(i, o1, y0), v(j, o1, y0), v(j, o0, y0), v(i, o0, y0), [0, -1, 0]);
+    let nx = (N[i][0] + N[j][0]) / 2, nz = (N[i][1] + N[j][1]) / 2; const l = Math.hypot(nx, nz) || 1; nx /= l; nz /= l;
+    quad(v(i, o1, y0), v(j, o1, y0), v(j, o1, y1), v(i, o1, y1), [nx * sgn, 0, nz * sgn]);
+    quad(v(i, o0, y1), v(j, o0, y1), v(j, o0, y0), v(i, o0, y0), [-nx * sgn, 0, -nz * sgn]);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+  g.setIndex(idx); g.computeBoundingSphere();
+  return g;
+}
+function addRibbon(pts, closed, o0, o1, y0, y1, mat, cast, recv, parent) {
+  const m = new THREE.Mesh(ribbon(pts, closed, o0, o1, y0, y1), mat);
+  m.castShadow = !!cast; m.receiveShadow = recv !== false; (parent || scene).add(m); return m;
+}
+// instanced helper: fill from array of {x,y,z,ry,sx,sy,sz,color}
+function instanced(geo, mat, list, cast, recv) {
+  const im = new THREE.InstancedMesh(geo, mat, Math.max(1, list.length));
+  im.count = list.length;
+  list.forEach((o, i) => {
+    _e.set(o.rx || 0, o.ry || 0, o.rz || 0); _q.setFromEuler(_e);
+    _m4.compose(_v.set(o.x, o.y, o.z), _q, _s.set(o.sx === undefined ? 1 : o.sx, o.sy === undefined ? 1 : o.sy, o.sz === undefined ? 1 : o.sz));
+    im.setMatrixAt(i, _m4);
+    if (o.color !== undefined) im.setColorAt(i, _c.set(o.color));
+  });
+  im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true;
+  im.castShadow = !!cast; im.receiveShadow = recv !== false; scene.add(im); return im;
+}
+function labelTexture(text, sub, w, h, bg, fg) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d');
+  g.fillStyle = bg; g.fillRect(0, 0, w, h);
+  g.fillStyle = fg; g.font = '700 ' + Math.round(h * 0.46) + 'px Inter, system-ui, sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left';
+  g.fillText(text, h * 0.35, h * 0.5);
+  if (sub) { g.font = '600 ' + Math.round(h * 0.28) + 'px Inter, system-ui, sans-serif'; g.textAlign = 'right'; g.globalAlpha = 0.85; g.fillText(sub, w - h * 0.35, h * 0.5); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+function glowTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,236,190,1)'); gr.addColorStop(0.35, 'rgba(255,214,150,.45)'); gr.addColorStop(1, 'rgba(255,200,120,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 128, 128); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function discTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.beginPath(); g.arc(32, 32, 30, 0, TAU); g.fill(); return new THREE.CanvasTexture(c);
+}
+const pickList = [];   // meshes the raycaster tests
+
+// ================================================================
+//  World: lights, ground, river, roads, viaduct, stations, depot, city
+// ================================================================
+const hemi = new THREE.HemisphereLight(0xeaf1f5, 0xc9c3ba, 0.9); scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff2dc, 2.4);
+sun.castShadow = true; sun.shadow.mapSize.set(IS_TOUCH ? 1024 : 2048, IS_TOUCH ? 1024 : 2048);
+Object.assign(sun.shadow.camera, { left: -175, right: 175, top: 125, bottom: -125, near: 20, far: 700 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.45; sun.shadow.radius = 3;
+scene.add(sun, sun.target);
+const moon = new THREE.DirectionalLight(0x86a2ff, 0); moon.position.set(-120, 200, -80); scene.add(moon);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+
+const G = GEO, CL = rrPoints(G.HX, G.HZ, G.R, 1.5), clPath = new Path(CL, true);
+const lead = sim.lead, tA = sim.tracks.A.path, tB = sim.tracks.B.path;
+
+// ---- ground slab, river, base ----------------------------------
+{
+  const sides = [M.groundSide, M.groundSide, M.ground, M.groundSide, M.groundSide, M.groundSide];
+  for (const sx of [-1, 1]) { const m = new THREE.Mesh(new THREE.BoxGeometry(143, 8, 192), sides); m.position.set(sx * 78.5, -4, 0); m.receiveShadow = true; m.castShadow = true; scene.add(m); }
+  scene.add(plainBox(14.2, 5, 192, M.bed, 0, -5.5, 0, false));
+  scene.add(plainBox(316, 10, 204, M.base, 0, -13, 0, false));
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(14, 192), M.water); water.rotation.x = -Math.PI / 2; water.position.y = -1.4; water.receiveShadow = true; scene.add(water);
+}
+const flowList = [];
+for (let i = 0; i < 40; i++) flowList.push({ x: -5.5 + ((i * 37) % 11), y: -1.36, z: -96 + i * 4.8, sx: 1, sz: 1 });
+const flow = instanced(new THREE.BoxGeometry(0.35, 0.02, 3.2), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.45 }), flowList, false, false);
+
+// ---- ring road + collector -------------------------------------
+addRibbon(CL, true, -7, 7, 0, 0.08, M.road, false, true);
+addRibbon(CL, true, -1.3, 1.3, 0.08, 0.13, M.sidewalk, false, true);
+addRibbon(CL, true, 7, 8.6, 0, 0.2, M.sidewalk, false, true);
+addRibbon(CL, true, -8.6, -7, 0, 0.2, M.sidewalk, false, true);
+const COL = rrPoints(40, 14, 10, 1.5), colPath = new Path(COL, true);
+addRibbon(COL, true, -3.6, 3.6, 0, 0.08, M.road, false, true);
+addRibbon(COL, true, 3.6, 4.8, 0, 0.2, M.sidewalk, false, true);
+addRibbon(COL, true, -4.8, -3.6, 0, 0.2, M.sidewalk, false, true);
+{
+  const dashes = [], o = {};
+  const dash = (path, offs, step) => { for (let d = 0; d < path.len; d += step) { path.at(d, o); for (const f of offs) dashes.push({ x: o.x + o.tz * f, y: 0.1, z: o.z - o.tx * f, ry: Math.atan2(-o.tz, o.tx) }); } };
+  dash(clPath, [-3.9, 3.9], 6); dash(clPath, [-6.6, 6.6], 2.2); dash(colPath, [0], 5);
+  instanced(new THREE.BoxGeometry(2.2, 0.02, 0.16), new THREE.MeshBasicMaterial({ color: 0xf4f6f7 }), dashes, false, false);
+  // road bridges over the river
+  for (const [zc, w] of [[-38, 15], [38, 15], [-14, 7.6], [14, 7.6]]) {
+    scene.add(plainBox(16.4, 1.4, w, M.sidewalk, 0, -0.7, zc, true));
+    for (const e of [-1, 1]) scene.add(plainBox(16.4, 0.6, 0.3, M.parapet, 0, 0.3, zc + e * (w / 2 - 0.15), true));
+  }
+}
+
+// ---- viaduct deck, tracks --------------------------------------
+addRibbon(CL, true, -6.1, 6.1, 6.0, 6.5, M.deck, true, true);
+const PARAPETS = [[CL, true, 5.75, 6.1], [CL, true, -6.1, -5.75], [lead.pts, false, 2.55, 2.9], [lead.pts, false, -2.9, -2.55]];   // [pts, closed, o0, o1] shared by the ribbons and the signal placement
+addRibbon(CL, true, 5.75, 6.1, 6.5, 7.05, M.parapet, true, true);
+addRibbon(CL, true, -6.1, -5.75, 6.5, 7.05, M.parapet, true, true);
+addRibbon(CL, true, 5.75, 6.1, 7.05, 7.1, M.accent, false, true);
+addRibbon(CL, true, -6.1, -5.75, 7.05, 7.1, M.accent, false, true);
+function layTrack(path, closed, ballastW) {
+  const pts = path.pts;
+  addRibbon(pts, closed, -ballastW, ballastW, 6.5, 6.64, M.ballast, false, true);
+  addRibbon(pts, closed, 0.62, 0.8, 6.64, 6.8, M.rail, false, true);
+  addRibbon(pts, closed, -0.8, -0.62, 6.64, 6.8, M.rail, false, true);
+  const sl = [], o = {};
+  for (let d = 0; d < path.len; d += 2.4) { path.at(d, o); sl.push({ x: o.x, y: 6.69, z: o.z, ry: Math.atan2(-o.tz, o.tx) + Math.PI / 2 }); }
+  instanced(new THREE.BoxGeometry(2.3, 0.1, 0.42), M.sleeper, sl, false, true);
+}
+layTrack(tA, true, 1.6); layTrack(tB, true, 1.6);
+// depot lead viaduct + slab
+addRibbon(lead.pts, false, -2.9, 2.9, 6.0, 6.5, M.deck, true, true);
+addRibbon(lead.pts, false, 2.55, 2.9, 6.5, 7.05, M.parapet, true, true);
+addRibbon(lead.pts, false, -2.9, -2.55, 6.5, 7.05, M.parapet, true, true);
+layTrack(lead, false, 1.5);
+const SLAB = { x0: 76, x1: 134, z0: -36, z1: 36 };
+{
+  const w = SLAB.x1 - SLAB.x0, d = SLAB.z1 - SLAB.z0, cx = (SLAB.x0 + SLAB.x1) / 2;
+  scene.add(plainBox(w, 0.9, d, M.deck, cx, 6.05, 0, true));
+  for (const z of [SLAB.z0, SLAB.z1]) scene.add(plainBox(w, 0.5, 0.3, M.accent, cx, 6.75, z, false));
+  for (const x of [SLAB.x0, SLAB.x1]) scene.add(plainBox(0.3, 0.5, d, M.accent, x, 6.75, 0, false));
+}
+
+// ---- piers -------------------------------------------------------
+{
+  const cols = [], caps = [], o = {};
+  for (let d = 0; d < clPath.len; d += 13.5) {
+    clPath.at(d, o);
+    if (Math.abs(o.x) < 10.5 && Math.abs(o.z) > 30) continue;
+    cols.push({ x: o.x, y: 2.75, z: o.z });
+    caps.push({ x: o.x, y: 5.65, z: o.z, ry: Math.atan2(-o.tx, o.tz) });
+  }
+  for (const sx of [-9, 9]) for (const sz of [-G.HZ, G.HZ]) { cols.push({ x: sx, y: 2.75, z: sz }); caps.push({ x: sx, y: 5.65, z: sz, ry: 0 }); }
+  const lo = {};
+  for (let d = 6; d < lead.len - 6; d += 12) {
+    lead.at(d, lo);
+    if (Math.abs(sdRR(lo.x, lo.z, G.HX, G.HZ, G.R)) < 10 || (lo.x > SLAB.x0 - 1 && Math.abs(lo.z) < SLAB.z1)) continue;
+    cols.push({ x: lo.x, y: 2.75, z: lo.z }); caps.push({ x: lo.x, y: 5.65, z: lo.z, ry: Math.atan2(-lo.tx, lo.tz), sx: 0.5 });
+  }
+  for (let x = SLAB.x0 + 6; x < SLAB.x1; x += 12) for (let z = SLAB.z0 + 6; z < SLAB.z1; z += 12) cols.push({ x, y: 2.9, z, sy: 1.04 });
+  instanced(new THREE.CylinderGeometry(0.72, 0.9, 5.5, 10), M.pillar, cols, true, true);
+  instanced(new THREE.BoxGeometry(7.4, 0.7, 1.7), M.pillar, caps, true, true);
+}
+
+// ---- river bridges (tied arches) ---------------------------------
+{
+  const archGeo = new THREE.TorusGeometry(9, 0.26, 8, 28, Math.PI);
+  for (const zc of [-G.HZ, G.HZ]) for (const e of [-1, 1]) {
+    const z = zc + e * 6.35;
+    const a = new THREE.Mesh(archGeo, M.accent); a.scale.set(1, 0.58, 1); a.position.set(0, 7.0, z); a.castShadow = true; scene.add(a);
+    const hang = [];
+    for (let x = -7.5; x <= 7.5; x += 2.5) { const h = 5.2 * Math.sqrt(Math.max(0, 1 - (x / 9) * (x / 9))); hang.push({ x, y: 7.0 + h / 2, z, sy: Math.max(0.1, h) }); }
+    instanced(new THREE.BoxGeometry(0.12, 1, 0.12), M.steel, hang, true, true);
+    scene.add(plainBox(20, 1.1, 0.5, M.accent, 0, 5.7, z, true));
+  }
+}
+
+// ---- signals -------------------------------------------------------
+const sigViz = [];
+{
+  const poleGeos = [], tmp = {};
+  sim.signals.forEach((sg, i) => {
+    const b = sg.block, path = b.path;
+    path.at(0.6, tmp);
+    // walk the pole outward until its footprint (shaft + bracket reaching 0.37 m toward the track) clears every parapet band by 1 cm
+    const bx0 = tmp.x + tmp.tz * 2.8, bz0 = tmp.z - tmp.tx * 2.8, near = [];
+    for (const [pts, closed, o0, o1] of PARAPETS) for (let k = 0, n = pts.length; k < (closed ? n : n - 1); k++) {
+      const a = pts[k], c = pts[(k + 1) % n], len = Math.hypot(c[0] - a[0], c[1] - a[1]);
+      if (Math.hypot((a[0] + c[0]) / 2 - bx0, (a[1] + c[1]) / 2 - bz0) < 14 + len / 2) near.push([a, c, o0, o1, len]);
+    }
+    const hitsParapet = (x, z) => near.some(([a, c, o0, o1, len]) => {
+      const dx = (c[0] - a[0]) / len, dz = (c[1] - a[1]) / len, rx = x - a[0], rz = z - a[1], t = rx * dx + rz * dz, o = rx * dz - rz * dx;
+      return t > -0.01 && t < len + 0.01 && o > o0 - 0.01 && o < o1 + 0.01;
+    });
+    let side = b.track === 'L' ? 3.2 : 2.8;
+    for (; side < 9; side += 0.01) {
+      const cx = tmp.x + tmp.tz * side, cz = tmp.z - tmp.tx * side;
+      let hit = false;
+      for (let u = -0.09; u <= 0.0901 && !hit; u += 0.03) for (let w = -0.08; w <= 0.3701 && !hit; w += 0.03) hit = hitsParapet(cx + tmp.tx * u - tmp.tz * w, cz + tmp.tz * u + tmp.tx * w);
+      if (!hit) break;
+    }
+    const px = tmp.x + tmp.tz * side, pz = tmp.z - tmp.tx * side, yaw = Math.atan2(-tmp.tz, tmp.tx);
+    sg.pos = { x: px, z: pz, y: 9.5 };
+    const g = [bx(0.16, 3.45, 0.16, 0x4a545b, 0, 0.875, 0), bx(0.18, 0.14, 0.4, 0x4a545b, 0, -0.35, 0.17), bx(0.42, 1.55, 0.5, 0x363e44, 0, 2.5, 0), bx(0.5, 0.06, 0.6, 0x20262b, 0, 3.3, 0)];
+    g.forEach((gg) => { gg.rotateY(yaw); gg.translate(px, Y_DECK + 0.55, pz); poleGeos.push(gg); });
+    sigViz.push({ sg, x: px, z: pz, fx: -tmp.tx, fz: -tmp.tz, i });
+  });
+  const poles = mesh(mergeGeometries(poleGeos), new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.6 }), true, true); scene.add(poles);
+}
+const lampGeo = new THREE.SphereGeometry(0.17, 8, 6);
+const lamps = new THREE.InstancedMesh(lampGeo, new THREE.MeshBasicMaterial({ color: 0xffffff }), sigViz.length * 3);
+lamps.frustumCulled = false; scene.add(lamps);
+const sigHit = new THREE.InstancedMesh(new THREE.BoxGeometry(2.6, 5, 2.6), new THREE.MeshBasicMaterial({ visible: false }), sigViz.length);
+sigHit.frustumCulled = false; scene.add(sigHit);
+sigHit.userData.pick = { type: 'signal' };
+pickList.push(sigHit);
+sigViz.forEach((s, i) => {
+  _q.identity();
+  for (let k = 0; k < 3; k++) { _m4.compose(_v.set(s.x + s.fx * 0.26, Y_DECK + 0.55 + 3.0 - k * 0.5, s.z + s.fz * 0.26), _q, _s.set(1, 1, 1)); lamps.setMatrixAt(i * 3 + k, _m4); }
+  _m4.compose(_v.set(s.x, Y_DECK + 0.55 + 2.4, s.z), _q, _s.set(1, 1, 1)); sigHit.setMatrixAt(i, _m4);
+  s.lastAspect = '';
+});
+lamps.instanceMatrix.needsUpdate = true; sigHit.instanceMatrix.needsUpdate = true;
+const LAMP_COL = { R: [0xff3b30, 0x3d1210], Y: [0xffb300, 0x3d2c00], G: [0x25d97c, 0x0a3321] };
+function refreshSignalLamps() {
+  for (const s of sigViz) {
+    const a = s.sg.aspect; if (a === s.lastAspect) continue; s.lastAspect = a;
+    ['R', 'Y', 'G'].forEach((k, j) => lamps.setColorAt(s.i * 3 + j, _c.setHex(LAMP_COL[k][a === k ? 0 : 1])));
+    lamps.instanceColor.needsUpdate = true;
+  }
+}
+refreshSignalLamps();
+
+// ---- stations --------------------------------------------------------
+const stViz = [];
+const glowTex = glowTexture();
+function buildStation(st) {
+  const g = new THREE.Group(), cx = st.x, zp = st.zp, so = st.side, picks = [];
+  scene.add(g);
+  const add = (m, pick) => { g.add(m); if (pick !== false) { m.userData.pick = { type: 'station', idx: st.idx }; picks.push(m); pickList.push(m); } return m; };
+  const plat = mesh(new RoundedBoxGeometry(34, 0.8, 3.8, 3, 0.12), M.platform); plat.position.set(cx, 6.7, zp); add(plat);
+  for (const e of [-1, 1]) g.add(plainBox(34, 0.05, 0.14, M.accent, cx, 7.12, zp + e * 1.75, false));
+  for (const e of [-1, 1]) g.add(plainBox(34, 0.05, 0.1, M.white, cx, 7.12, zp + e * 1.55, false));
+  // canopy halves + posts + lights
+  for (const sx of [-1, 1]) {
+    const x0 = cx + sx * 13.4;
+    add(plainBox(7.6, 0.24, 5.8, M.canopy, x0, 11.0, zp, true));
+    g.add(plainBox(7.6, 0.1, 0.18, M.accent, x0, 11.16, zp + 2.9, false)); g.add(plainBox(7.6, 0.1, 0.18, M.accent, x0, 11.16, zp - 2.9, false));
+    for (const px of [-3.3, 0, 3.3]) for (const e of [-1, 1]) g.add(plainBox(0.22, 3.9, 0.22, M.steel, x0 + px * (sx > 0 ? 1 : 1), 9.05, zp + e * 1.65, true));
+    for (const e of [-1, 1]) g.add(plainBox(6.8, 0.06, 0.22, M.stripLight, x0, 10.84, zp + e * 0.9, false));
+  }
+  // escalator landing, columns and ramps
+  const rise = Y_BRIDGE - Y_PLAT, run = rise / Math.tan(Math.PI / 6), len = Math.hypot(rise, run), ang = Math.atan2(rise, run);
+  add(plainBox(2.6, 0.34, 3.0, M.canopy, cx, Y_BRIDGE - 0.17, zp, true));
+  for (const sx of [-1, 1]) for (const e of [-1, 1]) g.add(plainBox(0.3, 4.2, 0.3, M.steel, cx + sx * 1.0, 9.2, zp + e * 1.35, true));
+  const ramps = [];
+  for (const dir of [1, -1]) {   // dir 1: east ramp (up), -1: west ramp (down)
+    const foot = new THREE.Vector3(cx + dir * (1.3 + run), Y_PLAT, zp), top = new THREE.Vector3(cx + dir * 1.3, Y_BRIDGE, zp);
+    const mid = foot.clone().add(top).multiplyScalar(0.5);
+    const body = plainBox(len, 0.3, 1.15, M.steel, mid.x, mid.y - 0.2, zp, true); body.rotation.z = -dir * ang; g.add(body);
+    for (const e of [-1, 1]) { const rail = plainBox(len, 0.75, 0.07, M.glass, mid.x, mid.y + 0.4, zp + e * 0.58, false); rail.rotation.z = -dir * ang; g.add(rail); }
+    ramps.push({ dir, foot, top, ang });
+  }
+  // glass corridor to the tower
+  const Lc = 11.6;
+  const cz = zp + so * (Lc / 2 + 0.4);
+  add(plainBox(3.2, 0.34, Lc + 0.8, M.canopy, cx, Y_BRIDGE - 0.17, cz, true));
+  g.add(plainBox(3.2, 2.7, Lc + 0.8, M.glass, cx, Y_BRIDGE + 1.35, cz, false));
+  g.add(plainBox(3.4, 0.14, Lc + 1.0, M.accent, cx, Y_BRIDGE + 2.78, cz, true));
+  for (let k = 0; k <= 4; k++) g.add(plainBox(3.3, 2.7, 0.1, M.steel, cx, Y_BRIDGE + 1.35, zp + so * (0.4 + k * (Lc / 4)), false));
+  // tower
+  const tz = zp + so * (Lc + 0.4 + 3.6);
+  const tw = mesh(new RoundedBoxGeometry(10, 14.5, 7, 3, 0.4), M.tower); tw.position.set(cx, 7.25, tz); add(tw);
+  g.add(plainBox(10.1, 0.7, 7.1, M.accent, cx, 11.0, tz, false));
+  g.add(plainBox(10.8, 0.45, 7.8, M.accent, cx, 14.7, tz, true));
+  g.add(plainBox(5.4, 3.3, 0.12, M.windowGlass, cx, 1.75, tz - so * 3.52, false));
+  const signMat = new THREE.MeshBasicMaterial({ map: labelTexture(st.name, st.code, 640, 140, '#00a86b', '#ffffff'), toneMapped: false });
+  for (const e of [-1, 1]) { const s = new THREE.Mesh(new THREE.PlaneGeometry(8.4, 1.84), signMat); s.position.set(cx, 16.3, tz + e * 0.05); if (e < 0) s.rotation.y = Math.PI; g.add(s); }
+  g.add(plainBox(8.4, 1.84, 0.06, M.dark, cx, 16.3, tz, false));
+  for (const px of [-3.8, 3.8]) g.add(plainBox(0.2, 1.6, 0.2, M.steel, cx + px, 15.6, tz, false));
+  // glow
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0, depthWrite: false, fog: false }));
+  glow.scale.set(46, 46, 1); glow.position.set(cx, 12.5, zp); g.add(glow);
+  const pl = new THREE.PointLight(0xffd9a0, 0, 42, 1.6); pl.position.set(cx, 10.2, zp); g.add(pl);
+  stViz[st.idx] = { st, g, cx, zp, so, run, len, ang, ramps, glow, pl, picks, tz, towerPos: new THREE.Vector3(cx, 7, tz) };
+}
+ST.forEach(buildStation);
+
+// escalator steps (instanced)
+const stepList = [];
+stViz.forEach((sv) => sv.ramps.forEach((r) => { for (let j = 0; j < 12; j++) stepList.push({ x: 0, y: 0, z: 0 }); }));
+const stepMesh = instanced(new THREE.BoxGeometry(0.72, 0.1, 0.95), new THREE.MeshStandardMaterial({ color: 0x5b666d, roughness: 0.6 }), stepList, false, true);
+stepMesh.frustumCulled = false;
+
+// ---- depot sheds and wash --------------------------------------------
+const washViz = { brushes: [], spray: null };
+{
+  const frame = (x0, x1, z0, z1, y0) => {
+    for (let x = x0; x <= x1 + 0.1; x += 6) for (const z of [z0, z1]) scene.add(plainBox(0.36, 6.4, 0.36, M.steel, x, y0 + 3.2, z, true));
+    scene.add(plainBox(x1 - x0 + 0.6, 0.14, z1 - z0 + 0.6, M.roofGlass, (x0 + x1) / 2, y0 + 6.5, (z0 + z1) / 2, false));
+    for (let x = x0; x <= x1 + 0.1; x += 6) scene.add(plainBox(0.3, 0.3, z1 - z0, M.steel, x, y0 + 6.3, (z0 + z1) / 2, false));
+    scene.add(plainBox(x1 - x0, 0.2, 0.3, M.accent, (x0 + x1) / 2, y0 + 6.6, z0, false)); scene.add(plainBox(x1 - x0, 0.2, 0.3, M.accent, (x0 + x1) / 2, y0 + 6.6, z1, false));
+  };
+  const siding = (z, x0, x1, fromLead) => {
+    const o = {}, sgn = z < 0 ? -1 : 1; let best = 0, bd = 1e9;
+    for (let d = 0; d < lead.len; d += 0.5) { lead.at(d, o); if (o.x > 88 && Math.abs(o.z - z * 1.05) < bd) { bd = Math.abs(o.z - z * 1.05); best = d; } }
+    lead.at(best, o);
+    const s0 = [o.x, o.z], t0 = [o.tx, o.tz];
+    const pts = bezier(s0, [s0[0] + t0[0] * 7, s0[1] + t0[1] * 7], [x0 - 9, z], [x0, z], 14);
+    for (let x = x0; x <= x1; x += 1) pts.push([x, z]);
+    addRibbon(pts, false, -1.5, 1.5, 6.5, 6.64, M.ballast, false, true);
+    addRibbon(pts, false, 0.62, 0.8, 6.64, 6.8, M.rail, false, true); addRibbon(pts, false, -0.8, -0.62, 6.64, 6.8, M.rail, false, true);
+    const sl = []; for (let x = x0; x < x1; x += 2.4) sl.push({ x, y: 6.69, z, ry: Math.PI / 2 });
+    instanced(new THREE.BoxGeometry(2.3, 0.1, 0.42), M.sleeper, sl, false, true);
+  };
+  siding(-27, 104, 132, true); siding(27, 104, 132, true);
+  frame(104, 134, -33, -21, 6.5); frame(104, 134, 21, 33, 6.5);
+  scene.add(plainBox(0.4, 6.4, 12.4, M.tower, 134.4, 9.7, -27, true)); scene.add(plainBox(0.4, 6.4, 12.4, M.tower, 134.4, 9.7, 27, true));
+  // maintenance cart and stacked crates in the south shed
+  scene.add(plainBox(5, 1.1, 2.2, M.accent, 118, 7.4, 27, true)); scene.add(plainBox(2.4, 1.6, 1.6, M.steel, 112, 7.6, 22.4, true));
+  for (let i = 0; i < 3; i++) scene.add(plainBox(1.4, 1.2, 1.4, M.steel, 126 + i * 1.6, 7.1, 31.2, true));
+  // wash tunnel on the lead (W01 straight at x = DEPOT_X)
+  const wx = 100;
+  for (let z = -16; z <= 16.1; z += 8) {
+    for (const e of [-1, 1]) scene.add(plainBox(0.5, 6, 0.5, M.accent, wx + e * 3.5, 9.5, z, true));
+    scene.add(plainBox(7.6, 0.45, 0.6, M.accent, wx, 12.7, z, true));
+  }
+  scene.add(plainBox(7.8, 0.12, 36.6, M.roofGlass, wx, 13.0, 0, false));
+  for (const z of [-11, -3.5, 4, 11.5]) for (const e of [-1, 1]) {
+    const b = mesh(new THREE.CylinderGeometry(0.5, 0.5, 3.4, 10), clay(e > 0 ? GREEN : 0x2fbf86, 0.8), true, true);
+    b.position.set(wx + e * 2.15, Y_RAIL + 1.9, z); scene.add(b); washViz.brushes.push(b);
+  }
+  const N = 160, pos = new Float32Array(N * 3), seeds = [];
+  for (let i = 0; i < N; i++) { seeds.push({ side: i % 2 ? 1 : -1, z: -17 + Math.random() * 34, t: Math.random() }); }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  washViz.spray = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xcdeeff, size: 0.34, map: discTexture(), alphaTest: 0.4, transparent: true, opacity: 0.85, depthWrite: false })); washViz.spray.frustumCulled = false; washViz.spray.visible = false;
+  washViz.seeds = seeds; scene.add(washViz.spray);
+}
+
+// depot yard: office, tank, crates, lamps, planters
+{
+  const office = mesh(new RoundedBoxGeometry(16, 5.2, 9, 3, 0.3), M.tower); office.position.set(120, 6.5 + 2.6, 0); scene.add(office);
+  scene.add(plainBox(16.2, 0.5, 9.2, M.accent, 120, 6.5 + 4.6, 0, false));
+  scene.add(plainBox(12, 1.0, 0.1, M.windowGlass, 120, 6.5 + 3.0, -4.55, false)); scene.add(plainBox(12, 1.0, 0.1, M.windowGlass, 120, 6.5 + 3.0, 4.55, false));
+  const tank = mesh(new THREE.CylinderGeometry(2.1, 2.1, 4.4, 14), M.accent); tank.position.set(128, 6.5 + 2.2, 12); scene.add(tank);
+  scene.add(plainBox(0.3, 0.3, 14, M.steel, 128, 6.5 + 4.8, 5, false));
+  for (let i = 0; i < 6; i++) scene.add(plainBox(1.6, 1.3, 1.6, M.steel, 84 + (i % 3) * 1.9, 6.5 + 0.65 + (i > 2 ? 1.3 : 0), -9 + (i % 3) * 0.2, true));
+  for (const [x, z] of [[80, -31], [80, 31], [130, -16], [130, 16], [90, 0], [112, -14], [112, 14]]) {
+    scene.add(plainBox(0.16, 4.6, 0.16, M.steel, x, 6.5 + 2.3, z, true)); scene.add(plainBox(0.9, 0.14, 0.34, M.lampHead, x, 6.5 + 4.7, z, false));
+  }
+  const px = [], tr = [];
+  for (let i = 0; i < 6; i++) { const x = 82 + i * 2.6, z = i % 2 ? 12 : 15, s = 0.8 + (i % 3) * 0.15; px.push({ x, y: 6.5 + 0.2, z, sx: 2, sy: 0.4, sz: 2, color: 0xe6e8e9 }); tr.push({ x, y: 6.5 + 1.7 * s, z, sx: 1.2 * s, sy: 1.5 * s, sz: 1.2 * s, color: [GREEN, 0x2fbf86, 0x6fd3a6][i % 3] }); }
+  instanced(new THREE.BoxGeometry(1, 1, 1), clay(0xffffff, 0.9), px, false, true); instanced(new THREE.IcosahedronGeometry(1, 0), clay(0xffffff, 0.9), tr, true, true);
+}
+
+// ---- city blocks, parks, trees, street lamps ---------------------------
+const rc = mulberry32(2024);
+let lanterns;
+function blockedAt(x, z) {
+  if (Math.abs(x) < 13) return true;
+  if (Math.abs(sdRR(x, z, G.HX, G.HZ, G.R)) < 13) return true;
+  if (Math.abs(sdRR(x, z, 40, 14, 10)) < 8.5) return true;
+  if (x > 64 && x < 146 && Math.abs(z) < 48) return true;
+  if (Math.abs(x) > 146 || Math.abs(z) > 96) return true;
+  for (const sv of stViz) if (Math.abs(x - sv.cx) < 10 && (z - sv.zp) * sv.so > 6 && (z - sv.zp) * sv.so < 26) return true;
+  return false;
+}
+{
+  const bld = [], roofs = [], pads = [], trees = [], trunks = [], BCOL = [0xeceeef, 0xe2e5e7, 0xd7dbde, 0xf4f5f6, 0xcfd4d7, 0xd6e9df];
+  const PROBES = [[0, 0], [1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]];
+  for (let gx = -140; gx <= 140; gx += 14) for (let gz = -91; gz <= 91; gz += 14) {
+    const w = 8 + rc() * 3.6, d = 8 + rc() * 3.6, park = rc() < 0.1;
+    if (PROBES.some(([ox, oz]) => blockedAt(gx + ox * w / 2, gz + oz * d / 2))) continue;
+    pads.push({ x: gx, y: 0.06, z: gz, sx: w + 2.4, sy: 1, sz: d + 2.4, color: park ? 0xbfe6d3 : 0xd0d4d7 });
+    if (park) {
+      for (let i = 0; i < 7; i++) { const tx = gx + (rc() - 0.5) * (w - 1), tz = gz + (rc() - 0.5) * (d - 1), s = 0.8 + rc() * 0.7; trees.push({ x: tx, y: 1.9 * s, z: tz, sx: 1.5 * s, sy: 1.9 * s, sz: 1.5 * s, color: [GREEN, 0x2fbf86, 0x6fd3a6][i % 3] }); trunks.push({ x: tx, y: 0.6, z: tz }); }
+      continue;
+    }
+    const dc = Math.hypot(gx / 1.2, gz * 1.2);
+    let h = 4 + rc() * 5 + Math.pow(Math.max(0, 1 - dc / 130), 1.5) * 24 * (0.35 + rc() * 0.65); h = Math.round(h * 2) / 2;
+    bld.push({ x: gx, y: h / 2, z: gz, sx: w, sy: h, sz: d, color: BCOL[Math.floor(rc() * BCOL.length)] });
+    if (h > 8) roofs.push({ x: gx + (rc() - 0.5) * 2, y: h + 0.7, z: gz + (rc() - 0.5) * 2, sx: w * 0.38, sy: 1.4, sz: d * 0.38, color: rc() < 0.16 ? GREEN : 0xc9ced1 });
+  }
+  for (const px of [-1, 1]) {
+    pads.push({ x: px * 21, y: 0.06, z: 0, sx: 22, sy: 1, sz: 12.5, color: 0xbfe6d3 });
+    for (let i = 0; i < 8; i++) { const tx = px * (12.5 + (i % 4) * 5.4) + (rc() - 0.5) * 2, tz = (i < 4 ? -1 : 1) * 2.6 + (rc() - 0.5) * 1.6, s = 0.8 + rc() * 0.6; trees.push({ x: tx, y: 1.9 * s, z: tz, sx: 1.5 * s, sy: 1.9 * s, sz: 1.5 * s, color: [GREEN, 0x2fbf86, 0x6fd3a6][i % 3] }); trunks.push({ x: tx, y: 0.6, z: tz }); }
+  }
+  instanced(new THREE.BoxGeometry(1, 1, 1), clay(0xffffff, 0.95), pads, false, true);
+  const bMat = windowed(clay(0xffffff, 0.9));
+  instanced(new RoundedBoxGeometry(1, 1, 1, 2, 0.05), bMat, bld, true, true);
+  instanced(new THREE.BoxGeometry(1, 1, 1), clay(0xffffff, 0.8), roofs, true, true);
+  instanced(new THREE.IcosahedronGeometry(1, 0), clay(0xffffff, 0.9), trees, true, true);
+  instanced(new THREE.CylinderGeometry(0.16, 0.2, 1.2, 6), clay(0xb7aa9b, 0.9), trunks, false, true);
+  // roadside trees and lamps
+  const rt = [], rtk = [], lampsL = [], o = {};
+  for (let dd = 0; dd < clPath.len; dd += 11) {
+    clPath.at(dd, o);
+    if (Math.abs(o.x) < 13) continue;
+    if (stViz.some((sv) => Math.abs(o.x - sv.cx) < 8 && Math.abs(o.z - sv.zp) < 14)) continue;
+    for (const side of [-1, 1]) {
+      const px = o.x + o.tz * side * 10.6, pz = o.z - o.tx * side * 10.6;
+      if (px > 62 && Math.abs(pz) < 44 && px < 112) continue;
+      const s = 0.8 + ((dd * 7) % 5) / 10;
+      rt.push({ x: px, y: 1.8 * s + 0.5, z: pz, sx: 1.3 * s, sy: 1.7 * s, sz: 1.3 * s, color: [GREEN, 0x2fbf86, 0x6fd3a6][Math.floor(dd) % 3] }); rtk.push({ x: px, y: 0.6, z: pz });
+    }
+  }
+  for (let dd = 5; dd < clPath.len; dd += 20) {
+    clPath.at(dd, o);
+    if (Math.abs(o.x) < 13) continue;
+    if (stViz.some((sv) => Math.abs(o.x - sv.cx) < 8 && Math.abs(o.z - sv.zp) < 14)) continue;
+    for (const side of [-1, 1]) lampsL.push({ x: o.x + o.tz * side * 7.9, z: o.z - o.tx * side * 7.9, side, ry: Math.atan2(-o.tz, o.tx) });
+  }
+  instanced(new THREE.IcosahedronGeometry(1, 0), clay(0xffffff, 0.9), rt, true, true);
+  instanced(new THREE.CylinderGeometry(0.16, 0.2, 1.2, 6), clay(0xb7aa9b, 0.9), rtk, false, true);
+  instanced(new THREE.CylinderGeometry(0.08, 0.1, 4.6, 6), M.steel, lampsL.map((l) => ({ x: l.x, y: 2.5, z: l.z })), true, true);
+  instanced(new THREE.BoxGeometry(0.9, 0.14, 0.34), M.lampHead, lampsL.map((l) => ({ x: l.x - (-0.3) * 0, y: 4.85, z: l.z, ry: l.ry })), false, true);
+  // festival lanterns
+  const lan = new THREE.InstancedMesh(new THREE.SphereGeometry(0.42, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffffff }), lampsL.length * 2);
+  lampsL.forEach((l, i) => { for (let k = 0; k < 2; k++) { _m4.compose(_v.set(l.x - l.side * 0.0, 4.2 - k * 0.2, l.z + (k ? 1.1 : -1.1) * Math.cos(l.ry)), _q.identity(), _s.set(1, 1.25, 1)); lan.setMatrixAt(i * 2 + k, _m4); lan.setColorAt(i * 2 + k, _c.setHex([0xff7a59, 0xffc84a, 0x00a86b, 0xff5fa2][(i + k) % 4])); } });
+  lan.visible = false; lan.frustumCulled = false; scene.add(lan); lanterns = lan;
+}
+
+// ================================================================
+//  Dynamic visuals: trains, passengers, road vehicles
+// ================================================================
+const carGeo = mergeGeometries([
+  rbx(CAR_L, 2.55, CAR_W, 0.34, 0xf6f7f8, 0, 1.55, 0), bx(CAR_L + 0.03, 0.34, CAR_W + 0.03, GREEN, 0, 0.64, 0),
+  bx(CAR_L - 0.9, 0.12, CAR_W - 0.8, 0xe3e6e8, 0, 2.86, 0), bx(1.3, 0.3, 1.0, 0xcdd2d5, -1.4, 3.02, 0), bx(1.3, 0.3, 1.0, 0xcdd2d5, 1.4, 3.02, 0),
+  bx(1.6, 0.36, 2.0, 0x39434a, -1.9, 0.18, 0), bx(1.6, 0.36, 2.0, 0x39434a, 1.9, 0.18, 0), bx(CAR_L + 0.03, 0.09, CAR_W + 0.03, GREEN, 0, 2.62, 0),
+]);
+const winGeo = mergeGeometries([-1.65, 0, 1.65].map((x) => new THREE.BoxGeometry(1.3, 0.78, 0.05).translate(x, 1.92, -CAR_W / 2 - 0.005)).concat([new THREE.BoxGeometry(1.0, 0.78, 0.05).translate(0, 1.92, CAR_W / 2 + 0.005)]));
+const slotGeo = mergeGeometries([-1.4, 1.4].map((x) => new THREE.BoxGeometry(1.5, 2.05, 0.03).translate(x, 1.55, CAR_W / 2 + 0.01)));
+const panelGeo = new THREE.BoxGeometry(0.76, 2.0, 0.07);
+const cabGeo = new THREE.BoxGeometry(0.05, 0.95, 2.0).translate(CAR_L / 2 + 0.01, 1.95, 0);
+const lightGeo = new THREE.BoxGeometry(0.06, 0.2, 0.34);
+const trainViz = [];
+for (const T of TRN) {
+  const tv = { T, cars: [], bodies: [] };
+  for (let i = 0; i < T.ncars; i++) {
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(carGeo, M.trainBody); body.castShadow = true; body.receiveShadow = true; body.userData.pick = { type: 'train', id: T.id }; g.add(body); pickList.push(body); tv.bodies.push(body);
+    g.add(new THREE.Mesh(winGeo, M.windowGlass), new THREE.Mesh(slotGeo, M.doorSlot));
+    const panels = [];
+    for (const xc of [-1.4, 1.4]) for (const sd of [-1, 1]) { const p = new THREE.Mesh(panelGeo, M.doorPanel); p.position.set(xc + sd * 0.38, 1.55, CAR_W / 2 + 0.06); p.userData = { xc, sd }; g.add(p); panels.push(p); }
+    if (i === 0) { g.add(new THREE.Mesh(cabGeo, M.windowGlass)); for (const z of [-0.7, 0.7]) { const l = new THREE.Mesh(lightGeo, M.headLight); l.position.set(CAR_L / 2 + 0.03, 0.85, z); g.add(l); } }
+    if (i === T.ncars - 1) { const c = new THREE.Mesh(cabGeo, M.windowGlass); c.rotation.y = Math.PI; g.add(c); for (const z of [-0.7, 0.7]) { const l = new THREE.Mesh(lightGeo, M.tailLight); l.position.set(-CAR_L / 2 - 0.03, 0.85, z); g.add(l); } }
+    g.position.y = Y_RAIL; scene.add(g); tv.cars.push({ g, panels });
+  }
+  trainViz.push(tv);
+}
+const _pose = { x: 0, z: 0, yaw: 0, l: 0, w: 0 };
+function updateTrains() {
+  for (const tv of trainViz) {
+    const T = tv.T, slide = 0.56 * T.open;
+    for (let i = 0; i < T.ncars; i++) {
+      T.carPose(i, _pose);
+      const c = tv.cars[i]; c.g.position.set(_pose.x, Y_RAIL, _pose.z); c.g.rotation.y = _pose.yaw;
+      if (T.parked) continue;
+      for (const p of c.panels) p.position.x = p.userData.xc + p.userData.sd * (0.38 + slide);
+    }
+  }
+}
+function trainCenter(T, out) {
+  T.carPose(1, _pose); const ax = _pose.x, az = _pose.z; T.carPose(2, _pose);
+  return out.set((ax + _pose.x) / 2, Y_RAIL + 1.6, (az + _pose.z) / 2);
+}
+
+// ---- road vehicles (one instanced mesh for all lanes) ---------------------
+const vehGeo = mergeGeometries([rbx(3.6, 0.85, 1.8, 0.22, 0xffffff, 0, 0.62, 0), rbx(1.9, 0.62, 1.6, 0.2, 0x7e929d, -0.25, 1.28, 0)]);
+const allCars = []; sim.lanes.forEach((ln) => ln.cars.forEach((c, i) => allCars.push({ ln, i, c })));
+const PAINT = [0xf4f5f6, 0xdfe3e5, 0xb9c0c5, 0x00a86b, 0xe9ecee, 0x8f989e];
+const vehMesh = new THREE.InstancedMesh(vehGeo, clay(0xffffff, 0.55, { vertexColors: true }), allCars.length);
+vehMesh.castShadow = true; vehMesh.receiveShadow = true; vehMesh.frustumCulled = false; scene.add(vehMesh);
+allCars.forEach((a, k) => vehMesh.setColorAt(k, _c.setHex(a.c.bus ? 0x00a86b : PAINT[a.c.hue % PAINT.length])));
+const headMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 0.16, 0.36), new THREE.MeshBasicMaterial({ color: 0xfff1c9 }), allCars.length * 2);
+const tailMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 0.16, 0.36), new THREE.MeshBasicMaterial({ color: 0xff3b30 }), allCars.length * 2);
+headMesh.frustumCulled = tailMesh.frustumCulled = false; scene.add(headMesh, tailMesh);
+const _o = { x: 0, z: 0, tx: 1, tz: 0 };
+function updateVehicles() {
+  allCars.forEach((a, k) => {
+    const c = a.c, ln = a.ln; ln.path.at(c.s - c.len / 2, _o);
+    const ry = Math.atan2(-_o.tz, _o.tx); _q.setFromAxisAngle(_v.set(0, 1, 0), ry);
+    const sc = c.bus ? c.len / 3.6 : 1, sy = c.bus ? 1.5 : 1;
+    _m4.compose(_v.set(_o.x, 0.1, _o.z), _q, _s.set(sc, sy, c.bus ? 1.1 : 1)); vehMesh.setMatrixAt(k, _m4);
+    const fx = Math.cos(ry), fz = -Math.sin(ry), rx = Math.sin(ry), rz = Math.cos(ry), hl = c.len / 2 * 1.0;
+    for (let e = 0; e < 2; e++) {
+      const z = e ? 0.62 : -0.62;
+      _m4.compose(_v.set(_o.x + fx * hl + rx * z * (c.bus ? 1.1 : 1), 0.62 * sy, _o.z + fz * hl + rz * z * (c.bus ? 1.1 : 1)), _q, _s.set(1, 1, 1)); headMesh.setMatrixAt(k * 2 + e, _m4);
+      _m4.compose(_v.set(_o.x - fx * hl + rx * z * (c.bus ? 1.1 : 1), 0.62 * sy, _o.z - fz * hl + rz * z * (c.bus ? 1.1 : 1)), _q, _s.set(1, 1, 1)); tailMesh.setMatrixAt(k * 2 + e, _m4);
+    }
+  });
+  vehMesh.instanceMatrix.needsUpdate = true; headMesh.instanceMatrix.needsUpdate = true; tailMesh.instanceMatrix.needsUpdate = true;
+}
+
+// ---- passengers and escalators --------------------------------------------
+const PAX_WAIT = 28, PAX_WALK = 14, PAX_N = PAX_WAIT + PAX_WALK;
+const paxGeo = mergeGeometries([new THREE.CylinderGeometry(0.2, 0.24, 0.62, 7).translate(0, 0.31, 0), new THREE.SphereGeometry(0.17, 8, 6).translate(0, 0.78, 0)]);
+const paxMesh = new THREE.InstancedMesh(paxGeo, clay(0xffffff, 0.8), ST.length * PAX_N);
+paxMesh.castShadow = true; paxMesh.frustumCulled = false; scene.add(paxMesh);
+const PAX_COL = [0x4a545b, 0x7b868d, 0x00a86b, 0xc2c8cc, 0x2fbf86, 0x59646b, 0x9aa3a8];
+const paxViz = ST.map((st, si) => {
+  const sv = stViz[si], rows = { A: [], B: [] }, order = { A: [], B: [] };
+  for (const dir of ['A', 'B']) {
+    const z = sv.zp + (dir === 'A' ? sv.so : -sv.so) * 0.95;
+    for (let i = 0; i < 14; i++) rows[dir].push([sv.cx + (i - 6.5) * 2.45 + ((i * 7) % 3 - 1) * 0.35, z + (((i * 5) % 3) - 1) * 0.25]);
+    order[dir] = rows[dir].map((_, i) => i).sort((a, b) => ((a * 7 + si) % 14) - ((b * 7 + si) % 14));
+  }
+  for (let k = 0; k < PAX_N; k++) paxMesh.setColorAt(si * PAX_N + k, _c.setHex(PAX_COL[(k * 3 + si) % PAX_COL.length]));
+  return { si, sv, rows, order, shown: { A: -1, B: -1 }, walkers: Array.from({ length: PAX_WALK }, () => ({ on: false, pts: [], k: 0, t: 0 })) };
+});
+function setPax(slot, x, y, z, s) { _m4.compose(_v.set(x, y, z), _q.identity(), _s.set(s, s, s)); paxMesh.setMatrixAt(slot, _m4); }
+function updatePassengers(dt) {
+  for (const pv of paxViz) {
+    const st = ST[pv.si];
+    for (const dir of ['A', 'B']) {
+      const n = Math.round(clamp(st.wait[dir] / 100, 0, 1) * 14);
+      if (n === pv.shown[dir]) continue; pv.shown[dir] = n;
+      const base = pv.si * PAX_N + (dir === 'A' ? 0 : 14);
+      for (let k = 0; k < 14; k++) { const idx = pv.order[dir][k], p = pv.rows[dir][idx]; setPax(base + idx, p[0], Y_PLAT, p[1], k < n ? 1 : 0); }
+    }
+    for (let w = 0; w < PAX_WALK; w++) {
+      const wk = pv.walkers[w], slot = pv.si * PAX_N + PAX_WAIT + w;
+      if (!wk.on) continue;
+      let a = wk.pts[wk.k], b = wk.pts[wk.k + 1], seg = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) || 0.01;
+      wk.t += dt * 1.7 / seg;
+      while (wk.t >= 1 && wk.k < wk.pts.length - 2) { wk.t -= 1; wk.k++; a = wk.pts[wk.k]; b = wk.pts[wk.k + 1]; seg = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) || 0.01; }
+      if (wk.t >= 1) { wk.on = false; setPax(slot, 0, 0, 0, 0); continue; }
+      const last = wk.k === wk.pts.length - 2, s = last ? clamp(1.2 - wk.t * 1.2, 0.0, 1) : 1;
+      setPax(slot, lerp(a[0], b[0], wk.t), lerp(a[1], b[1], wk.t) + Math.abs(Math.sin(performance.now() * 0.009 + w)) * 0.05, lerp(a[2], b[2], wk.t), s);
+    }
+  }
+  paxMesh.instanceMatrix.needsUpdate = true; if (paxMesh.instanceColor) paxMesh.instanceColor.needsUpdate = true;
+}
+function spawnWalker(ev) {
+  const T = sim.trainById[ev.train], pv = paxViz[ev.st];
+  if (!T || T.state !== 'dwell') return;
+  const wk = pv.walkers.find((w) => !w.on); if (!wk) return;
+  T.carPose(ev.car, _pose);
+  const fx = Math.cos(_pose.yaw), fz = -Math.sin(_pose.yaw), rx = Math.sin(_pose.yaw), rz = Math.cos(_pose.yaw), off = ev.door ? 1.4 : -1.4;
+  const dx = _pose.x + fx * off + rx * 1.45, dz = _pose.z + fz * off + rz * 1.45, ex = dx + rx * 0.45, ez = dz + rz * 0.45, sv = pv.sv;
+  const upFoot = [sv.cx + 1.3 + sv.run, Y_PLAT, sv.zp], upTop = [sv.cx + 1.3, Y_BRIDGE, sv.zp], dnTop = [sv.cx - 1.3, Y_BRIDGE, sv.zp], dnFoot = [sv.cx - 1.3 - sv.run, Y_PLAT, sv.zp];
+  if (ev.kind === 'alight') wk.pts = [[dx, Y_PLAT, dz], [ex, Y_PLAT, ez], [upFoot[0], Y_PLAT, sv.zp + (ez - sv.zp) * 0.3], upFoot, upTop];
+  else wk.pts = [dnTop, dnFoot, [dnFoot[0] + 1, Y_PLAT, sv.zp + (ez - sv.zp) * 0.3], [ex, Y_PLAT, ez], [dx - rx * 0.9, Y_PLAT, dz - rz * 0.9]];
+  wk.on = true; wk.k = 0; wk.t = 0;
+}
+let escT = 0;
+function updateEscalators(dt) {
+  escT += dt; let k = 0;
+  for (const sv of stViz) for (const r of sv.ramps) {
+    for (let j = 0; j < 12; j++) {
+      const u = (((j / 12 + r.dir * escT * 0.085) % 1) + 1) % 1, fade = Math.min(1, Math.min(u, 1 - u) * 14);
+      _e.set(0, 0, -r.dir * r.ang); _q.setFromEuler(_e);
+      _m4.compose(_v.set(lerp(r.foot.x, r.top.x, u), lerp(r.foot.y, r.top.y, u) + 0.12, sv.zp), _q, _s.set(fade, fade, 1)); stepMesh.setMatrixAt(k++, _m4);
+    }
+  }
+  stepMesh.instanceMatrix.needsUpdate = true;
+}
+
+// ================================================================
+//  Environment: day / night, seasons, rain, fireworks
+// ================================================================
+const env = { mode: 'auto', phase: 0.38, day: 1, wet: 0, fog: 0, rain: 0, fest: 0, over: 0, target: { wet: 0, fog: 0, rain: 0, fest: 0, over: 0 } };
+const SEASON_VIS = { clear: { wet: 0, fog: 0, rain: 0, fest: 0, over: 0 }, monsoon: { wet: 1, fog: 0.25, rain: 1, fest: 0, over: 0.8 }, fog: { wet: 0.15, fog: 1, rain: 0, fest: 0, over: 0.55 }, festival: { wet: 0, fog: 0, rain: 0, fest: 1, over: 0 } };
+const C = { dayBg: new THREE.Color(0xe6ebee), nightBg: new THREE.Color(0x0c1218), dusk: new THREE.Color(0xe9b894), grey: new THREE.Color(0xa9b4ba), tmp: new THREE.Color(), tmp2: new THREE.Color() };
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+// rain
+const RAIN_N = 6000, rainPos = new Float32Array(RAIN_N * 6), rainSeed = new Float32Array(RAIN_N * 3);
+for (let i = 0; i < RAIN_N; i++) { rainSeed[i * 3] = (Math.random() - 0.5) * 240; rainSeed[i * 3 + 1] = Math.random() * 80; rainSeed[i * 3 + 2] = (Math.random() - 0.5) * 240; }
+const rainGeo = new THREE.BufferGeometry(); rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
+const rain = new THREE.LineSegments(rainGeo, new THREE.LineBasicMaterial({ color: 0xc9d8e2, transparent: true, opacity: 0.7, depthWrite: false, fog: false }));
+rain.frustumCulled = false; rain.visible = false; scene.add(rain);
+const _rc = new THREE.Color();
+function updateRain(dt) {
+  const f = env.rain; rain.visible = f > 0.02; if (!rain.visible) return;
+  rain.material.opacity = Math.min(1, 1.1 * f); rain.material.color.setHex(0x5d7488).lerp(_rc.setHex(0xc9d8e2), 1 - env.day); rain.position.set(controls.target.x, 0, controls.target.z);
+  for (let i = 0; i < RAIN_N; i++) {
+    let y = rainSeed[i * 3 + 1] - 78 * dt; if (y < 0) { y += 80; rainSeed[i * 3] = (Math.random() - 0.5) * 240; rainSeed[i * 3 + 2] = (Math.random() - 0.5) * 240; }
+    rainSeed[i * 3 + 1] = y; const x = rainSeed[i * 3], z = rainSeed[i * 3 + 2], k = i * 6;
+    rainPos[k] = x; rainPos[k + 1] = y; rainPos[k + 2] = z; rainPos[k + 3] = x - 0.7; rainPos[k + 4] = y + 5.5; rainPos[k + 5] = z - 0.3;
+  }
+  rainGeo.attributes.position.needsUpdate = true;
+}
+// fireworks
+const FW_B = 5, FW_P = 70, fwN = FW_B * FW_P, fwPos = new Float32Array(fwN * 3), fwCol = new Float32Array(fwN * 3), fwVel = new Float32Array(fwN * 3);
+const fwGeo = new THREE.BufferGeometry(); fwGeo.setAttribute('position', new THREE.BufferAttribute(fwPos, 3)); fwGeo.setAttribute('color', new THREE.BufferAttribute(fwCol, 3));
+const fireworks = new THREE.Points(fwGeo, new THREE.PointsMaterial({ size: 3.4, vertexColors: true, map: discTexture(), alphaTest: 0.4, transparent: true, depthWrite: false, fog: false })); fireworks.frustumCulled = false; fireworks.visible = false; scene.add(fireworks);
+const fwBursts = Array.from({ length: FW_B }, () => ({ life: 0, col: new THREE.Color(), cx: 0, cy: 0, cz: 0 }));
+let fwTimer = 0;
+const FW_COL = [0xff7a59, 0xffc84a, 0x00a86b, 0xff5fa2, 0x66ccff];
+function updateFireworks(dt) {
+  fireworks.visible = env.fest > 0.05; if (!fireworks.visible) return;
+  fwTimer -= dt;
+  if (fwTimer <= 0) {
+    fwTimer = 0.9 + Math.random() * 1.6; const b = fwBursts.find((x) => x.life <= 0);
+    if (b) {
+      b.life = 2.4; b.col.setHex(FW_COL[Math.floor(Math.random() * FW_COL.length)]); b.cx = controls.target.x + (Math.random() - 0.5) * 90; b.cy = 26 + Math.random() * 22; b.cz = controls.target.z + (Math.random() - 0.5) * 40 - 14;
+      const bi = fwBursts.indexOf(b);
+      for (let p = 0; p < FW_P; p++) { const k = (bi * FW_P + p) * 3, th = Math.random() * TAU, ph = Math.acos(2 * Math.random() - 1), sp = 8 + Math.random() * 9; fwPos[k] = b.cx; fwPos[k + 1] = b.cy; fwPos[k + 2] = b.cz; fwVel[k] = Math.sin(ph) * Math.cos(th) * sp; fwVel[k + 1] = Math.cos(ph) * sp; fwVel[k + 2] = Math.sin(ph) * Math.sin(th) * sp; }
+    }
+  }
+  const bg = scene.background;
+  fwBursts.forEach((b, bi) => {
+    if (b.life > 0) b.life -= dt;
+    const f = clamp(b.life / 2.4, 0, 1);
+    for (let p = 0; p < FW_P; p++) {
+      const k = (bi * FW_P + p) * 3;
+      if (b.life > 0) { fwVel[k + 1] -= 7 * dt; fwVel[k] *= 1 - 0.7 * dt; fwVel[k + 2] *= 1 - 0.7 * dt; fwPos[k] += fwVel[k] * dt; fwPos[k + 1] += fwVel[k + 1] * dt; fwPos[k + 2] += fwVel[k + 2] * dt; }
+      const a = b.life > 0 ? Math.pow(f, 0.6) : 0;
+      fwCol[k] = lerp(bg.r, b.col.r, a); fwCol[k + 1] = lerp(bg.g, b.col.g, a); fwCol[k + 2] = lerp(bg.b, b.col.b, a);
+      if (b.life <= 0) fwPos[k + 1] = -50;
+    }
+  });
+  fwGeo.attributes.position.needsUpdate = true; fwGeo.attributes.color.needsUpdate = true;
+}
+function updateEnvironment(dt) {
+  // daylight
+  if (env.mode === 'auto') { env.phase = (env.phase + dt / 240) % 1; env.day = clamp(0.5 + 0.95 * Math.sin(TAU * (env.phase - 0.25)), 0, 1); }
+  else { const tgt = env.mode === 'day' ? 1 : 0; env.day += clamp(tgt - env.day, -dt * 0.9, dt * 0.9); }
+  const e = 0.9 * dt; for (const k of ['wet', 'fog', 'rain', 'fest', 'over']) env[k] += clamp(env.target[k] - env[k], -e * 0.5, e * 0.5);
+  const d = smooth(0, 1, env.day), night = 1 - d, over = env.over;
+  NIGHT.value = smooth(0.1, 0.75, night);
+  // sun
+  const az = env.mode === 'auto' ? 0.9 + env.phase * 1.4 : 0.9, el = 0.18 + 0.98 * d;
+  sun.position.set(controls.target.x + Math.cos(az) * Math.cos(el) * 260, Math.sin(el) * 260, controls.target.z + Math.sin(az) * Math.cos(el) * 260 * 0.8);
+  sun.target.position.set(controls.target.x, 0, controls.target.z);
+  sun.intensity = 2.5 * smooth(0.04, 0.8, d) * (1 - 0.65 * over);
+  sun.color.setHex(0xffc89a).lerp(C.tmp.setHex(0xfff4e2), smooth(0.2, 0.8, d));
+  hemi.intensity = lerp(0.22, 0.95, d) + over * 0.18; hemi.color.setHex(0x3a4c6a).lerp(C.tmp.setHex(0xeaf1f5), d); hemi.groundColor.setHex(0x1b1f26).lerp(C.tmp.setHex(0xc9c3ba), d);
+  moon.intensity = night * 0.6;
+  renderer.toneMappingExposure = lerp(1.05, 1.0, d);
+  // sky / fog
+  C.tmp.copy(C.nightBg).lerp(C.dayBg, d);
+  const dusk = clamp(1 - Math.abs(env.day - 0.38) / 0.3, 0, 1) * 0.4; C.tmp.lerp(C.dusk, dusk * (1 - over));
+  C.tmp2.copy(C.grey).multiplyScalar(lerp(0.12, 1, d)); C.tmp.lerp(C.tmp2, over * 0.75);
+  scene.background.copy(C.tmp); scene.fog.color.copy(C.tmp); scene.fog.density = lerp(0.0006, 0.0031, env.fog);
+  document.body.classList.toggle('night', env.day < 0.42);
+  // env map + emissives
+  const ei = lerp(0.06, 0.45, d) * (1 - 0.3 * over);
+  for (const m of matList) m.envMapIntensity = ei;
+  for (const g of glowList) g.m.emissiveIntensity = NIGHT.value * g.max;
+  for (const sv of stViz) { sv.glow.material.opacity = NIGHT.value * 0.5; sv.pl.intensity = NIGHT.value * 55; }
+  // wet look
+  for (const w of wetList) { w.m.roughness = lerp(w.r0, w.r1, env.wet); w.m.color.copy(w.c0).lerp(w.c1, env.wet); }
+  lanterns.visible = env.fest > 0.3;
+}
+
+// ================================================================
+//  Camera: glide, follow, selection ring
+// ================================================================
+const sph = new THREE.Spherical(), offV = new THREE.Vector3(), _fv = new THREE.Vector3(), _fd = new THREE.Vector3();
+const camState = { tween: null, follow: false, followFn: null };
+function resizeCamera() {
+  const w = window.innerWidth, h = window.innerHeight, a = w / h;
+  camera.aspect = a; camera.fov = a < 1 ? Math.min(58, 2 * Math.atan(Math.tan(13 * Math.PI / 180) / a) * 180 / Math.PI) : 26;
+  camera.updateProjectionMatrix(); renderer.setSize(w, h, false); setViewShift(viewShift.x, viewShift.y);
+}
+// Compact layouts: the detail panel covers part of the screen, so shift the projection to centre the view in the free band (portrait: between the KPI row and the sheet; short landscape: left of the right-hand column).
+let viewShift = { x: 0, y: 0 };
+function setViewShift(x, y) {
+  viewShift = { x, y };
+  if (Math.abs(x) < 0.5 && Math.abs(y) < 0.5) { viewShift = { x: 0, y: 0 }; camera.clearViewOffset(); }
+  else camera.setViewOffset(window.innerWidth, window.innerHeight, x, y, window.innerWidth, window.innerHeight);
+}
+function freeBand() {
+  if (!sel || !isMobile()) return null;
+  const W = window.innerWidth, H = window.innerHeight, dr = $('detail').getBoundingClientRect();
+  if (dr.height <= 0) return null;
+  if (isLand()) return { l: 0, r: dr.left > 120 ? dr.left : W, t: $('top').getBoundingClientRect().bottom, b: H };
+  const top = $('kpis').getBoundingClientRect().bottom;
+  return dr.top > top + 60 ? { l: 0, r: W, t: top, b: dr.top } : null;
+}
+function stepViewShift(dt) {
+  const band = freeBand();
+  const wx = band ? window.innerWidth / 2 - (band.l + band.r) / 2 : 0, wy = band ? window.innerHeight / 2 - (band.t + band.b) / 2 : 0;
+  if (wx === viewShift.x && wy === viewShift.y) return;
+  const dx = wx - viewShift.x, dy = wy - viewShift.y, k = 1 - Math.exp(-dt * 9);
+  if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) setViewShift(wx, wy); else setViewShift(viewShift.x + dx * k, viewShift.y + dy * k);
+}
+function flyTo(getTarget, dist, opts) {
+  opts = opts || {};
+  offV.copy(camera.position).sub(controls.target); sph.setFromVector3(offV);
+  const th1 = opts.theta !== undefined ? opts.theta : sph.theta; let dth = th1 - sph.theta; dth = Math.atan2(Math.sin(dth), Math.cos(dth));
+  camState.tween = { t: 0, dur: opts.dur || 1.5, from: controls.target.clone(), th0: sph.theta, dth, ph0: sph.phi, ph1: opts.phi !== undefined ? opts.phi : sph.phi, r0: sph.radius, r1: clamp(dist, controls.minDistance, controls.maxDistance), get: typeof getTarget === 'function' ? getTarget : () => getTarget };
+}
+function stepCamera(dt) {
+  const tw = camState.tween;
+  if (tw) {
+    tw.t += dt / tw.dur; const k = Math.min(1, tw.t), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    controls.target.lerpVectors(tw.from, tw.get(_fv), e);
+    sph.set(lerp(tw.r0, tw.r1, e), lerp(tw.ph0, tw.ph1, e), tw.th0 + tw.dth * e);
+    offV.setFromSpherical(sph); camera.position.copy(controls.target).add(offV);
+    if (k >= 1) camState.tween = null;
+  } else if (camState.follow && camState.followFn) {
+    _fd.copy(camState.followFn(_fv)).sub(controls.target); controls.target.add(_fd); camera.position.add(_fd);
+  }
+  controls.update();
+  const t = controls.target, cx = clamp(t.x, -150, 150), cz = clamp(t.z, -105, 105), cy = clamp(t.y, 0, 14);
+  if (cx !== t.x || cz !== t.z || cy !== t.y) { camera.position.add(_fd.set(cx - t.x, cy - t.y, cz - t.z)); t.set(cx, cy, cz); }
+}
+
+// selection ring + label
+let sel = null;
+const selRing = new THREE.Group();
+{
+  const mk = (geo, op) => { const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: GREEN, transparent: true, opacity: op, depthTest: false, depthWrite: false, side: THREE.DoubleSide, fog: false })); m.renderOrder = 20; m.rotation.x = -Math.PI / 2; selRing.add(m); return m; };
+  selRing.userData.a = mk(new THREE.RingGeometry(0.93, 1, 72), 0.95); selRing.userData.b = mk(new THREE.RingGeometry(0.97, 1, 72), 0.4); selRing.userData.c = mk(new THREE.CircleGeometry(0.93, 48), 0.1);
+  selRing.visible = false; scene.add(selRing);
+}
+const tagEl = $('tag'), _sp = new THREE.Vector3();
+function selectionPoint(out) {
+  if (!sel) return null;
+  if (sel.type === 'train') { const T = sim.trainById[sel.id]; trainCenter(T, out); return { r: 10.5, up: 4.6, y: Y_RAIL + 0.1, text: T.id }; }
+  if (sel.type === 'station') { const sv = stViz[sel.idx]; out.set(sv.cx, Y_PLAT, sv.zp); return { r: 22, up: 17, y: Y_PLAT + 0.1, text: ST[sel.idx].name }; }
+  if (sel.type === 'signal') { const sg = sim.signals.find((s) => s.id === sel.id); out.set(sg.pos.x, 9.4, sg.pos.z); return { r: 3.4, up: 3.2, y: 7.3, text: sg.id }; }
+  return null;
+}
+function updateSelection(time) {
+  const info = selectionPoint(_sp);
+  if (!info) { selRing.visible = false; tagEl.style.display = 'none'; return; }
+  const pulse = 1 + 0.06 * Math.sin(time * 4);
+  selRing.visible = true; selRing.position.set(_sp.x, info.y, _sp.z); selRing.scale.setScalar(info.r * pulse);
+  selRing.userData.b.scale.setScalar(1.12 + 0.1 * Math.sin(time * 4 + 1));
+  _fv.set(_sp.x, info.y + info.up, _sp.z).project(camera);
+  if (_fv.z > 1 || _fv.z < -1) { tagEl.style.display = 'none'; return; }
+  tagEl.style.display = 'block'; tagEl.textContent = info.text;
+  tagEl.style.transform = 'translate(' + ((_fv.x * 0.5 + 0.5) * window.innerWidth).toFixed(1) + 'px,' + ((-_fv.y * 0.5 + 0.5) * window.innerHeight).toFixed(1) + 'px) translate(-50%,-100%)';
+}
+
+// ---- fit-to-band framing (compact layouts) ---------------------------------------------------------
+// Distance at which the selection ring (pulse peak and halo) and its label sit inside the free band with a margin, for the camera's current tilt.
+const fitCam = new THREE.PerspectiveCamera(), _fs = new THREE.Spherical(), _fT = new THREE.Vector3(), _fP = new THREE.Vector3(), _fR = new THREE.Vector3();
+function selTarget(o) {
+  if (sel.type === 'train') return trainFollowPos(o);
+  if (sel.type === 'station') { const sv = stViz[sel.idx]; return o.set(sv.cx, Y_PLAT, sv.zp); }
+  const sg = sim.signals.find((s) => s.id === sel.id); return o.set(sg.pos.x, 8, sg.pos.z);
+}
+function fitRoom(d, phi, theta, band) {   // spare px between ring + label and the band edges (negative = overflow)
+  const info = selectionPoint(_fR), W = window.innerWidth, H = window.innerHeight;
+  selTarget(_fT);
+  fitCam.fov = camera.fov; fitCam.aspect = camera.aspect; fitCam.near = camera.near; fitCam.far = camera.far; fitCam.updateProjectionMatrix();
+  _fs.set(d, phi, theta); fitCam.position.setFromSpherical(_fs).add(_fT); fitCam.lookAt(_fT); fitCam.updateMatrixWorld(true);
+  const R = info.r * 1.06 * 1.22, cx = _fR.x, cz = _fR.z;
+  let up = 0, down = 0, side = 0;
+  const pt = (x, y, z) => { _fP.set(x, y, z).project(fitCam); return [(_fP.x * 0.5 + 0.5) * W - W / 2, (-_fP.y * 0.5 + 0.5) * H - H / 2]; };
+  for (let i = 0; i < 32; i++) { const a = i / 32 * Math.PI * 2, q = pt(cx + Math.cos(a) * R, info.y, cz + Math.sin(a) * R); up = Math.max(up, -q[1]); down = Math.max(down, q[1]); side = Math.max(side, Math.abs(q[0])); }
+  const lq = pt(cx, info.y + info.up, cz);
+  up = Math.max(up, -lq[1] + 34); side = Math.max(side, Math.abs(lq[0]) + (info.text.length * 7.2 + 24) / 2);
+  return Math.min((band.b - band.t) / 2 - up, (band.b - band.t) / 2 - down, (band.r - band.l) / 2 - side);
+}
+function frameDist(type) {
+  const base = type === 'train' ? 60 : type === 'station' ? 68 : 34, band = freeBand();
+  if (!band) return base;
+  offV.copy(camera.position).sub(controls.target); _fs.setFromVector3(offV);
+  const need = 8 + 0.06 * Math.min(band.r - band.l, band.b - band.t) / 2;
+  let lo = Math.max(base, controls.minDistance), hi = controls.maxDistance;
+  if (fitRoom(lo, _fs.phi, _fs.theta, band) >= need) return lo;
+  for (let i = 0; i < 24; i++) { const m = (lo + hi) / 2; if (fitRoom(m, _fs.phi, _fs.theta, band) >= need) hi = m; else lo = m; }
+  return hi;
+}
+// Tilting (or a layout change) must not push the ring out of the band: zoom out just enough, never in.
+let fitSig = '';
+function ensureFit() {
+  const band = !camState.tween && freeBand();
+  if (!band) { fitSig = ''; return; }
+  offV.copy(camera.position).sub(controls.target); _fs.setFromVector3(offV);
+  const sig = [_fs.phi.toFixed(3), band.l | 0, band.r | 0, band.t | 0, band.b | 0, selId()].join();
+  if (sig === fitSig) return; fitSig = sig;
+  const th = _fs.theta, phi = _fs.phi, r = _fs.radius, need = 8 + 2;
+  if (fitRoom(r, phi, th, band) >= need) return;
+  let lo = r, hi = controls.maxDistance;
+  for (let i = 0; i < 24; i++) { const m = (lo + hi) / 2; if (fitRoom(m, phi, th, band) >= need) hi = m; else lo = m; }
+  camera.position.copy(controls.target).addScaledVector(offV.normalize(), hi);
+}
+
+// ================================================================
+//  Dashboard UI
+// ================================================================
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmtN = (n) => Math.round(n).toLocaleString('en-US');
+const ASPECT_WORD = { R: 'Red', Y: 'Yellow', G: 'Green' };
+const SVG = (d) => '<path d="' + d + '"/>';
+const ICON = {
+  clear: SVG('M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z') + SVG('M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'),
+  monsoon: SVG('M7 15a4 4 0 1 1 .9-7.9A5.5 5.5 0 0 1 18.5 9 3.5 3.5 0 0 1 17.5 15H7Z') + SVG('M8 18l-1 2M12 18l-1 2M16 18l-1 2'),
+  fog: SVG('M6 12a4 4 0 0 1 .9-7.9A5.5 5.5 0 0 1 17.5 6 3.5 3.5 0 0 1 17 12H6Z') + SVG('M4 16h16M7 20h10'),
+  festival: SVG('M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4L12 3Z') + SVG('M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z'),
+  auto: SVG('M12 3a9 9 0 1 0 0 18V3Z') + SVG('M12 3a9 9 0 0 1 0 18'),
+  day: ICON_SUN(), night: SVG('M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z'),
+};
+function ICON_SUN() { return SVG('M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z') + SVG('M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'); }
+const isLand = () => window.innerHeight <= 500 && window.innerWidth > window.innerHeight;
+const isMobile = () => window.innerWidth <= 900 || isLand();
+
+// ---- areas ------------------------------------------------------------
+const AREAS = [
+  { key: 'overview', label: 'Overview', get: () => _fv.set(12, 0, 2), dist: () => (window.innerWidth / window.innerHeight < 1 ? 335 : 255), phi: 0.95, theta: 0.62 },
+  ...ST.map((st, i) => ({ key: 'st' + i, label: st.name, get: () => _fv.set(stViz[i].cx, Y_PLAT, stViz[i].zp), dist: () => (isMobile() ? 78 : 66), phi: 0.86, theta: 0.62 })),
+  { key: 'depot', label: 'Depot', get: () => _fv.set(106, 6.5, 0), dist: () => (isMobile() ? 190 : 150), phi: 0.86, theta: 0.8 },
+];
+let areaKey = 'overview';
+function goArea(key, noFly) {
+  const a = AREAS.find((x) => x.key === key); if (!a) return;
+  if (sel) deselect();
+  areaKey = key; camState.follow = false; camState.followFn = null; refreshFollowBtn();
+  if (!noFly) flyTo(() => a.get(_fv), a.dist(), { phi: a.phi, theta: a.theta, dur: 1.6 });
+  $('areas').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.k === key));
+  $('areaSel').value = key;
+}
+$('areas').innerHTML = AREAS.map((a) => '<button data-k="' + a.key + '">' + esc(a.label) + '</button>').join('');
+$('areaSel').innerHTML = AREAS.map((a) => '<option value="' + a.key + '">' + esc(a.label) + '</option>').join('');
+$('areas').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) goArea(b.dataset.k); });
+$('areaSel').addEventListener('change', (e) => goArea(e.target.value));
+
+// ---- dropdown plumbing ---------------------------------------------------
+const drops = ['qres', 'wxMenu', 'alMenu', 'userMenu'];
+function closeDrops(except) { drops.forEach((id) => { if (id !== except) $(id).classList.remove('open'); }); }
+function toggleDrop(id) { const el = $(id), was = el.classList.contains('open'); closeDrops(id); el.classList.toggle('open', !was); return !was; }
+document.addEventListener('pointerdown', (e) => { if (!e.target.closest('.menuwrap') && !e.target.closest('.search')) closeDrops(); });
+
+// ---- weather ---------------------------------------------------------------
+const WX_KEYS = ['clear', 'monsoon', 'fog', 'festival'];
+function setSeason(key) {
+  sim.setSeason(key); Object.assign(env.target, SEASON_VIS[key]);
+  const se = sim.season; $('wxLabel').textContent = se.name; $('wxIco').innerHTML = ICON[key];
+  $('wxMenu').innerHTML = WX_KEYS.map((k) => { const s = SEASONS[k]; return '<button class="it' + (k === key ? ' on' : '') + '" data-k="' + k + '"><svg viewBox="0 0 24 24">' + ICON[k] + '</svg><div><b>' + s.name + '</b><small>' + s.note + '</small></div></button>'; }).join('');
+}
+$('wxBtn').addEventListener('click', () => toggleDrop('wxMenu'));
+$('wxMenu').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { setSeason(b.dataset.k); closeDrops(); } });
+
+// ---- day / night ---------------------------------------------------------------
+const DN = ['auto', 'day', 'night'], DN_TITLE = { auto: 'Day / night: automatic cycle', day: 'Day / night: day', night: 'Day / night: night' };
+function setDN(mode) { env.mode = mode; $('dnIco').innerHTML = ICON[mode]; $('dnBtn').title = DN_TITLE[mode]; $('dnBtn').setAttribute('aria-label', DN_TITLE[mode]); toast(DN_TITLE[mode]); }
+$('dnBtn').addEventListener('click', () => setDN(DN[(DN.indexOf(env.mode) + 1) % 3]));
+$('userBtn').addEventListener('click', () => toggleDrop('userMenu'));
+$('signOut').addEventListener('click', () => { closeDrops(); toast('Sign out is disabled in this demo'); });
+
+// ---- toast ---------------------------------------------------------------------
+let toastTimer = 0;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2800); }
+
+// ---- alerts ----------------------------------------------------------------------
+const alerts = []; let unread = 0, lastEv = sim.eventSeq;
+function pollEvents() {
+  let fresh = false;
+  for (const e of sim.events) if (e.id > lastEv) { lastEv = e.id; alerts.unshift(e); unread++; fresh = true; if (e.level !== 'info') toast(e.text); }
+  if (alerts.length > 40) alerts.length = 40;
+  if (fresh) { $('alCount').textContent = unread ? String(Math.min(unread, 99)) : ''; if ($('alMenu').classList.contains('open')) renderAlerts(); }
+}
+function renderAlerts() {
+  $('alMenu').innerHTML = alerts.length ? alerts.slice(0, 25).map((e, i) => '<button class="it" data-i="' + i + '"><span class="dot ' + (e.level === 'warn' ? 'Y' : 'G') + '"></span><div>' + esc(e.text) + '<small>' + Math.max(0, Math.round(sim.time - e.t)) + ' s ago</small></div></button>').join('') : '<div class="none">No alerts yet. Service is running normally.</div>';
+}
+$('alBtn').addEventListener('click', () => { if (toggleDrop('alMenu')) { unread = 0; $('alCount').textContent = ''; renderAlerts(); } });
+$('alMenu').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const ev = alerts[+b.dataset.i]; closeDrops(); if (ev && ev.ref) selectRef(ev.ref); });
+function selectRef(r) { if (r.type === 'train') select('train', r.id); else if (r.type === 'station') select('station', ST.findIndex((s) => s.id === r.id)); else if (r.type === 'signal') select('signal', r.id); }
+
+// ---- search ------------------------------------------------------------------------
+const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+function searchIndex() {
+  const out = [];
+  TRN.forEach((t) => out.push({ type: 'train', id: t.id, label: t.id, sub: t.parked ? 'Maintenance shed' : t.track.name, hay: norm(t.id + ' train ' + t.num) }));
+  ST.forEach((s, i) => out.push({ type: 'station', id: i, label: s.name, sub: s.id + ' · ' + s.code, hay: norm(s.name + s.id + s.code + 'station') }));
+  sim.signals.forEach((s) => out.push({ type: 'signal', id: s.id, label: s.id, sub: 'Block ' + s.block.id + ' · ' + (s.block.track === 'L' ? 'Depot lead' : s.block.track === 'A' ? 'Outer line' : 'Inner line'), hay: norm(s.id + ' signal block ' + s.block.id) }));
+  return out;
+}
+let searchHits = [], searchSel = 0;
+function runSearch() {
+  const q = norm($('q').value); const box = $('qres');
+  if (!q) { box.classList.remove('open'); searchHits = []; return; }
+  const idx = searchIndex();
+  searchHits = idx.filter((x) => x.hay.includes(q)).sort((a, b) => (b.hay.startsWith(q) - a.hay.startsWith(q)) || (a.hay.length - b.hay.length)).slice(0, 8);
+  searchSel = 0;
+  box.innerHTML = searchHits.length ? searchHits.map((h, i) => '<button class="it' + (i === 0 ? ' on' : '') + '" data-i="' + i + '"><span class="ty">' + h.type + '</span><div>' + esc(h.label) + '<small>' + esc(h.sub) + '</small></div></button>').join('') : '<div class="none">No match for "' + esc($('q').value) + '"</div>';
+  closeDrops('qres'); box.classList.add('open');
+}
+function pickHit(h) { if (!h) return; $('qres').classList.remove('open'); $('q').blur(); select(h.type, h.id); }
+$('q').addEventListener('input', runSearch);
+$('q').addEventListener('focus', () => { if ($('q').value) runSearch(); });
+$('q').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { if (!searchHits.length) runSearch(); pickHit(searchHits[searchSel]); }
+  else if (e.key === 'Escape') { $('qres').classList.remove('open'); $('q').blur(); }
+  else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); searchSel = (searchSel + (e.key === 'ArrowDown' ? 1 : -1) + searchHits.length) % Math.max(1, searchHits.length); $('qres').querySelectorAll('.it').forEach((b, i) => b.classList.toggle('on', i === searchSel)); }
+});
+$('qres').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) pickHit(searchHits[+b.dataset.i]); });
+window.addEventListener('keydown', (e) => { if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); } else if (e.key === 'Escape') { closeDrops(); if (document.activeElement === $('q')) $('q').blur(); else if (sel) deselect(); } });
+
+// ---- KPIs -----------------------------------------------------------------------------
+const kHist = { s1: [], s2: [], s3: [] };
+function spark(id, arr, lo, hi) {
+  const c = $(id), g = c.getContext('2d'), w = c.width, h = c.height; g.clearRect(0, 0, w, h);
+  if (arr.length < 2) return;
+  const mn = lo !== undefined ? lo : Math.min(...arr), mx = hi !== undefined ? hi : Math.max(...arr), span = Math.max(1e-6, mx - mn);
+  g.beginPath(); arr.forEach((v, i) => { const x = i / (arr.length - 1) * (w - 4) + 2, y = h - 4 - (v - mn) / span * (h - 10); i ? g.lineTo(x, y) : g.moveTo(x, y); });
+  g.strokeStyle = '#00A86B'; g.lineWidth = 3; g.lineJoin = 'round'; g.stroke();
+  g.lineTo(w - 2, h); g.lineTo(2, h); g.closePath(); const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(0,168,107,.28)'); gr.addColorStop(1, 'rgba(0,168,107,0)'); g.fillStyle = gr; g.fill();
+}
+let ridersWin = [];
+function updateKPIs() {
+  const st = sim.stats(); let inDepot = 0, avgDelay = 0, n = 0;
+  for (const t of TRN) { if (t.parked) continue; if (t.segs.length && t.headBlock().track === 'L') inDepot++; avgDelay += Math.max(0, t.delay); n++; }
+  const inSvc = st.inService;
+  $('k1').innerHTML = inSvc + '<small> / ' + st.fleet + '</small>';
+  $('k1d').textContent = inDepot + ' washing · ' + TRN.filter((t) => t.parked).length + ' spare';
+  $('k2').innerHTML = st.onTimePct + '<small>%</small>';
+  $('k2d').textContent = 'Avg delay ' + Math.round(avgDelay / Math.max(1, n)) + ' s';
+  $('k2d').className = 'd ' + (st.onTimePct >= 92 ? 'up' : st.onTimePct < 80 ? 'dn' : '');
+  ridersWin.push([sim.time, st.riders]); while (ridersWin.length && sim.time - ridersWin[0][0] > 60) ridersWin.shift();
+  const rate = ridersWin.length > 5 ? (st.riders - ridersWin[0][1]) / Math.max(1, sim.time - ridersWin[0][0]) * 60 : 0;
+  $('k3').textContent = fmtN(st.riders); $('k3d').textContent = rate > 0 ? '+' + fmtN(rate) + ' / min' : 'Live count';
+  $('k3d').className = 'd up';
+  kHist.s1.push(inSvc); kHist.s2.push(st.onTimePct); kHist.s3.push(st.riders);
+  for (const k in kHist) if (kHist[k].length > 48) kHist[k].shift();
+  spark('s1', kHist.s1, 0, st.fleet); spark('s2', kHist.s2, 50, 100); spark('s3', kHist.s3);
+}
+for (let i = 0; i < 24; i++) { kHist.s1.push(6); kHist.s2.push(93 + (i % 5)); kHist.s3.push(84210 - (24 - i) * 7); }
+
+// ---- selection ---------------------------------------------------------------------------
+const hist = {};
+function hpush(key, v) { const a = hist[key] || (hist[key] = []); a.push(v); if (a.length > 120) a.shift(); }
+function trainStatus(T) {
+  if (T.parked) return 'Maintenance';
+  if (T.state === 'dwell') return T.phase === 'doors' ? 'Doors open' : T.phase === 'boarding' ? 'Boarding' : 'Ready to depart';
+  if (T.phase === 'wash') return 'In depot wash';
+  if (T.held()) return 'Held at signal';
+  return T.phase === 'arriving' ? 'Arriving' : T.phase === 'depart' ? 'Departing' : T.toDepot ? 'To depot' : 'In section';
+}
+function selId() { return sel ? (sel.type === 'station' ? ST[sel.idx].id : sel.id) : null; }
+function trainFollowPos(out) { return trainCenter(sim.trainById[sel.id], out); }
+function select(type, id, opts) {
+  opts = opts || {};
+  if (type === 'station' && typeof id === 'string') id = ST.findIndex((s) => s.id === id);
+  sel = type === 'station' ? { type, idx: id } : { type, id };
+  document.body.classList.add('has-sel');
+  buildDetailHead(); renderDetail(); renderTracker(); renderTable(true);
+  recentre({ dur: type === 'signal' ? 1.2 : 1.3 });
+  refreshFollowBtn();
+  if (opts.silent !== true) $('areas').querySelectorAll('button').forEach((b) => b.classList.remove('on'));
+}
+// fly to the selection (and follow a running train); compact layouts use the fit-to-band distance, computed once the detail panel has its final size
+function recentre(o) {
+  const type = sel.type, dist = frameDist(type);
+  if (type === 'train') {
+    const T = sim.trainById[sel.id]; camState.follow = !T.parked; camState.followFn = T.parked ? null : (p) => trainFollowPos(p);
+    flyTo((p) => trainFollowPos(p), dist, o);
+  } else {
+    camState.follow = false; camState.followFn = null;
+    flyTo((p) => selTarget(p), dist, o);
+  }
+}
+function deselect() { sel = null; camState.follow = false; camState.followFn = null; document.body.classList.remove('has-sel'); buildDetailHead(); renderDetail(); renderTracker(); renderTable(true); }
+function refreshFollowBtn() { const b = $('followBtn'); if (b) { b.classList.toggle('on', camState.follow); b.textContent = camState.follow ? 'Following' : 'Follow'; } }
+
+// ---- detail panel ------------------------------------------------------------------------------
+const detailEl = $('detail');
+detailEl.innerHTML = '<div id="dHead"></div><div id="trkSlot"></div><div id="dStats"></div><canvas id="chart" width="600" height="128"></canvas><div id="dBtns" class="btns"></div>';
+const ICO_SVG = { train: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 11h14M9 21l2-4M15 21l-2-4"/></svg>', station: '<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg>', signal: '<svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="15" rx="3"/><circle cx="12" cy="6" r="1"/><circle cx="12" cy="10" r="1"/><circle cx="12" cy="14" r="1"/><path d="M12 17v5"/></svg>' };
+function buildDetailHead() {
+  const head = $('dHead'), btns = $('dBtns');
+  if (!sel) {
+    head.innerHTML = '<div class="idle"><b>Network overview</b>Left-drag to pan, right-drag to rotate, scroll or pinch to zoom. Click a train, station or signal to follow it, or search above.</div>';
+    btns.innerHTML = ''; $('chart').style.display = 'none'; $('dStats').innerHTML = idleStats(); detailEl.classList.toggle('hidden', isMobile()); return;
+  }
+  detailEl.classList.remove('hidden');
+  let title, sub;
+  if (sel.type === 'train') { const T = sim.trainById[sel.id]; title = T.id; sub = T.parked ? 'Spare set, maintenance shed' : T.track.name; }
+  else if (sel.type === 'station') { const s = ST[sel.idx]; title = s.name; sub = s.id + ' · ' + s.code + ' · island platform'; }
+  else { const s = sim.signals.find((x) => x.id === sel.id); title = s.id; sub = 'Protects block ' + s.block.id; }
+  head.innerHTML = '<div class="hd"><div class="ico">' + ICO_SVG[sel.type] + '</div><div><h3>' + esc(title) + '</h3><div class="sub">' + esc(sub) + '</div></div><button class="x" id="dClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';
+  $('dClose').onclick = deselect;
+  btns.innerHTML = sel.type === 'train' ? '<button class="btn" id="followBtn">Follow</button><button class="btn" id="fitBtn">Re-centre</button>' : '<button class="btn" id="fitBtn">Re-centre</button>';
+  $('chart').style.display = sel.type === 'signal' ? 'none' : 'block';
+  if ($('followBtn')) $('followBtn').onclick = () => { const T = sim.trainById[sel.id]; if (T.parked) return; camState.follow = !camState.follow; camState.followFn = (o) => trainFollowPos(o); if (camState.follow) flyTo((o) => trainFollowPos(o), frameDist('train'), { dur: 0.9 }); refreshFollowBtn(); };
+  $('fitBtn').onclick = () => { recentre({ dur: 1 }); refreshFollowBtn(); };
+}
+function idleStats() {
+  const busiest = ST.reduce((a, b) => (a.load > b.load ? a : b));
+  return '<div class="grid2"><div class="stat"><label>Season</label><b>' + esc(sim.season.name) + '</b></div><div class="stat"><label>Busiest platform</label><b>' + esc(busiest.name) + '</b></div><div class="stat"><label>Signals not green</label><b>' + sim.signals.filter((s) => s.aspect !== 'G').length + ' of ' + sim.signals.length + '</b></div><div class="stat"><label>Depot wash</label><b>' + (sim.washActive ? 'In progress' : 'Idle') + '</b></div></div>';
+}
+const stat = (l, v, wide) => '<div class="stat' + (wide ? ' wide' : '') + '"><label>' + l + '</label><b>' + v + '</b></div>';
+const barHtml = (p) => '<div class="bar"><i class="' + (p > 85 ? 'hot' : p > 60 ? 'mid' : '') + '" style="width:' + clamp(p, 2, 100) + '%"></i></div>';
+const dotHtml = (a) => '<span class="dot ' + a + '"></span>';
+function nextArrivals(st) {
+  const res = { A: null, B: null };
+  for (const T of TRN) { if (T.parked) continue; const e = sim.etaTo(T, st); if (e === null) continue; const d = T.track.id; if (!res[d] || e < res[d].eta) res[d] = { id: T.id, eta: e }; }
+  return res;
+}
+function renderDetail() {
+  if (!sel) { $('dStats').innerHTML = idleStats(); return; }
+  let h = '';
+  if (sel.type === 'train') {
+    const T = sim.trainById[sel.id], status = trainStatus(T), kmh = Math.round(T.v * 3.6);
+    if (T.parked) h = '<div class="grid2">' + stat('Status', '<span class="pill warn">Maintenance</span>') + stat('Location', 'Depot shed 1') + stat('Cars', T.ncars) + stat('Next service', 'Spare, on call') + '</div>';
+    else {
+      const nx = T.state === 'dwell' ? T.curStation : T.nextStation, hb = T.headBlock(), ahead = T.state === 'dwell' ? null : T.nextBlock(T.segs[T.segs.length - 1].block), eta = T.state === 'dwell' ? Math.max(0, T.schedDep - sim.time) : sim.etaTo(T, T.nextStation);
+      const lp = Math.round(T.load / 240 * 100);
+      h = '<div style="margin-top:10px"><span class="pill' + (T.held() ? ' warn' : '') + '">' + dotHtml('G').replace('dot G', 'dot').replace('<span class="dot"></span>', '') + status + '</span></div><div class="grid2">' +
+        stat('Speed', kmh + ' km/h') + stat('Doors', T.open > 0.98 ? 'Open' : T.open < 0.02 ? 'Closed' : T.open > 0.5 ? 'Opening' : 'Closing') +
+        (T.state === 'dwell' ? stat('Departs in', Math.round(eta) + ' s') + stat('Next stop', esc(ST[T.route[(T.route.indexOf(T.curStation.idx) + 1) % 4]].name)) : stat('Next stop', esc(nx.name)) + stat('ETA', Math.round(eta) + ' s')) +
+        stat('Delay', (T.delay > 1 ? '+' : '') + Math.round(T.delay) + ' s') + stat('Headway', T.lastHeadway === null ? 'n/a' : Math.round(T.lastHeadway) + ' s') +
+        stat('Load', T.load.toFixed(0) + ' / 240 (' + lp + '%)' + barHtml(lp), true) +
+        stat('Block', hb.id + (hb.track === 'L' ? ' (depot)' : '')) + stat('Signal ahead', ahead ? dotHtml(ahead.sig.aspect) + ahead.sig.id : '-') + stat('Stops today', T.stopsDone) + stat('Washes', T.washed) + '</div>';
+    }
+  } else if (sel.type === 'station') {
+    const st = ST[sel.idx], c = Math.round(st.load * 100), na = nextArrivals(st), here = TRN.filter((T) => !T.parked && T.state === 'dwell' && T.curStation === st);
+    h = '<div style="margin-top:10px"><span class="pill' + (c > 85 ? ' bad' : c > 60 ? ' warn' : '') + '">Crowding ' + c + '%</span></div><div class="grid2">' +
+      stat('Platform crowding', c + '%' + barHtml(c), true) + stat('Waiting outer', Math.round(st.wait.A)) + stat('Waiting inner', Math.round(st.wait.B)) +
+      stat('Next outer', na.A ? na.A.id + ' · ' + Math.round(na.A.eta) + ' s' : '-') + stat('Next inner', na.B ? na.B.id + ' · ' + Math.round(na.B.eta) + ' s' : '-') +
+      stat('Headway outer', st.headway.A === null ? 'n/a' : Math.round(st.headway.A) + ' s') + stat('Headway inner', st.headway.B === null ? 'n/a' : Math.round(st.headway.B) + ' s') +
+      stat('At platform', here.length ? here.map((t) => t.id).join(', ') : 'No train') + stat('Escalators', '2 running') + '</div>';
+  } else {
+    const sg = sim.signals.find((s) => s.id === sel.id), b = sg.block, nb = b.next;
+    h = '<div style="margin-top:10px"><span class="pill ' + (sg.aspect === 'R' ? 'bad' : sg.aspect === 'Y' ? 'warn' : '') + '">' + ASPECT_WORD[sg.aspect] + '</span></div><div class="grid2">' +
+      stat('Aspect', dotHtml(sg.aspect) + ASPECT_WORD[sg.aspect]) + stat('Block', b.id + ' · ' + Math.round(b.len) + ' m') + stat('Track', b.track === 'L' ? 'Depot lead' : b.track === 'A' ? 'Outer line' : 'Inner line') +
+      stat('Block state', b.owner ? (b.occ ? 'Occupied' : 'Reserved') : 'Clear') + stat('Held by', b.owner ? b.owner.id : '-') + stat('Next signal', nb ? dotHtml(nb.sig.aspect) + nb.sig.id : '-') +
+      stat('Last change', Math.round(sim.time - sg.since) + ' s ago') + stat('Changes', sg.changes) + '</div>';
+  }
+  $('dStats').innerHTML = h;
+}
+function drawChart() {
+  if (!sel || sel.type === 'signal') return;
+  const key = sel.type === 'train' ? 'v:' + sel.id : 'c:' + sel.idx, arr = hist[key] || [], c = $('chart'), g = c.getContext('2d'), w = c.width, h = c.height;
+  g.clearRect(0, 0, w, h);
+  const css = getComputedStyle(document.body); g.fillStyle = css.getPropertyValue('--ink2'); g.font = '600 20px Inter, system-ui, sans-serif';
+  g.fillText(sel.type === 'train' ? 'Speed, last 60 s (km/h)' : 'Crowding, last 60 s (%)', 4, 20);
+  if (arr.length < 2) return;
+  const mx = sel.type === 'train' ? 45 : 100;
+  g.beginPath(); arr.forEach((v, i) => { const x = i / 119 * (w - 8) + 4 + (120 - arr.length) / 119 * (w - 8), y = h - 8 - clamp(v / mx, 0, 1) * (h - 40); i ? g.lineTo(x, y) : g.moveTo(x, y); });
+  g.strokeStyle = '#00A86B'; g.lineWidth = 3.5; g.lineJoin = 'round'; g.stroke();
+  g.lineTo(w - 4, h - 8); g.lineTo((120 - arr.length) / 119 * (w - 8) + 4, h - 8); g.closePath(); const gr = g.createLinearGradient(0, 30, 0, h); gr.addColorStop(0, 'rgba(0,168,107,.3)'); gr.addColorStop(1, 'rgba(0,168,107,0)'); g.fillStyle = gr; g.fill();
+}
+
+// ---- journey tracker -----------------------------------------------------------------------------------
+const STEPS = ['Depart', 'In section', 'Arriving', 'Doors open', 'Boarding', 'Depart'];
+$('steps').innerHTML = STEPS.map((s) => '<div class="step"><i></i>' + s + '</div>').join('');
+const PHASE_IDX = { depart: 0, section: 1, wash: 1, arriving: 2, doors: 3, boarding: 4, ready: 5 };
+function renderTracker() {
+  const els = $('steps').children, msg = $('trkMsg');
+  if (!sel || sel.type !== 'train' || sim.trainById[sel.id].parked) {
+    $('trkWho').textContent = 'Select a train'; msg.innerHTML = 'Click a train in the scene or the Trains table to follow its journey.';
+    for (const e of els) e.className = 'step'; return;
+  }
+  const T = sim.trainById[sel.id]; $('trkWho').textContent = T.id + ' · ' + (T.track.id === 'A' ? 'outer' : 'inner') + ' line';
+  const idx = PHASE_IDX[T.phase] !== undefined ? PHASE_IDX[T.phase] : 1;
+  [...els].forEach((e, i) => { e.className = 'step' + (i < idx ? ' done' : i === idx ? ' on' : ''); });
+  let m;
+  if (T.state === 'dwell') m = '<b>' + esc(T.curStation.name) + '</b> · ' + (T.phase === 'doors' ? 'doors opening' : T.phase === 'boarding' ? 'passengers boarding and alighting' : 'doors closing') + ' · departs in <b>' + Math.max(0, Math.round(T.schedDep - sim.time)) + ' s</b>';
+  else if (T.phase === 'wash') m = '<b>Depot wash tunnel</b> · crawling through at 6 km/h';
+  else if (T.held()) { const nb = T.nextBlock(T.segs[T.segs.length - 1].block); m = 'Holding for <b>' + (nb ? nb.sig.id : 'signal') + '</b> · block ahead occupied by ' + (nb && nb.owner ? nb.owner.id : 'another train'); }
+  else m = 'Heading to <b>' + esc(T.nextStation.name) + '</b> · ETA <b>' + Math.round(sim.etaTo(T, T.nextStation)) + ' s</b>' + (T.toDepot ? ' · via depot wash' : '');
+  msg.innerHTML = m;
+}
+const mq = window.matchMedia('(max-width:900px),(max-height:500px) and (orientation:landscape)');
+function placeTracker() { const tr = $('tracker'); if (mq.matches) $('trkSlot').appendChild(tr); else $('ui').appendChild(tr); buildDetailHead(); }
+mq.addEventListener('change', placeTracker);
+const setPlaceholder = () => { $('q').placeholder = window.innerWidth <= 480 ? 'Search' : 'Search train, station, signal'; };
+setPlaceholder(); window.addEventListener('resize', setPlaceholder);
+
+// ---- table ---------------------------------------------------------------------------------------------------
+let tab = 'trains';
+const COLS = { trains: ['Train', 'Line', 'Status', 'Next stop', 'ETA', 'km/h', 'Load', 'Delay', 'Headway'], stations: ['Station', 'Code', 'Crowding', 'Wait outer', 'Wait inner', 'Next outer', 'Next inner', 'Headway'], signals: ['Signal', 'Block', 'Track', 'Aspect', 'Held by', 'Since'] };
+function renderTable(force) {
+  const cols = COLS[tab]; let rows = '';
+  if (tab === 'trains') {
+    for (const T of TRN) {
+      const sl = sel && sel.type === 'train' && sel.id === T.id ? ' sel' : '';
+      if (T.parked) { rows += '<tr class="' + sl + '" data-t="train" data-i="' + T.id + '"><td><b>' + T.id + '</b></td><td>-</td><td>Maintenance</td><td>-</td><td>-</td><td>0</td><td>-</td><td>-</td><td>-</td></tr>'; continue; }
+      const nx = T.state === 'dwell' ? ST[T.route[(T.route.indexOf(T.curStation.idx) + 1) % 4]] : T.nextStation, eta = sim.etaTo(T, nx), dl = Math.round(T.delay);
+      rows += '<tr class="' + sl + '" data-t="train" data-i="' + T.id + '"><td><b>' + T.id + '</b></td><td>' + (T.track.id === 'A' ? 'Outer' : 'Inner') + '</td><td>' + trainStatus(T) + '</td><td>' + esc(nx.name) + '</td><td>' + Math.round(eta) + ' s</td><td>' + Math.round(T.v * 3.6) + '</td><td>' + Math.round(T.load / 240 * 100) + '%</td><td class="' + (dl > 45 ? 'late' : dl < -5 ? 'early' : '') + '">' + (dl > 0 ? '+' : '') + dl + ' s</td><td>' + (T.lastHeadway === null ? '-' : Math.round(T.lastHeadway) + ' s') + '</td></tr>';
+    }
+    $('tcnt').textContent = TRN.length + ' trains';
+  } else if (tab === 'stations') {
+    ST.forEach((st, i) => {
+      const na = nextArrivals(st), c = Math.round(st.load * 100), sl = sel && sel.type === 'station' && sel.idx === i ? ' sel' : '';
+      rows += '<tr class="' + sl + '" data-t="station" data-i="' + i + '"><td><b>' + esc(st.name) + '</b></td><td>' + st.code + '</td><td class="' + (c > 85 ? 'late' : '') + '">' + c + '%</td><td>' + Math.round(st.wait.A) + '</td><td>' + Math.round(st.wait.B) + '</td><td>' + (na.A ? na.A.id + ' · ' + Math.round(na.A.eta) + ' s' : '-') + '</td><td>' + (na.B ? na.B.id + ' · ' + Math.round(na.B.eta) + ' s' : '-') + '</td><td>' + (st.headway.A === null ? '-' : Math.round(st.headway.A)) + ' / ' + (st.headway.B === null ? '-' : Math.round(st.headway.B)) + ' s</td></tr>';
+    });
+    $('tcnt').textContent = ST.length + ' stations';
+  } else {
+    for (const sg of sim.signals) {
+      const b = sg.block, sl = sel && sel.type === 'signal' && sel.id === sg.id ? ' sel' : '';
+      rows += '<tr class="' + sl + '" data-t="signal" data-i="' + sg.id + '"><td><b>' + sg.id + '</b></td><td>' + b.id + '</td><td>' + (b.track === 'L' ? 'Lead' : b.track === 'A' ? 'Outer' : 'Inner') + '</td><td>' + dotHtml(sg.aspect) + ASPECT_WORD[sg.aspect] + '</td><td>' + (b.owner ? b.owner.id : '-') + '</td><td>' + Math.round(sim.time - sg.since) + ' s</td></tr>';
+    }
+    $('tcnt').textContent = sim.signals.length + ' signals';
+  }
+  if (force || $('thead').dataset.tab !== tab) { $('thead').innerHTML = '<tr>' + cols.map((c) => '<th>' + c + '</th>').join('') + '</tr>'; $('thead').dataset.tab = tab; }
+  $('tbody').innerHTML = rows;
+}
+document.querySelector('#table .tabs').addEventListener('click', (e) => { const b = e.target.closest('button[data-tab]'); if (!b) return; tab = b.dataset.tab; document.querySelectorAll('#table .tabs button[data-tab]').forEach((x) => x.classList.toggle('on', x === b)); renderTable(true); if (mq.matches) $('table').classList.remove('col'); });
+$('tbody').addEventListener('click', (e) => { const tr = e.target.closest('tr'); if (!tr) return; const t = tr.dataset.t, i = tr.dataset.i; select(t, t === 'station' ? +i : i); });
+let tblHold = false; $('table').addEventListener('pointerdown', () => { tblHold = true; }); window.addEventListener('pointerup', () => setTimeout(() => { tblHold = false; }, 250));
+$('tgl').addEventListener('click', () => { $('table').classList.toggle('col'); });
+if (mq.matches) $('table').classList.add('col');
+
+// ---- picking and pointer handling ---------------------------------------------------------------------------------------
+const raycaster = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pickAt(cx, cy) {
+  const r = canvas.getBoundingClientRect(); ndc.set((cx - r.left) / r.width * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hits = raycaster.intersectObjects(pickList, false);
+  for (const h of hits) {
+    const p = h.object.userData.pick; if (!p) continue;
+    if (p.type === 'signal') return { type: 'signal', id: sigViz[h.instanceId].sg.id };
+    return p.type === 'station' ? { type: 'station', id: p.idx } : { type: 'train', id: p.id };
+  }
+  return null;
+}
+const ptr = { pointers: new Set(), x0: 0, y0: 0, t0: 0, moved: false, btn: 0, multi: false };
+canvas.addEventListener('pointerdown', (e) => {
+  ptr.pointers.add(e.pointerId); if (ptr.pointers.size === 1) { ptr.x0 = e.clientX; ptr.y0 = e.clientY; ptr.t0 = performance.now(); ptr.moved = false; ptr.btn = e.button; ptr.multi = false; } else ptr.multi = true;
+  camState.tween = null; closeDrops(); if (document.activeElement && document.activeElement !== canvas) document.activeElement.blur();
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!ptr.pointers.has(e.pointerId)) { if (e.pointerType === 'mouse') canvas.style.cursor = pickAt(e.clientX, e.clientY) ? 'pointer' : 'grab'; return; }
+  if (!ptr.moved && Math.hypot(e.clientX - ptr.x0, e.clientY - ptr.y0) > 6) {
+    ptr.moved = true;
+    if (!ptr.multi && ptr.pointers.size === 1 && (e.pointerType !== 'mouse' || ptr.btn === 0) && camState.follow) { camState.follow = false; refreshFollowBtn(); }
+  }
+});
+const endPtr = (e) => {
+  const was = ptr.pointers.has(e.pointerId); ptr.pointers.delete(e.pointerId);
+  if (!was || e.type === 'pointercancel') return;
+  if (!ptr.moved && !ptr.multi && ptr.btn === 0 && performance.now() - ptr.t0 < 600) { const p = pickAt(e.clientX, e.clientY); if (p) select(p.type, p.id); else if (sel && !isMobile()) { /* keep selection on empty click */ } }
+};
+canvas.addEventListener('pointerup', endPtr); canvas.addEventListener('pointercancel', endPtr);
+canvas.addEventListener('wheel', () => { camState.tween = null; }, { passive: true });
+canvas.addEventListener('dblclick', (e) => { const p = pickAt(e.clientX, e.clientY); if (!p) deselect(); });
+
+// ---- clock ---------------------------------------------------------------------------------------------------------------------
+function updateClock() { const d = new Date(); $('clock').firstChild.nodeValue = d.toLocaleTimeString('en-GB'); $('clock').lastChild.textContent = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); }
+
+// ---- main loop -------------------------------------------------------------------------------------------------------------------
+window.addEventListener('resize', () => { resizeCamera(); $('ui').style.setProperty('--topH', $('top').offsetHeight + 'px'); document.documentElement.style.setProperty('--topH', $('top').offsetHeight + 'px'); });
+if (window.ResizeObserver) new ResizeObserver(() => document.documentElement.style.setProperty('--topH', $('top').offsetHeight + 'px')).observe($('top'));
+let last = performance.now(), acc = 0, tClock = 0, tUi = 0, tHist = 0, tTab = 0, tK = 0, fpsAcc = 0, fpsN = 0, firstFrame = true;
+const H = 1 / 60;
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  acc += dt; let n = 0; while (acc >= H && n < 5) { sim.step(H); acc -= H; n++; } if (n >= 5) acc = 0;
+  if (sim.pax.length) { for (const ev of sim.pax) spawnWalker(ev); sim.pax.length = 0; }
+  updateTrains(); updateVehicles(); updatePassengers(dt); updateEscalators(dt); refreshSignalLamps();
+  // water flow + wash
+  { const f = flow; for (let i = 0; i < flowList.length; i++) { const o = flowList[i]; o.z += 3.2 * dt; if (o.z > 96) o.z -= 192; _m4.compose(_v.set(o.x, o.y, o.z), _q.identity(), _s.set(1, 1, 1)); f.setMatrixAt(i, _m4); } f.instanceMatrix.needsUpdate = true; }
+  { const on = sim.washActive; washViz.spray.visible = on; for (const b of washViz.brushes) b.rotation.y += on ? dt * 9 : 0;
+    if (on) { const p = washViz.spray.geometry.attributes.position.array; washViz.seeds.forEach((s, i) => { s.t = (s.t + dt * 1.1) % 1; p[i * 3] = 100 + s.side * (1.2 + s.t * 1.5); p[i * 3 + 1] = Y_RAIL + 3.8 - s.t * 3.4; p[i * 3 + 2] = s.z; }); washViz.spray.geometry.attributes.position.needsUpdate = true; } }
+  updateEnvironment(dt); updateRain(dt); updateFireworks(dt);
+  stepCamera(dt); ensureFit(); stepViewShift(dt);
+  updateSelection(now / 1000);
+  tClock += dt; if (tClock > 0.25) { tClock = 0; updateClock(); }
+  tHist += dt; if (tHist > 0.5) { tHist = 0; for (const T of TRN) if (!T.parked) hpush('v:' + T.id, T.v * 3.6); ST.forEach((s, i) => hpush('c:' + i, s.load * 100)); }
+  tUi += dt; if (tUi > 0.25) { tUi = 0; renderDetail(); renderTracker(); drawChart(); pollEvents(); }
+  tTab += dt; if (tTab > 0.5 && !tblHold) { tTab = 0; renderTable(false); }
+  tK += dt; if (tK > 1) { tK = 0; updateKPIs(); }
+  fpsAcc += dt; fpsN++; if (fpsAcc > 1) { window.__fps = Math.round(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; }
+  renderer.render(scene, camera);
+  if (firstFrame) { firstFrame = false; $('boot').classList.add('done'); }
+}
+
+// ---- init ------------------------------------------------------------------------------------------------------------------------------
+resizeCamera();
+{
+  const mob = window.innerWidth / window.innerHeight < 1;
+  const sphI = new THREE.Spherical(mob ? 335 : 258, 0.95, 0.62);
+  controls.target.set(12, 0, 2); camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sphI)); controls.update();
+}
+setSeason('clear'); setDN('auto'); toast('Welcome to Railgrid');
+$('areas').querySelector('button').classList.add('on'); $('areaSel').value = 'overview';
+placeTracker(); buildDetailHead(); renderDetail(); renderTracker(); renderTable(true); updateKPIs(); updateClock(); pollEvents();
+sim.emit('info', 'Service started: 6 trains running, 1 spare in maintenance', { type: 'weather' }); lastEv = sim.eventSeq - 0;
+document.documentElement.style.setProperty('--topH', $('top').offsetHeight + 'px');
+window.__railgrid = { fireworks, getSel: () => sel, info: () => ({ calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geos: renderer.info.memory.geometries }), sim, select, deselect, goArea, setSeason, setDN, camera, controls, scene, renderer, env, camState, pickAt, THREE };
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

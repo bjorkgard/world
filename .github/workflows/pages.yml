@@ -1,0 +1,66 @@
+name: Deploy pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          items=""
+          for f in *.html; do
+            [ "$f" = "index.html" ] && continue
+            name="${f%.html}"
+            mkdir -p "_site/$name"
+            cp "$f" "_site/$name/index.html"
+            cp "$f" "_site/$f"
+            title=$(grep -o -m1 '<title>[^<]*' "$f" | sed 's/<title>//' || true)
+            [ -z "$title" ] && title="$name"
+            items="$items<li><a href=\"$name/\">$title</a></li>"
+          done
+          cat > _site/index.html <<HTML
+          <!doctype html>
+          <html lang="en"><head><meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>World</title>
+          <style>
+            body{font-family:system-ui,sans-serif;max-width:640px;margin:48px auto;padding:0 16px;background:#fafafa;color:#111}
+            @media (prefers-color-scheme:dark){body{background:#111;color:#eee}a{color:#8ab4ff}}
+            li{margin:.5em 0;font-size:1.1em}
+          </style></head>
+          <body><h1>World</h1><ul>$items</ul></body></html>
+          HTML
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
