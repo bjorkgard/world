@@ -1,4 +1,6 @@
 # Build your own World
+All pages: https://bjorkgard.github.io/world/
+
 
 Fill the yellow blanks with any place you can imagine. A library, a zoo, a shipyard, your own city.
 
@@ -26,6 +28,8 @@ EXTRAS: seasons (<span style="background-color:yellow;color:#000;">**4 WEATHER M
 
 ## EXAMPLES
 ### Railgrid (Opus 5.5 High)
+Live: https://bjorkgard.github.io/world/railgrid/
+
 Build a single-file interactive web app (HTML, CSS and JS) using Three.js from a CDN: a live 3D metro rail control dashboard called "Railgrid" that feels like a strategy game.
 
 **WORLD:** a low-poly isometric city slice built entirely in code, no external models. An elevated metro line with pillars, a curved junction, four stations with platforms, escalators and canopies, a depot with maintenance sheds, a river bridge, roads below with traffic, and city blocks. Clean toy-like clay look, one accent colour (#00A86B green) on light grey.
@@ -39,6 +43,8 @@ Build a single-file interactive web app (HTML, CSS and JS) using Three.js from a
 **EXTRAS:** seasons (Clear, Monsoon with wet tracks and slower speeds, Fog, Festival rush), animated day/night with lit carriages and station glow; works on mobile.
 
 ### Parkline (Opus 5.5 Medium)
+Live: https://bjorkgard.github.io/world/parkline/
+
 Build a single-file interactive web app (HTML, CSS and JS) using Three.js from a CDN: a live 3D theme park dashboard called "Parkline" that feels like a theme park tycoon game.
 
 **WORLD:** a low-poly isometric theme park built entirely in code, no external models. An entrance plaza, a roller coaster with loops, a Ferris wheel, a log flume with a splash drop, a carousel, food courts, a lake with paddle boats, a parade route, a monorail and parking. Clean toy-like clay look, one accent colour (#F43F5E candy pink) on warm cream.
@@ -52,6 +58,8 @@ Build a single-file interactive web app (HTML, CSS and JS) using Three.js from a
 **EXTRAS:** weather (Sunny, Rain with umbrellas and closed water rides, Windy with coaster holds, Festive night with fireworks); animated day/night with ride lights; works on mobile.
 
 ### Apex (Opus 5.5 Max)
+Live: https://bjorkgard.github.io/world/apex/
+
 Build a single-file interactive web app (HTML, CSS and JS) using Three.js from a CDN: a live 3D race control dashboard called "Apex" that feels like a strategy game.
 
 **WORLD:** a low-poly isometric racing circuit built entirely in code, no external models. A twisting track with kerbs, run-off areas and barriers, a pit lane with team garages, a race control tower, grandstands full of fans, a paddock with team trucks, a marina section and a tunnel. Clean toy-like clay look, one accent colour (#E10600 racing red) on warm grey.
